@@ -14,7 +14,7 @@ COPY ./.env.production /code/.env.production
 
 COPY ./app /code/app
 
-COPY ./migratin /code/app
+COPY ./migration /code/migration
 
 COPY ./alembic.ini /code/alembic.ini
 
