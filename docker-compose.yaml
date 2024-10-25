@@ -30,15 +30,18 @@ services:
         command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
     db:
-        image: postgres:16
-        container_name: postgres-db
-        volumes:
-            - postgres_data:/var/lib/postgresql/data/
+        image: mysql:8.4
+        container_name: mysql_db
         environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=password
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: mydatabase
+            MYSQL_USER: user
+            MYSQL_PASSWORD: userpassword
         ports:
-            - 5432:5432
+            - '3306:3306'
+        volumes:
+            - mysql_data:/var/lib/mysql
+
 volumes:
     nuxt_node_modules:
-    postgres_data:
+    mysql_data:
