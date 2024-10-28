@@ -1,7 +1,7 @@
 <script setup>
 import { ref, shallowRef } from 'vue';
 
-const props = defineProps(['idToken']);
+const props = defineProps(['idToken', 'apiUrl']);
 
 const dialog = shallowRef(false);
 
@@ -73,7 +73,7 @@ const category = ['社会人', '大学', '高校', '中学', '小学'];
 const emit = defineEmits(['teamInfoRegisterd']);
 
 async function registerTeamInfo() {
-    const newTeamInfo = await $fetch('http://localhost:8000/team_info', {
+    const newTeamInfo = await $fetch(`${props.apiUrl}/team_info/`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${props.idToken}`,

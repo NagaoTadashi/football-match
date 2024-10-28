@@ -38,6 +38,7 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                 text="まずはじめに下記のボタンをクリックしてチーム情報を登録してください"
                 ><RegisterButton
                     :idToken="idToken"
+                    :apiUrl="runtimeConfig.public.apiUrl"
                     @TeamInfoRegisterd="handleTeamInfoRegisterd"
                 />
             </v-empty-state>
@@ -45,7 +46,9 @@ function handleTeamInfoEdited(updatedTeamInfo) {
         <div v-else>
             <v-row class="d-flex align-end justify-end">
                 <EditButton
+                    :idToken="idToken"
                     :teamInfo="teamInfo"
+                    :apiUrl="runtimeConfig.public.apiUrl"
                     @TeamInfoEdited="handleTeamInfoEdited"
                 />
             </v-row>

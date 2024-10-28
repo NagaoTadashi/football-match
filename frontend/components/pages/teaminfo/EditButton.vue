@@ -3,7 +3,7 @@ import { ref, shallowRef } from 'vue';
 
 const dialog = shallowRef(false);
 
-const props = defineProps(['teamInfo']);
+const props = defineProps(['idToken', 'teamInfo', 'apiUrl']);
 const emit = defineEmits(['teamInfoEdited']);
 
 const teamInfo = ref({
@@ -73,13 +73,14 @@ const regionsList = Object.keys(regions);
 const category = ['社会人', '大学', '高校', '中学', '小学'];
 
 async function editTeamInfo(id) {
-    const updatedTeamInfo = await $fetch(
-        `http://localhost:8000/team_info/${id}`,
-        {
-            method: 'PUT',
-            body: teamInfo.value,
-        }
-    );
+    const updatedTeamInfo = await $fetch(`${props.apiUrl}/team_info/${id}/`, {
+        method: 'PUT',
+        headers: {
+            Authorization: `Bearer ${props.idToken}`,
+            'Content-Type': 'application/json',
+        },
+        body: teamInfo.value,
+    });
     if (updatedTeamInfo) {
         // ダイアログを閉じる
         dialog.value = false;
