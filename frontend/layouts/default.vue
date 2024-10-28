@@ -7,7 +7,7 @@ const menues = [
         icon: 'mdi-soccer-field',
         title: '試合日程・結果',
         value: 'matchList',
-        to: '/MatchList/',
+        to: '/',
     },
     {
         icon: 'mdi-tshirt-crew',
