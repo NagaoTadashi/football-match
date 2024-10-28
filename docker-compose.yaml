@@ -22,6 +22,9 @@ services:
         build:
             context: .
             dockerfile: ./backend/Dockerfile.development
+        depends_on:
+            db:
+                condition: service_healthy
         volumes:
             - ./backend:/code
         ports:
@@ -30,7 +33,7 @@ services:
         command: uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
     db:
-        image: mysql:8.4
+        image: mysql:8.0
         container_name: mysql_db
         environment:
             MYSQL_ROOT_PASSWORD: rootpassword
@@ -41,6 +44,11 @@ services:
             - '3306:3306'
         volumes:
             - mysql_data:/var/lib/mysql
+        healthcheck:
+            test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
 volumes:
     nuxt_node_modules:
