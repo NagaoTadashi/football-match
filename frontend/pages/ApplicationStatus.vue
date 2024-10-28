@@ -7,7 +7,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: applications } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/application_status`,
+    `${runtimeConfig.public.apiUrl}/application_status/`,
     {
         method: 'GET',
         headers: {
@@ -33,7 +33,7 @@ const headers = ref([
 ]);
 
 async function deleteApplication(id) {
-    await $fetch(`${runtimeConfig.public.apiUrl}/application/${id}`, {
+    await $fetch(`${runtimeConfig.public.apiUrl}/application/${id}/`, {
         method: 'DELETE',
     });
 

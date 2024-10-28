@@ -8,7 +8,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: teamInfo } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/team_info`,
+    `${runtimeConfig.public.apiUrl}/team_info/`,
     {
         method: 'GET',
         headers: {

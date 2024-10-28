@@ -7,7 +7,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: teamInfo } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/team_info`,
+    `${runtimeConfig.public.apiUrl}/team_info/`,
     {
         method: 'GET',
         headers: {
@@ -18,7 +18,7 @@ const { data: teamInfo } = await useFetch(
 );
 
 const { data: recruitments } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/my_team_recruitments`,
+    `${runtimeConfig.public.apiUrl}/my_team_recruitments/`,
     {
         method: 'GET',
         headers: {
@@ -61,7 +61,7 @@ const defaultItem = ref({
 
 async function postRecruitment() {
     const postedRecruitment = await $fetch(
-        `${runtimeConfig.public.apiUrl}/recruitments`,
+        `${runtimeConfig.public.apiUrl}/recruitments/`,
         {
             method: 'POST',
             headers: {
@@ -75,7 +75,7 @@ async function postRecruitment() {
 }
 
 async function deleteRecruitment(id) {
-    await $fetch(`${runtimeConfig.public.apiUrl}/recruitments/${id}`, {
+    await $fetch(`${runtimeConfig.public.apiUrl}/recruitments/${id}/`, {
         method: 'DELETE',
     });
 

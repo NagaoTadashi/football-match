@@ -7,7 +7,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: applicationRequests } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/application_requests`,
+    `${runtimeConfig.public.apiUrl}/application_requests/`,
     {
         method: 'GET',
         headers: {
@@ -19,7 +19,7 @@ const { data: applicationRequests } = await useFetch(
 
 async function approveApplicationRequest(id) {
     await $fetch(
-        `${runtimeConfig.public.apiUrl}/approve_application_request/${id}`,
+        `${runtimeConfig.public.apiUrl}/approve_application_request/${id}/`,
         {
             method: 'POST',
         }
@@ -32,7 +32,7 @@ async function approveApplicationRequest(id) {
 
 async function declineApplicationRequest(id) {
     await $fetch(
-        `${runtimeConfig.public.apiUrl}/decline_application_request/${id}`,
+        `${runtimeConfig.public.apiUrl}/decline_application_request/${id}/`,
         {
             method: 'POST',
         }

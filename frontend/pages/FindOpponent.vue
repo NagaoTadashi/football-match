@@ -7,7 +7,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: teamInfo } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/team_info`,
+    `${runtimeConfig.public.apiUrl}/team_info/`,
     {
         method: 'GET',
         headers: {
@@ -18,7 +18,7 @@ const { data: teamInfo } = await useFetch(
 );
 
 const { data: recruitments } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/other_team_recruitments`,
+    `${runtimeConfig.public.apiUrl}/other_team_recruitments/`,
     {
         method: 'GET',
         headers: {
@@ -37,7 +37,7 @@ const isErrorDialogVisible = ref(false);
 
 const postApplication = async (recruitment_id) => {
     const postedApplication = await $fetch(
-        `${runtimeConfig.public.apiUrl}/application`,
+        `${runtimeConfig.public.apiUrl}/application/`,
         {
             method: 'POST',
             headers: {

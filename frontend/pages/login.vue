@@ -8,7 +8,7 @@ const { $ui } = useNuxtApp();
 onMounted(() => {
     $ui.start('#firebaseui-auth-container', {
         signInFlow: 'popup',
-        signInSuccessUrl: '/',
+        signInSuccessUrl: '/MatchList/',
         signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
     });
 });

@@ -7,7 +7,7 @@ const idToken = await user.getIdToken();
 const runtimeConfig = useRuntimeConfig();
 
 const { data: players } = await useFetch(
-    `${runtimeConfig.public.apiUrl}/players`,
+    `${runtimeConfig.public.apiUrl}/players/`,
     {
         method: 'GET',
         headers: {
@@ -60,7 +60,7 @@ const defaultItem = ref({
 
 async function registerPlayer() {
     const registeredPlayer = await $fetch(
-        `${runtimeConfig.public.apiUrl}/players`,
+        `${runtimeConfig.public.apiUrl}/players/`,
         {
             method: 'POST',
             headers: {
@@ -76,7 +76,7 @@ async function registerPlayer() {
 
 async function editPlayer(id) {
     const editedPlayer = await $fetch(
-        `${runtimeConfig.public.apiUrl}/players/${id}`,
+        `${runtimeConfig.public.apiUrl}/players/${id}/`,
         {
             method: 'PUT',
             body: editedItem.value,
@@ -87,7 +87,7 @@ async function editPlayer(id) {
 }
 
 async function deletePlayer(id) {
-    await $fetch(`${runtimeConfig.public.apiUrl}/players/${id}`, {
+    await $fetch(`${runtimeConfig.public.apiUrl}/players/${id}/`, {
         method: 'DELETE',
     });
 
