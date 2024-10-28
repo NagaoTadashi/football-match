@@ -86,7 +86,7 @@ def create_team_info(
     return created_team_info
 
 
-@app.put("/team_info/{team_id}", response_model=schemas.Team)
+@app.put("/team_info/{team_id}/", response_model=schemas.Team)
 def update_team_info(
     team_id: int, team_info_update: schemas.TeamUpdate, db: Session = Depends(get_db)
 ):
@@ -118,7 +118,7 @@ def create_player(
     return created_player
 
 
-@app.put("/players/{player_id}", response_model=schemas.Player)
+@app.put("/players/{player_id}/", response_model=schemas.Player)
 def update_player(
     player_id: int, player_update: schemas.PlayerUpdate, db: Session = Depends(get_db)
 ):
@@ -131,7 +131,7 @@ def update_player(
     return updated_player
 
 
-@app.delete("/players/{player_id}", response_model=schemas.Player)
+@app.delete("/players/{player_id}/", response_model=schemas.Player)
 def delete_player(player_id: int, db: Session = Depends(get_db)):
     deleted_player = crud.delete_player(db=db, player_id=player_id)
 
@@ -174,7 +174,7 @@ def create_recruitment(
     return created_recruitment
 
 
-@app.delete("/recruitments/{recruitment_id}", response_model=schemas.Recruitment)
+@app.delete("/recruitments/{recruitment_id}/", response_model=schemas.Recruitment)
 def delete_recruitment(recruitment_id: int, db: Session = Depends(get_db)):
     deleted_recruitment = crud.delete_recruitment(db=db, recruitment_id=recruitment_id)
 
@@ -195,7 +195,7 @@ def get_application_requests(
 
 
 @app.post(
-    "/approve_application_request/{application_id}", response_model=schemas.Application
+    "/approve_application_request/{application_id}/", response_model=schemas.Application
 )
 def approve_application_request(application_id: int, db: Session = Depends(get_db)):
     approved_application_request = crud.approve_application_request(
@@ -205,7 +205,7 @@ def approve_application_request(application_id: int, db: Session = Depends(get_d
 
 
 @app.post(
-    "/decline_application_request/{application_id}", response_model=schemas.Application
+    "/decline_application_request/{application_id}/", response_model=schemas.Application
 )
 def decline_application_request(application_id: int, db: Session = Depends(get_db)):
     declined_application_request = crud.decline_application_request(
@@ -237,7 +237,7 @@ def create_application(
     return created_application
 
 
-@app.delete("/application/{application_id}", response_model=schemas.Application)
+@app.delete("/application/{application_id}/", response_model=schemas.Application)
 def delete_application(application_id: int, db: Session = Depends(get_db)):
     deleted_application = crud.delete_application(db=db, application_id=application_id)
 
