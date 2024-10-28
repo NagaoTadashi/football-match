@@ -24,9 +24,7 @@ def get_db():
         db.close()
 
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://localhost:3000", "https://nuxt-163743873735.us-central1.run.app"]
 
 app.add_middleware(
     CORSMiddleware,
