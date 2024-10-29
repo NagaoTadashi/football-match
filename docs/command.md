@@ -24,7 +24,7 @@ docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match
 
 docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match-439708/fastapi/fastapi:latest -f Dockerfile.production .
 
-#　 push
+# push
 
 docker push us-central1-docker.pkg.dev/football-match-439708/nuxt/nuxt:latest
 
