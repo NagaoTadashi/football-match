@@ -80,18 +80,30 @@ const img_url =
                             >
                                 <v-card class="pb-3" border flat>
                                     <v-img :src="img_url">
-                                        <div class="d-flex justify-end">
-                                            <!-- <v-btn
-                                                density="comfortable"
-                                                v-tooltip:top="'試合動画'"
-                                                icon="mdi-video"
-                                            ></v-btn> -->
-                                            <!-- <v-btn
-                                                density="comfortable"
-                                                v-tooltip:top="'試合メモ'"
-                                                icon="mdi-note-edit-outline"
-                                            ></v-btn> -->
-                                        </div>
+                                        <!-- <div
+                                            class="d-flex justify-space-between pa-2"
+                                        >
+                                            <div class="d-flex">
+                                                <v-btn
+                                                    density="comfortable"
+                                                    v-tooltip:top="'試合メモ'"
+                                                    icon="mdi-note-edit-outline"
+                                                ></v-btn>
+                                            </div>
+
+                                            <div class="d-flex">
+                                                <v-btn
+                                                    density="comfortable"
+                                                    v-tooltip:top="'試合動画'"
+                                                    icon="mdi-video"
+                                                ></v-btn>
+                                                <v-btn
+                                                    density="comfortable"
+                                                    v-tooltip:top="'試合動画'"
+                                                    icon="mdi-video"
+                                                ></v-btn>
+                                            </div>
+                                        </div> -->
                                     </v-img>
 
                                     <v-card-item>
