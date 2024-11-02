@@ -92,6 +92,7 @@ console.log(teamInfo.value);
                                 <v-card-subtitle class="text-h6"
                                     >SNSアカウント:
                                     <a
+                                        v-if="teamInfo.instagram_user_name"
                                         :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
                                         target="_blank"
                                     >
@@ -102,6 +103,7 @@ console.log(teamInfo.value);
                                             style="vertical-align: middle"
                                     /></a>
                                     <a
+                                        v-if="teamInfo.X_user_name"
                                         :href="`https://x.com/${teamInfo.X_user_name}/`"
                                         target="_blank"
                                     >

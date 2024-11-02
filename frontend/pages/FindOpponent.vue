@@ -156,6 +156,9 @@ const img_url =
                                     <v-img :src="img_url">
                                         <div class="d-flex justify-end">
                                             <a
+                                                v-if="
+                                                    item.raw.instagram_user_name
+                                                "
                                                 href="https://www.instagram.com/tadashi_0508/"
                                                 target="_blank"
                                             >
@@ -168,6 +171,7 @@ const img_url =
                                                     "
                                             /></a>
                                             <a
+                                                v-if="item.raw.X_user_name"
                                                 href="https://x.com/NagaoTadashi"
                                                 target="_blank"
                                             >
