@@ -12,12 +12,16 @@ class MatchBase(BaseModel):
     home_team_prefecture: str
     home_team_category: str
     home_team_league: str
+    home_team_instagram_user_name: Optional[str] = None
+    home_team_X_user_name: Optional[str] = None
     away_team_id: int
     away_team_name: str
     away_team_region: str
     away_team_prefecture: str
     away_team_category: str
     away_team_league: str
+    away_team_instagram_user_name: Optional[str] = None
+    away_team_X_user_name: Optional[str] = None
     year: int
     month: int
     day: int
@@ -40,6 +44,8 @@ class TeamBase(BaseModel):
     prefecture: str
     category: str
     league: str
+    instagram_user_name: Optional[str] = None
+    X_user_name: Optional[str] = None
 
 
 class TeamCreate(TeamBase):
@@ -131,6 +137,8 @@ class OtherTeamRecruitment(RecruitmentBase):
     prefecture: str
     category: str
     league: str
+    instagram_user_name: Optional[str] = None
+    X_user_name: Optional[str] = None
 
     class Config:
         orm_mode = True
