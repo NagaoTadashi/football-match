@@ -189,5 +189,6 @@ logs
 sql_app.db
 alembic.ini
 alembic/
+migration/
 
 serviceAccountKey.json
