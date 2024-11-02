@@ -79,7 +79,12 @@ const img_url =
                                 cols="auto"
                                 md="4"
                             >
-                                <v-card class="pb-3" border flat>
+                                <v-card
+                                    v-if="item.raw.home_team_id === myTeam.id"
+                                    class="pb-3"
+                                    border
+                                    flat
+                                >
                                     <v-img :src="img_url">
                                         <div class="d-flex justify-end">
                                             <a
@@ -118,52 +123,96 @@ const img_url =
                                     </v-img>
 
                                     <v-card-item>
-                                        <div
-                                            v-if="
-                                                item.raw.home_team_id ===
-                                                myTeam.id
-                                            "
-                                        >
-                                            <v-card-title>
-                                                vs
-                                                {{ item.raw.away_team_name }}
-                                                (H)
-                                            </v-card-title>
+                                        <v-card-title>
+                                            vs
+                                            {{ item.raw.away_team_name }}
+                                            (H)
+                                        </v-card-title>
 
-                                            <v-card-subtitle>
-                                                {{
+                                        <v-card-subtitle>
+                                            {{ item.raw.away_team_prefecture }}
+                                            |
+                                            {{ item.raw.away_team_category }}
+                                            |
+                                            {{ item.raw.away_team_league }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon>mdi-calendar-month</v-icon>
+                                            {{ item.raw.year }}年{{
+                                                item.raw.month
+                                            }}月{{ item.raw.day }}日
+                                        </v-card-subtitle>
+                                        <v-card-subtitle>
+                                            <v-icon>
+                                                mdi-clock-time-eight-outline
+                                            </v-icon>
+                                            {{ item.raw.start_time }}
+                                            ~
+                                            {{ item.raw.end_time }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon
+                                                >mdi-map-marker-outline</v-icon
+                                            >
+                                            {{ item.raw.location }}
+                                        </v-card-subtitle>
+                                    </v-card-item>
+                                </v-card>
+
+                                <v-card v-else class="pb-3" border flat>
+                                    <v-img :src="img_url">
+                                        <div class="d-flex justify-end">
+                                            <a
+                                                v-if="
                                                     item.raw
-                                                        .away_team_prefecture
-                                                }}
-                                                |
-                                                {{
-                                                    item.raw.away_team_category
-                                                }}
-                                                |
-                                                {{ item.raw.away_team_league }}
-                                            </v-card-subtitle>
-                                        </div>
-
-                                        <div v-else>
-                                            <v-card-title>
-                                                vs
-                                                {{ item.raw.home_team_name }}
-                                                (A)
-                                            </v-card-title>
-
-                                            <v-card-subtitle>
-                                                {{
+                                                        .home_team_instagram_user_name
+                                                "
+                                                :href="`https://www.instagram.com/${item.raw.home_team_instagram_user_name}/`"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-インスタグラム.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                            <a
+                                                v-if="
                                                     item.raw
-                                                        .home_team_prefecture
-                                                }}
-                                                |
-                                                {{
-                                                    item.raw.home_team_category
-                                                }}
-                                                |
-                                                {{ item.raw.home_team_league }}
-                                            </v-card-subtitle>
+                                                        .home_team_X_user_name
+                                                "
+                                                :href="`https://x.com/${item.raw.home_team_X_user_name}/`"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-ツイッターx.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
                                         </div>
+                                    </v-img>
+
+                                    <v-card-item>
+                                        <v-card-title>
+                                            vs
+                                            {{ item.raw.home_team_name }}
+                                            (A)
+                                        </v-card-title>
+
+                                        <v-card-subtitle>
+                                            {{ item.raw.home_team_prefecture }}
+                                            |
+                                            {{ item.raw.home_team_category }}
+                                            |
+                                            {{ item.raw.home_team_league }}
+                                        </v-card-subtitle>
 
                                         <v-card-subtitle>
                                             <v-icon>mdi-calendar-month</v-icon>
