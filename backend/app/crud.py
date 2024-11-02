@@ -19,12 +19,16 @@ def get_matches(db: Session, uid: str):
             home_team.prefecture.label("home_team_prefecture"),
             home_team.category.label("home_team_category"),
             home_team.league.label("home_team_league"),
+            home_team.instagram_user_name.label("home_team_instagram_user_name"),
+            home_team.X_user_name.label("home_team_X_user_name"),
             away_team.id.label("away_team_id"),
             away_team.name.label("away_team_name"),
             away_team.region.label("away_team_region"),
             away_team.prefecture.label("away_team_prefecture"),
             away_team.category.label("away_team_category"),
             away_team.league.label("away_team_league"),
+            away_team.instagram_user_name.label("away_team_instagram_user_name"),
+            away_team.X_user_name.label("away_team_X_user_name"),
             models.Match.year,
             models.Match.month,
             models.Match.day,
@@ -60,6 +64,8 @@ def create_team_info(db: Session, team_info: schemas.TeamCreate, uid: str):
         prefecture=team_info.prefecture,
         category=team_info.category,
         league=team_info.league,
+        instagram_user_name=team_info.instagram_user_name,
+        X_user_name=team_info.X_user_name,
     )
 
     db.add(db_team_info)
@@ -82,6 +88,8 @@ def update_team_info(
     team_info.prefecture = team_info_update.prefecture
     team_info.category = team_info_update.category
     team_info.league = team_info_update.league
+    team_info.instagram_user_name = team_info_update.instagram_user_name
+    team_info.X_user_name = team_info_update.X_user_name
 
     db.commit()
     db.refresh(team_info)
@@ -159,6 +167,8 @@ def get_other_team_recruitments(db: Session, uid: str):
             models.Team.prefecture,
             models.Team.category,
             models.Team.league,
+            models.Team.instagram_user_name,
+            models.Team.X_user_name,
         )
         .join(models.Team, models.Recruitment.uid == models.Team.uid)
         .filter(models.Recruitment.uid != uid)
@@ -224,6 +234,8 @@ def get_application_requests(db: Session, uid: str):
             models.Team.prefecture,
             models.Team.category,
             models.Team.league,
+            models.Team.instagram_user_name,
+            models.Team.X_user_name,
         )
         .join(
             models.Application,
@@ -320,6 +332,8 @@ def get_application_status(db: Session, uid: str):
             models.Team.prefecture,
             models.Team.category,
             models.Team.league,
+            models.Team.instagram_user_name,
+            models.Team.X_user_name,
         )
         .join(
             models.Application,

@@ -13,6 +13,8 @@ const teamInfo = ref({
     prefecture: props.teamInfo.prefecture,
     category: props.teamInfo.category,
     league: props.teamInfo.league,
+    instagram_user_name: props.teamInfo.instagram_user_name,
+    X_user_name: props.teamInfo.X_user_name,
 });
 
 const regions = {
@@ -154,6 +156,40 @@ const isValid = computed(() => {
                             <v-text-field
                                 v-model="teamInfo.league"
                                 label="所属リーグを入力"
+                                clearable
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="2" sm="6">
+                            <img
+                                src="../../../public/icons8-インスタグラム.svg"
+                                width="50"
+                                height="50"
+                                style="vertical-align: middle"
+                            />
+                        </v-col>
+                        <v-col cols="12" md="6" sm="6">
+                            <v-text-field
+                                v-model="teamInfo.instagram_user_name"
+                                label="ユーザー名を入力"
+                                clearable
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="12" md="2" sm="6">
+                            <img
+                                src="../../../public/icons8-ツイッターx.svg"
+                                width="50"
+                                height="50"
+                                style="vertical-align: middle"
+                            />
+                        </v-col>
+                        <v-col cols="12" md="6" sm="6">
+                            <v-text-field
+                                v-model="teamInfo.X_user_name"
+                                label="ユーザー名を入力"
                                 clearable
                             ></v-text-field>
                         </v-col>

@@ -153,7 +153,38 @@ const img_url =
                                 md="4"
                             >
                                 <v-card class="pb-3" border flat>
-                                    <v-img :src="img_url"></v-img>
+                                    <v-img :src="img_url">
+                                        <div class="d-flex justify-end">
+                                            <a
+                                                v-if="
+                                                    item.raw.instagram_user_name
+                                                "
+                                                href="https://www.instagram.com/tadashi_0508/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-インスタグラム.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                            <a
+                                                v-if="item.raw.X_user_name"
+                                                href="https://x.com/NagaoTadashi"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-ツイッターx.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                        </div>
+                                    </v-img>
 
                                     <v-card-item>
                                         <v-card-title>

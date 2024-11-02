@@ -20,9 +20,9 @@ alembic upgrade head
 
 # コンテナのビルド
 
-docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match-439708/nuxt/nuxt:latest -f Dockerfile.production .
+docker build --no-cache --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match-439708/nuxt/nuxt:latest -f Dockerfile.production .
 
-docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match-439708/fastapi/fastapi:latest -f Dockerfile.production .
+docker build --no-cache --platform linux/amd64 -t us-central1-docker.pkg.dev/football-match-439708/fastapi/fastapi:latest -f Dockerfile.production .
 
 # push
 

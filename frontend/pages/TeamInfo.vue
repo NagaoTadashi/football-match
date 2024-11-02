@@ -25,6 +25,8 @@ function handleTeamInfoRegisterd(newTeamInfo) {
 function handleTeamInfoEdited(updatedTeamInfo) {
     teamInfo.value = updatedTeamInfo;
 }
+
+console.log(teamInfo.value);
 </script>
 
 <template>
@@ -85,6 +87,33 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                                     >所属リーグ:
                                     {{ teamInfo.league }}</v-card-subtitle
                                 >
+                                <br />
+
+                                <v-card-subtitle class="text-h6"
+                                    >SNSアカウント:
+                                    <a
+                                        v-if="teamInfo.instagram_user_name"
+                                        :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
+                                        target="_blank"
+                                    >
+                                        <img
+                                            src="../public/icons8-インスタグラム.svg"
+                                            width="50"
+                                            height="50"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                    <a
+                                        v-if="teamInfo.X_user_name"
+                                        :href="`https://x.com/${teamInfo.X_user_name}/`"
+                                        target="_blank"
+                                    >
+                                        <img
+                                            src="../public/icons8-ツイッターx.svg"
+                                            width="50"
+                                            height="50"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                </v-card-subtitle>
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-img
