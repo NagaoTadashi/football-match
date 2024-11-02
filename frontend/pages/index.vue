@@ -1,4 +1,5 @@
 <script setup>
+import TeamInfo from './TeamInfo.vue';
 const user = await getCurrentUser();
 const idToken = await user.getIdToken();
 
@@ -83,9 +84,10 @@ const img_url =
                                         <div class="d-flex justify-end">
                                             <a
                                                 v-if="
-                                                    item.raw.instagram_user_name
+                                                    item.raw
+                                                        .away_team_instagram_user_name
                                                 "
-                                                href="https://www.instagram.com/tadashi_0508/"
+                                                :href="`https://www.instagram.com/${item.raw.away_team_instagram_user_name}/`"
                                                 target="_blank"
                                             >
                                                 <img
@@ -97,8 +99,11 @@ const img_url =
                                                     "
                                             /></a>
                                             <a
-                                                v-if="item.raw.X_user_name"
-                                                href="https://x.com/NagaoTadashi"
+                                                v-if="
+                                                    item.raw
+                                                        .away_team_X_user_name
+                                                "
+                                                :href="`https://x.com/${item.raw.away_team_X_user_name}/`"
                                                 target="_blank"
                                             >
                                                 <img

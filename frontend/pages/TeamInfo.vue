@@ -25,8 +25,6 @@ function handleTeamInfoRegisterd(newTeamInfo) {
 function handleTeamInfoEdited(updatedTeamInfo) {
     teamInfo.value = updatedTeamInfo;
 }
-
-console.log(teamInfo.value);
 </script>
 
 <template>

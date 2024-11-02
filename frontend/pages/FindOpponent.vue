@@ -80,6 +80,8 @@ const img_url =
 //     'Tech',
 //     'Creative Writing',
 // ];
+
+console.log(recruitments.value);
 </script>
 
 <template>
@@ -159,7 +161,7 @@ const img_url =
                                                 v-if="
                                                     item.raw.instagram_user_name
                                                 "
-                                                href="https://www.instagram.com/tadashi_0508/"
+                                                :href="`https://www.instagram.com/${item.raw.instagram_user_name}/`"
                                                 target="_blank"
                                             >
                                                 <img
@@ -172,7 +174,7 @@ const img_url =
                                             /></a>
                                             <a
                                                 v-if="item.raw.X_user_name"
-                                                href="https://x.com/NagaoTadashi"
+                                                :href="`https://x.com/${item.raw.X_user_name}/`"
                                                 target="_blank"
                                             >
                                                 <img
