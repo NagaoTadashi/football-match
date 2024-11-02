@@ -80,30 +80,32 @@ const img_url =
                             >
                                 <v-card class="pb-3" border flat>
                                     <v-img :src="img_url">
-                                        <!-- <div
-                                            class="d-flex justify-space-between pa-2"
-                                        >
-                                            <div class="d-flex">
-                                                <v-btn
-                                                    density="comfortable"
-                                                    v-tooltip:top="'試合メモ'"
-                                                    icon="mdi-note-edit-outline"
-                                                ></v-btn>
-                                            </div>
-
-                                            <div class="d-flex">
-                                                <v-btn
-                                                    density="comfortable"
-                                                    v-tooltip:top="'試合動画'"
-                                                    icon="mdi-video"
-                                                ></v-btn>
-                                                <v-btn
-                                                    density="comfortable"
-                                                    v-tooltip:top="'試合動画'"
-                                                    icon="mdi-video"
-                                                ></v-btn>
-                                            </div>
-                                        </div> -->
+                                        <div class="d-flex justify-end">
+                                            <a
+                                                href="https://www.instagram.com/tadashi_0508/"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-インスタグラム.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                            <a
+                                                href="https://x.com/NagaoTadashi"
+                                                target="_blank"
+                                            >
+                                                <img
+                                                    src="../public/icons8-ツイッターx.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                        </div>
                                     </v-img>
 
                                     <v-card-item>
