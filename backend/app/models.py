@@ -30,8 +30,8 @@ class Team(Base):
     prefecture = Column(String(10))
     category = Column(String(10))
     league = Column(String(20))
-    instagram_user_name = Column(String(20), nullable=True)
-    X_user_name = Column(String(20), nullable=True)
+    instagram_user_name = Column(String(50), nullable=True)
+    X_user_name = Column(String(50), nullable=True)
 
 
 # Player
