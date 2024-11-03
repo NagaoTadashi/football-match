@@ -6,6 +6,8 @@ const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
 
+const isErrorDialogVisible = ref(false);
+
 const { data: applicationRequests } = await useFetch(
     `${runtimeConfig.public.apiUrl}/application_requests/`,
     {
@@ -18,13 +20,16 @@ const { data: applicationRequests } = await useFetch(
 );
 
 async function approveApplicationRequest(id) {
-    await $fetch(
+    const approvedApplicationRequest = await $fetch(
         `${runtimeConfig.public.apiUrl}/approve_application_request/${id}/`,
         {
             method: 'POST',
         }
     );
 
+    if (approvedApplicationRequest == null) {
+        isErrorDialogVisible.value = true;
+    }
     applicationRequests.value = applicationRequests.value.filter(
         (applicationRequest) => applicationRequest.id !== id
     );
@@ -209,5 +214,18 @@ function declineItemConfirm() {
                 現在、他チームからの申し込みはありません
             </template>
         </v-data-table>
+
+        <v-dialog v-model="isErrorDialogVisible" max-width="750">
+            <v-card
+                prepend-icon="mdi-alert-circle-outline"
+                title="この申し込みは直前でキャンセルされたため、マッチできませんでした。"
+            >
+                <v-card-actions>
+                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                        >閉じる</v-btn
+                    >
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>

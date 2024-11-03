@@ -6,6 +6,8 @@ const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
 
+const isErrorDialogVisible = ref(false);
+
 const { data: teamInfo } = await useFetch(
     `${runtimeConfig.public.apiUrl}/team_info/`,
     {
@@ -32,8 +34,6 @@ recruitments.value = recruitments.value.map((item) => ({
     ...item,
     isApplied: false,
 }));
-
-const isErrorDialogVisible = ref(false);
 
 const postApplication = async (recruitment_id) => {
     const postedApplication = await $fetch(
@@ -80,8 +80,6 @@ const img_url =
 //     'Tech',
 //     'Creative Writing',
 // ];
-
-console.log(recruitments.value);
 </script>
 
 <template>
