@@ -6,6 +6,8 @@ const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
 
+const isErrorDialogVisible = ref(false);
+
 const { data: applicationRequests } = await useFetch(
     `${runtimeConfig.public.apiUrl}/application_requests/`,
     {
@@ -18,13 +20,16 @@ const { data: applicationRequests } = await useFetch(
 );
 
 async function approveApplicationRequest(id) {
-    await $fetch(
+    const approvedApplicationRequest = await $fetch(
         `${runtimeConfig.public.apiUrl}/approve_application_request/${id}/`,
         {
             method: 'POST',
         }
     );
 
+    if (approvedApplicationRequest == null) {
+        isErrorDialogVisible.value = true;
+    }
     applicationRequests.value = applicationRequests.value.filter(
         (applicationRequest) => applicationRequest.id !== id
     );
