@@ -214,5 +214,18 @@ function declineItemConfirm() {
                 現在、他チームからの申し込みはありません
             </template>
         </v-data-table>
+
+        <v-dialog v-model="isErrorDialogVisible" max-width="750">
+            <v-card
+                prepend-icon="mdi-alert-circle-outline"
+                title="この申し込みは直前でキャンセルされたため、マッチできませんでした。"
+            >
+                <v-card-actions>
+                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                        >閉じる</v-btn
+                    >
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
