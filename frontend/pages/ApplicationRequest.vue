@@ -170,6 +170,7 @@ function declineItemConfirm() {
                     v-if="item.instagram_user_name"
                     :href="`https://www.instagram.com/${item.instagram_user_name}/`"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <img
                         src="../public/icons8-インスタグラム.svg"
@@ -182,6 +183,7 @@ function declineItemConfirm() {
                     v-if="item.X_user_name"
                     :href="`https://x.com/${item.X_user_name}/`"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <img
                         src="../public/icons8-ツイッターx.svg"

@@ -93,6 +93,7 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                                         v-if="teamInfo.instagram_user_name"
                                         :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                     >
                                         <img
                                             src="../public/icons8-インスタグラム.svg"
@@ -104,6 +105,7 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                                         v-if="teamInfo.X_user_name"
                                         :href="`https://x.com/${teamInfo.X_user_name}/`"
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                     >
                                         <img
                                             src="../public/icons8-ツイッターx.svg"

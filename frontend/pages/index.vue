@@ -94,6 +94,7 @@ const img_url =
                                                 "
                                                 :href="`https://www.instagram.com/${item.raw.away_team_instagram_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-インスタグラム.svg"
@@ -110,6 +111,7 @@ const img_url =
                                                 "
                                                 :href="`https://x.com/${item.raw.away_team_X_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-ツイッターx.svg"
@@ -171,6 +173,7 @@ const img_url =
                                                 "
                                                 :href="`https://www.instagram.com/${item.raw.home_team_instagram_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-インスタグラム.svg"
@@ -187,6 +190,7 @@ const img_url =
                                                 "
                                                 :href="`https://x.com/${item.raw.home_team_X_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-ツイッターx.svg"

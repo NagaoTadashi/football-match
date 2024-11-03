@@ -161,6 +161,7 @@ const img_url =
                                                 "
                                                 :href="`https://www.instagram.com/${item.raw.instagram_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-インスタグラム.svg"
@@ -174,6 +175,7 @@ const img_url =
                                                 v-if="item.raw.X_user_name"
                                                 :href="`https://x.com/${item.raw.X_user_name}/`"
                                                 target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <img
                                                     src="../public/icons8-ツイッターx.svg"
