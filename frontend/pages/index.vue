@@ -100,9 +100,6 @@ const img_url =
                                                     src="../public/icons8-インスタグラム.svg"
                                                     width="50"
                                                     height="50"
-                                                    style="
-                                                        vertical-align: middle;
-                                                    "
                                             /></a>
                                             <a
                                                 v-if="
@@ -117,9 +114,6 @@ const img_url =
                                                     src="../public/icons8-ツイッターx.svg"
                                                     width="50"
                                                     height="50"
-                                                    style="
-                                                        vertical-align: middle;
-                                                    "
                                             /></a>
                                         </div>
                                     </v-img>
