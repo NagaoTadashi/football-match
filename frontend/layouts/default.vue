@@ -73,8 +73,19 @@ const handleSignOut = async () => {
             >
             <v-spacer></v-spacer>
 
+            <v-btn
+                class="text-none"
+                stacked
+                v-tooltip:bottom="'Xで問い合わせ'"
+                href="https://x.com/fm110508"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                <v-icon>mdi-email-outline</v-icon>
+            </v-btn>
+
             <v-btn class="text-none" stacked v-tooltip:bottom="'お知らせ'">
-                <v-badge color="error" content="200">
+                <v-badge color="error" content="1">
                     <v-icon>mdi-bell-outline</v-icon>
                 </v-badge>
             </v-btn>
