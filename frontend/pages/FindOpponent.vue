@@ -131,20 +131,6 @@ const img_url =
 
                 <template v-slot:default="{ items }">
                     <v-container class="pa-2" fluid>
-                        <!-- <v-row>
-                            <v-sheet class="py-4 px-1">
-                                <v-chip-group
-                                    selected-class="text-primary"
-                                    multiple
-                                >
-                                    <v-chip
-                                        v-for="tag in tags"
-                                        :key="tag"
-                                        :text="tag"
-                                    ></v-chip>
-                                </v-chip-group>
-                            </v-sheet>
-                        </v-row> -->
                         <v-row dense>
                             <v-col
                                 v-for="item in items"
