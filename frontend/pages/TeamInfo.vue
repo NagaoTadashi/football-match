@@ -64,32 +64,35 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                                 <br />
 
                                 <v-card-subtitle class="text-h6" opacity="100"
-                                    >地域:
-                                    {{ teamInfo.region }}</v-card-subtitle
+                                    >地域・・・{{
+                                        teamInfo.region
+                                    }}</v-card-subtitle
                                 >
                                 <br />
 
                                 <v-card-subtitle class="text-h6" opacity="100"
-                                    >都道府県:
-                                    {{ teamInfo.prefecture }}</v-card-subtitle
+                                    >都道府県・・・{{
+                                        teamInfo.prefecture
+                                    }}</v-card-subtitle
                                 >
                                 <br />
 
                                 <v-card-subtitle class="text-h6" opacity="100"
-                                    >カテゴリ:
-                                    {{ teamInfo.category }}</v-card-subtitle
+                                    >カテゴリ・・・{{
+                                        teamInfo.category
+                                    }}</v-card-subtitle
                                 >
                                 <br />
 
                                 <v-card-subtitle class="text-h6" opacity="100"
-                                    >所属リーグ:
-                                    {{ teamInfo.league }}</v-card-subtitle
+                                    >所属リーグ・・・{{
+                                        teamInfo.league
+                                    }}</v-card-subtitle
                                 >
                                 <br />
 
                                 <v-card-subtitle class="text-h6" opacity="100"
-                                    >SNSアカウント:
-                                    <a
+                                    >SNSアカウント・・・<a
                                         v-if="teamInfo.instagram_user_name"
                                         :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
                                         target="_blank"
