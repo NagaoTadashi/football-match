@@ -104,6 +104,38 @@ watch(dialogDelete, (val) => {
                     </v-dialog>
                 </v-toolbar>
             </template>
+
+            <template v-slot:[`item.name`]="{ item }">
+                <span>{{ item.name }}</span>
+                <span style="margin-left: 8px"></span>
+                <a
+                    v-if="item.instagram_user_name"
+                    :href="`https://www.instagram.com/${item.instagram_user_name}/`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        src="../public/icons8-インスタグラム.svg"
+                        width="30"
+                        height="30"
+                        style="vertical-align: middle"
+                    />
+                </a>
+                <a
+                    v-if="item.X_user_name"
+                    :href="`https://x.com/${item.X_user_name}/`"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        src="../public/icons8-ツイッターx.svg"
+                        width="30"
+                        height="30"
+                        style="vertical-align: middle"
+                    />
+                </a>
+            </template>
+
             <template v-slot:[`item.actions`]="{ item }">
                 <v-icon
                     v-if="item.status === '回答待ち'"
