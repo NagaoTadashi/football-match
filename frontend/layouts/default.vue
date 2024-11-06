@@ -73,16 +73,47 @@ const handleSignOut = async () => {
             >
             <v-spacer></v-spacer>
 
-            <v-btn
-                class="text-none"
-                stacked
-                v-tooltip:bottom="'Xで問い合わせ'"
-                href="https://x.com/fm110508"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <v-icon>mdi-email-outline</v-icon>
-            </v-btn>
+            <v-menu location="bottom">
+                <template v-slot:activator="{ props }">
+                    <v-btn
+                        v-bind="props"
+                        class="text-none"
+                        stacked
+                        v-tooltip:bottom="'問い合わせ'"
+                    >
+                        <v-icon>mdi-email-outline</v-icon>
+                    </v-btn>
+                </template>
+                <v-list>
+                    <v-list-item class="d-flex justify-center">
+                        <a
+                            href="https://x.com/fm110508/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img
+                                src="../public/icons8-ツイッターx.svg"
+                                width="35"
+                                height="35"
+                            />
+                        </a>
+                    </v-list-item>
+
+                    <v-list-item class="d-flex justify-center">
+                        <a
+                            href="https://www.instagram.com/footballmatch050/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img
+                                src="../public/icons8-インスタグラム.svg"
+                                width="35"
+                                height="35"
+                            />
+                        </a>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
 
             <v-btn class="text-none" stacked v-tooltip:bottom="'お知らせ'">
                 <v-badge color="error" content="1">
