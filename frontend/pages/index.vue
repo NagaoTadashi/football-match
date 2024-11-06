@@ -95,12 +95,13 @@ const img_url =
                                                 :href="`https://www.instagram.com/${item.raw.away_team_instagram_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-インスタグラム.svg"
-                                                    width="50"
-                                                    height="50"
-                                            /></a>
+                                                    src="../public/Instagram.svg"
+                                                    class="icon"
+                                                />
+                                            </a>
                                             <a
                                                 v-if="
                                                     item.raw
@@ -109,12 +110,13 @@ const img_url =
                                                 :href="`https://x.com/${item.raw.away_team_X_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-ツイッターx.svg"
-                                                    width="50"
-                                                    height="50"
-                                            /></a>
+                                                    src="../public/X.svg"
+                                                    class="icon"
+                                                />
+                                            </a>
                                         </div>
                                     </v-img>
 
@@ -168,15 +170,13 @@ const img_url =
                                                 :href="`https://www.instagram.com/${item.raw.home_team_instagram_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-インスタグラム.svg"
-                                                    width="50"
-                                                    height="50"
-                                                    style="
-                                                        vertical-align: middle;
-                                                    "
-                                            /></a>
+                                                    src="../public/Instagram.svg"
+                                                    class="icon"
+                                                />
+                                            </a>
                                             <a
                                                 v-if="
                                                     item.raw
@@ -185,15 +185,14 @@ const img_url =
                                                 :href="`https://x.com/${item.raw.home_team_X_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-ツイッターx.svg"
-                                                    width="50"
-                                                    height="50"
-                                                    style="
-                                                        vertical-align: middle;
-                                                    "
-                                            /></a>
+                                                    src="../public/X.svg"
+                                                    alt="X Icon"
+                                                    class="icon"
+                                                />
+                                            </a>
                                         </div>
                                     </v-img>
 
@@ -271,3 +270,21 @@ const img_url =
         </div>
     </div>
 </template>
+
+<style>
+.icon-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
+</style>

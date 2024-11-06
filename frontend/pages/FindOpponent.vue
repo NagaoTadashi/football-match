@@ -148,22 +148,22 @@ const img_url =
                                                 :href="`https://www.instagram.com/${item.raw.instagram_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-インスタグラム.svg"
-                                                    width="50"
-                                                    height="50"
+                                                    src="../public/Instagram.svg"
+                                                    class="icon"
                                             /></a>
                                             <a
                                                 v-if="item.raw.X_user_name"
                                                 :href="`https://x.com/${item.raw.X_user_name}/`"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
+                                                class="icon-wrapper"
                                             >
                                                 <img
-                                                    src="../public/icons8-ツイッターx.svg"
-                                                    width="50"
-                                                    height="50"
+                                                    src="../public/X.svg"
+                                                    class="icon"
                                             /></a>
                                         </div>
                                     </v-img>
@@ -286,3 +286,21 @@ const img_url =
         </v-dialog>
     </div>
 </template>
+
+<style>
+.icon-wrapper {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
+</style>
