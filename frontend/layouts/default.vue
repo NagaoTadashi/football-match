@@ -69,7 +69,7 @@ const handleSignOut = async () => {
     <v-app id="inspire">
         <v-app-bar :elevation="3" rounded>
             <v-app-bar-title>
-                <v-icon>mdi-soccer</v-icon> Football Match</v-app-bar-title
+                <v-icon>mdi-soccer</v-icon> Web League</v-app-bar-title
             >
             <v-spacer></v-spacer>
 
@@ -87,7 +87,7 @@ const handleSignOut = async () => {
                 <v-list>
                     <v-list-item class="d-flex justify-center">
                         <a
-                            href="https://x.com/fm110508/"
+                            href="https://x.com/web_league_0508"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -101,7 +101,7 @@ const handleSignOut = async () => {
 
                     <v-list-item class="d-flex justify-center">
                         <a
-                            href="https://www.instagram.com/footballmatch050/"
+                            href="https://www.instagram.com/web.league/"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
