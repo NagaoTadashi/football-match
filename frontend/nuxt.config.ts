@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     ssr: false,
     app: {
         head: {
-            title: 'Football Match',
+            title: 'Web League',
             meta: [
                 { charset: 'utf-8' },
                 {
@@ -54,6 +54,10 @@ export default defineNuxtConfig({
             projectNumber: process.env.PROJECT_NUMBER,
             apiKey: process.env.API_KEY,
             authDomain: process.env.AUTH_DOMAIN,
+            storageBucket: process.env.STORAGE_BUCKET,
+            messagingSenderId: process.env.MESSAGING_SENDER_ID,
+            appId: process.env.APP_ID,
+            measurementId: process.env.MEASUREMENT_ID,
         },
     },
 });
