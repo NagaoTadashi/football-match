@@ -24,7 +24,11 @@ def get_db():
         db.close()
 
 
-origins = ["http://localhost:3000", "https://nuxt-163743873735.us-central1.run.app"]
+origins = [
+    "http://localhost:3000",
+    "https://nuxt-797940994128.us-central1.run.app",
+    "web-league.com",
+]
 
 app.add_middleware(
     CORSMiddleware,
