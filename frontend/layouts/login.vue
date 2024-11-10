@@ -8,7 +8,7 @@ const visible = ref(false);
     <div>
         <div>
             <div class="text-center mx-auto my-6" max-width="228" text>
-                <h1><v-icon>mdi-soccer</v-icon> Football Match</h1>
+                <h1><v-icon>mdi-soccer</v-icon> Web League</h1>
             </div>
 
             <v-card
