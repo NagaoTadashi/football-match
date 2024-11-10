@@ -27,7 +27,7 @@ def get_db():
 origins = [
     "http://localhost:3000",
     "https://nuxt-797940994128.us-central1.run.app",
-    "web-league.com",
+    "https://web-league.com/",
 ]
 
 app.add_middleware(
