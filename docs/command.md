@@ -20,9 +20,9 @@ alembic upgrade head
 
 # コンテナのビルド
 
-docker build --no-cache --platform linux/amd64 -t us-central1-docker.pkg.dev/web-league-441014/nuxt/nuxt:latest -f Dockerfile.production .
+docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/web-league-441014/nuxt/nuxt:latest -f Dockerfile.production .
 
-docker build --no-cache --platform linux/amd64 -t us-central1-docker.pkg.dev/web-league-441014/fastapi/fastapi:latest -f Dockerfile.production .
+docker build --platform linux/amd64 -t us-central1-docker.pkg.dev/web-league-441014/fastapi/fastapi:latest -f Dockerfile.production .
 
 # push
 
