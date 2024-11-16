@@ -23,7 +23,7 @@ const menues = [
     },
     {
         icon: 'mdi-text-box-outline',
-        title: '対戦相手を募集する',
+        title: '対戦相手を募集',
         value: 'requirementOpponent',
         to: '/RequirementOpponent/',
     },
