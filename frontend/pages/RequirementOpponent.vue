@@ -28,8 +28,10 @@ const { data: recruitments } = await useFetch(
     }
 );
 
-const dialog = ref(false);
+const postDialog = ref(false);
+const reservationDialog = ref(false);
 const dialogDelete = ref(false);
+
 const headers = ref([
     { title: '状態', align: 'start', key: 'status' },
     { title: '年', key: 'year', sortable: false },
@@ -85,7 +87,7 @@ async function deleteRecruitment(id) {
 }
 
 function close() {
-    dialog.value = false;
+    postDialog.value = false;
     nextTick(() => {
         editedItem.value = Object.assign({}, defaultItem.value);
         itemId.value = -1;
@@ -114,6 +116,10 @@ function deleteItemConfirm() {
     closeDelete();
 }
 
+const goToUrl = (url) => {
+    window.open(url, '_blank');
+};
+
 const currentYear = new Date().getFullYear();
 const yearOptions = [currentYear, currentYear + 1];
 
@@ -134,7 +140,7 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-watch(dialog, (val) => {
+watch(postDialog, (val) => {
     val || close();
 });
 watch(dialogDelete, (val) => {
@@ -151,6 +157,17 @@ const isValid = computed(() => {
         editedItem.value.location
     );
 });
+
+const oitaGrounds = [
+    {
+        title: '大分県サッカー協会人工芝グラウンド',
+        url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
+    },
+    {
+        title: 'その他のグラウンド',
+        url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
+    },
+];
 </script>
 
 <template>
@@ -186,15 +203,93 @@ const isValid = computed(() => {
                     <v-btn
                         prepend-icon="mdi-text-box-plus-outline"
                         elevation="5"
-                        @click="dialog = true"
+                        @click="postDialog = true"
                     >
                         募集を投稿
                     </v-btn>
 
-                    <v-dialog v-model="dialog" max-width="500px">
+                    <v-dialog v-model="postDialog" max-width="500px">
                         <v-card prepend-icon="mdi-form-select" title="募集内容">
                             <v-card-text>
                                 <v-container>
+                                    <v-row>
+                                        <v-col class="d-flex align-center">
+                                            <v-icon>mdi-soccer-field</v-icon>
+                                        </v-col>
+                                        <v-col cols="10" md="10" sm="7"
+                                            ><v-btn
+                                                evaluation="10"
+                                                @click="
+                                                    reservationDialog = true
+                                                "
+                                            >
+                                                グラウンドを予約
+                                            </v-btn>
+                                            <v-dialog
+                                                v-model="reservationDialog"
+                                                max-width="450"
+                                            >
+                                                <v-card>
+                                                    <v-card-title
+                                                        >大分県</v-card-title
+                                                    >
+                                                    <v-list lines="two"
+                                                        ><v-list-item
+                                                            v-for="(
+                                                                item, i
+                                                            ) in oitaGrounds"
+                                                            :key="i"
+                                                            :value="item"
+                                                        >
+                                                            <v-list-item-title
+                                                                >{{
+                                                                    item.title
+                                                                }}</v-list-item-title
+                                                            >
+                                                            <template
+                                                                v-slot:append
+                                                            >
+                                                                <v-btn
+                                                                    @click="
+                                                                        goToUrl(
+                                                                            item.url
+                                                                        )
+                                                                    "
+                                                                    >予約ページへ</v-btn
+                                                                >
+                                                            </template>
+                                                        </v-list-item>
+                                                    </v-list>
+                                                    <template v-slot:actions>
+                                                        <v-btn
+                                                            class="ms-auto"
+                                                            color="primary"
+                                                            variant="tonal"
+                                                            text="閉じる"
+                                                            @click="
+                                                                reservationDialog = false
+                                                            "
+                                                        ></v-btn>
+                                                    </template>
+                                                </v-card>
+                                            </v-dialog>
+                                        </v-col>
+                                    </v-row>
+                                    <v-row>
+                                        <v-col class="d-flex align-center">
+                                            <v-icon
+                                                >mdi-map-marker-outline</v-icon
+                                            >
+                                        </v-col>
+                                        <v-col cols="10" md="10" sm="7">
+                                            <v-text-field
+                                                v-model="editedItem.location"
+                                                hide-details="auto"
+                                                label="開催場所を入力"
+                                                clearable
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
                                     <v-row>
                                         <v-col class="d-flex align-center">
                                             <v-icon>
@@ -242,21 +337,6 @@ const isValid = computed(() => {
                                                 label="終了時間"
                                                 :items="timeOptions"
                                             />
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col class="d-flex align-center">
-                                            <v-icon>
-                                                mdi-map-marker-outline</v-icon
-                                            >
-                                        </v-col>
-                                        <v-col cols="12" md="10" sm="7">
-                                            <v-text-field
-                                                v-model="editedItem.location"
-                                                hide-details="auto"
-                                                label="場所"
-                                                clearable
-                                            ></v-text-field>
                                         </v-col>
                                     </v-row>
                                 </v-container>
