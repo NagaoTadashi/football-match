@@ -62,24 +62,7 @@ const postApplication = async (recruitment_id) => {
 const search = shallowRef('');
 
 const img_url =
-    // 'https://images.pexels.com/photos/41257/pexels-photo-41257.jpeg?auto=compress&cs=tinysrgb&w=800';
-    // 'https://images.pexels.com/photos/1884574/pexels-photo-1884574.jpeg?auto=compress&cs=tinysrgb&w=800';
-    // 'https://images.pexels.com/photos/18420917/pexels-photo-18420917.jpeg?auto=compress&cs=tinysrgb&w=800';
     'https://cdn.pixabay.com/photo/2015/07/02/00/08/football-828218_1280.jpg';
-
-// const tags = [
-//     '高校',
-//     '大学',
-//     '社会人',
-//     'Home Improvement',
-//     'Vacation',
-//     'Food',
-//     'Drawers',
-//     'Shopping',
-//     '8',
-//     'Tech',
-//     'Creative Writing',
-// ];
 </script>
 
 <template>
