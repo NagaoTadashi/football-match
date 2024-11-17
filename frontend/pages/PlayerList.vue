@@ -165,7 +165,7 @@ const isValid = computed(() => {
             :sort-by="[{ key: 'number', order: 'asc' }]"
         >
             <template v-slot:top>
-                <v-toolbar flat>
+                <v-toolbar class="px-2">
                     <v-toolbar-title>選手一覧</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>

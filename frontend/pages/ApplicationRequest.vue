@@ -109,7 +109,7 @@ function declineItemConfirm() {
             ]"
         >
             <template v-slot:top>
-                <v-toolbar flat>
+                <v-toolbar class="px-2">
                     <v-toolbar-title
                         >他チームからの申し込み依頼</v-toolbar-title
                     >
