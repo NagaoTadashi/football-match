@@ -52,6 +52,10 @@ def get_matches(db: Session, uid: str):
 
 
 # Team
+def get_registered_teams(db: Session, uid: str):
+    return db.query(models.Team).filter(models.Team.uid != uid).all()
+
+
 def get_team_info(db: Session, uid: str):
     return db.query(models.Team).filter(models.Team.uid == uid).first()
 
