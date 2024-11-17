@@ -164,7 +164,7 @@ const oitaGrounds = [
         url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
     },
     {
-        title: 'その他のグラウンド',
+        title: '大分県のその他のグラウンド',
         url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
     },
 ];
@@ -230,36 +230,42 @@ const oitaGrounds = [
                                                 max-width="450"
                                             >
                                                 <v-card>
-                                                    <v-card-title
-                                                        >大分県</v-card-title
+                                                    <v-card-title>
+                                                        予約可能なグラウンド
+                                                    </v-card-title>
+
+                                                    <v-divider></v-divider>
+                                                    <v-virtual-scroll
+                                                        :items="oitaGrounds"
+                                                        height="300"
+                                                        item-height="50"
                                                     >
-                                                    <v-list lines="two"
-                                                        ><v-list-item
-                                                            v-for="(
-                                                                item, i
-                                                            ) in oitaGrounds"
-                                                            :key="i"
-                                                            :value="item"
+                                                        <template
+                                                            v-slot:default="{
+                                                                item,
+                                                            }"
                                                         >
-                                                            <v-list-item-title
-                                                                >{{
-                                                                    item.title
-                                                                }}</v-list-item-title
-                                                            >
-                                                            <template
-                                                                v-slot:append
-                                                            >
-                                                                <v-btn
-                                                                    @click="
-                                                                        goToUrl(
-                                                                            item.url
-                                                                        )
-                                                                    "
-                                                                    >予約ページへ</v-btn
+                                                            <v-list-item>
+                                                                <v-list-item-title
+                                                                    >{{
+                                                                        item.title
+                                                                    }}</v-list-item-title
                                                                 >
-                                                            </template>
-                                                        </v-list-item>
-                                                    </v-list>
+                                                                <template
+                                                                    v-slot:append
+                                                                >
+                                                                    <v-btn
+                                                                        @click="
+                                                                            goToUrl(
+                                                                                item.url
+                                                                            )
+                                                                        "
+                                                                        >予約ページへ</v-btn
+                                                                    >
+                                                                </template>
+                                                            </v-list-item>
+                                                        </template>
+                                                    </v-virtual-scroll>
                                                     <template v-slot:actions>
                                                         <v-btn
                                                             class="ms-auto"
