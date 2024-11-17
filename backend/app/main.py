@@ -69,6 +69,16 @@ def get_matches(db: Session = Depends(get_db), user=Depends(get_current_user)):
 
 
 # Team
+@app.get("/registered_teams/", response_model=list[schemas.Team])
+def get_registered_teams(
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    uid = user["uid"]
+    registered_teams = crud.get_registered_teams(db=db, uid=uid)
+    return registered_teams
+
+
 @app.get("/team_info/", response_model=Optional[schemas.Team])
 def get_team_info(
     db: Session = Depends(get_db),
