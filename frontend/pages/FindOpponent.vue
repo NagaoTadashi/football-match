@@ -8,6 +8,19 @@ const runtimeConfig = useRuntimeConfig();
 
 const isErrorDialogVisible = ref(false);
 
+const teamsDialog = ref(false);
+
+const { data: registeredTeams } = await useFetch(
+    `${runtimeConfig.public.apiUrl}/registered_teams/`,
+    {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${idToken}`,
+            'Content-Type': 'application/json',
+        },
+    }
+);
+
 const { data: teamInfo } = await useFetch(
     `${runtimeConfig.public.apiUrl}/team_info/`,
     {
@@ -109,25 +122,84 @@ const img_url =
                             clearable
                             hide-details
                         ></v-text-field>
+                        <v-spacer></v-spacer>
+
+                        <v-btn elevation="5" @click="teamsDialog = true">
+                            登録チーム一覧
+                        </v-btn>
+
+                        <v-dialog v-model="teamsDialog" max-width="450">
+                            <v-card>
+                                <v-card-title> 登録チーム </v-card-title>
+
+                                <v-divider></v-divider>
+                                <v-virtual-scroll
+                                    :items="registeredTeams"
+                                    height="300"
+                                    item-height="50"
+                                >
+                                    <template v-slot:default="{ item }">
+                                        <v-list-item>
+                                            <v-list-item-title>{{
+                                                item.name
+                                            }}</v-list-item-title>
+                                            <v-list-item-subtitle
+                                                >{{ item.region }} |
+                                                {{ item.category }} |
+                                                {{ item.prefecture }} |
+                                                {{ item.league }}
+                                            </v-list-item-subtitle>
+                                            <template v-slot:append>
+                                                <a
+                                                    v-if="
+                                                        item.instagram_user_name
+                                                    "
+                                                    :href="`https://www.instagram.com/${item.instagram_user_name}/`"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <img
+                                                        src="../public/icons8-インスタグラム.svg"
+                                                        width="40"
+                                                        height="40"
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                /></a>
+                                                <a
+                                                    v-if="item.X_user_name"
+                                                    :href="`https://x.com/${item.X_user_name}/`"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <img
+                                                        src="../public/icons8-ツイッターx.svg"
+                                                        width="40"
+                                                        height="40"
+                                                        style="
+                                                            vertical-align: middle;
+                                                        "
+                                                /></a>
+                                            </template>
+                                        </v-list-item>
+                                    </template>
+                                </v-virtual-scroll>
+                                <template v-slot:actions>
+                                    <v-btn
+                                        class="ms-auto"
+                                        color="primary"
+                                        variant="tonal"
+                                        text="閉じる"
+                                        @click="teamsDialog = false"
+                                    ></v-btn>
+                                </template>
+                            </v-card>
+                        </v-dialog>
                     </v-toolbar>
                 </template>
 
                 <template v-slot:default="{ items }">
                     <v-container class="pa-2" fluid>
-                        <!-- <v-row>
-                            <v-sheet class="py-4 px-1">
-                                <v-chip-group
-                                    selected-class="text-primary"
-                                    multiple
-                                >
-                                    <v-chip
-                                        v-for="tag in tags"
-                                        :key="tag"
-                                        :text="tag"
-                                    ></v-chip>
-                                </v-chip-group>
-                            </v-sheet>
-                        </v-row> -->
                         <v-row dense>
                             <v-col
                                 v-for="item in items"
