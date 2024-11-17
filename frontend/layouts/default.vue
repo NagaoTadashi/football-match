@@ -81,7 +81,7 @@ const handleSignOut = async () => {
                         stacked
                         v-tooltip:bottom="'問い合わせ'"
                     >
-                        <v-icon>mdi-email-outline</v-icon>
+                        <v-icon>mdi-message-question-outline</v-icon>
                     </v-btn>
                 </template>
                 <v-list>
