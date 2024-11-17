@@ -1,4 +1,4 @@
-from sqlalchemy import select, or_
+from sqlalchemy import select, or_, not_
 from sqlalchemy.orm import Session, aliased
 
 from . import models, schemas
@@ -53,7 +53,11 @@ def get_matches(db: Session, uid: str):
 
 # Team
 def get_registered_teams(db: Session, uid: str):
-    return db.query(models.Team).filter(models.Team.uid != uid).all()
+    return (
+        db.query(models.Team)
+        .filter(models.Team.uid != uid, not_(models.Team.name.like("テストチーム%")))
+        .all()
+    )
 
 
 def get_team_info(db: Session, uid: str):
