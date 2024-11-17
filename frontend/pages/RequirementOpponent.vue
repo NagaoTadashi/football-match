@@ -195,7 +195,7 @@ const oitaGrounds = [
             ]"
         >
             <template v-slot:top>
-                <v-toolbar flat>
+                <v-toolbar class="px-2">
                     <v-toolbar-title>投稿済みの募集一覧</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>
