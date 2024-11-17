@@ -200,7 +200,11 @@ const oitaGrounds = [
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>
 
-                    <v-btn elevation="5" @click="postDialog = true">
+                    <v-btn
+                        prepend-icon="mdi-text-box-plus-outline"
+                        elevation="5"
+                        @click="postDialog = true"
+                    >
                         募集を投稿
                     </v-btn>
 

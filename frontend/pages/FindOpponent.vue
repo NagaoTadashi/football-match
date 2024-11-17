@@ -124,7 +124,11 @@ const img_url =
                         ></v-text-field>
                         <v-spacer></v-spacer>
 
-                        <v-btn elevation="5" @click="teamsDialog = true">
+                        <v-btn
+                            prepend-icon="mdi-list-box-outline"
+                            elevation="5"
+                            @click="teamsDialog = true"
+                        >
                             登録チーム一覧
                         </v-btn>
 
