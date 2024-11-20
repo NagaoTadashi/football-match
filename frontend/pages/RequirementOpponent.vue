@@ -28,6 +28,97 @@ const { data: recruitments } = await useFetch(
     }
 );
 
+const selectedRegion = ref('');
+const selectedPrefecture = ref('');
+
+const regions = {
+    '北海道・東北': [
+        '北海道',
+        '青森県',
+        '岩手県',
+        '宮城県',
+        '秋田県',
+        '山形県',
+        '福島県',
+    ],
+    関東: [
+        '茨城県',
+        '栃木県',
+        '群馬県',
+        '埼玉県',
+        '千葉県',
+        '東京都',
+        '神奈川県',
+    ],
+    中部: [
+        '新潟県',
+        '富山県',
+        '石川県',
+        '福井県',
+        '山梨県',
+        '長野県',
+        '岐阜県',
+        '静岡県',
+        '愛知県',
+    ],
+    近畿: [
+        '三重県',
+        '滋賀県',
+        '京都府',
+        '大阪府',
+        '兵庫県',
+        '奈良県',
+        '和歌山県',
+    ],
+    中国: ['鳥取県', '島根県', '岡山県', '広島県', '山口県'],
+    四国: ['徳島県', '香川県', '愛媛県', '高知県'],
+    '九州・沖縄': [
+        '福岡県',
+        '佐賀県',
+        '長崎県',
+        '熊本県',
+        '大分県',
+        '宮崎県',
+        '鹿児島県',
+        '沖縄県',
+    ],
+};
+
+const regionsList = Object.keys(regions);
+
+const grounds = {
+    大分県: [
+        {
+            title: '大分県サッカー協会人工芝グラウンド',
+            url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
+        },
+    ],
+    福岡県: [
+        {
+            title: '福岡フットボールセンター',
+            url: 'https://fukuoka-ffc.com/',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://www3.11489.jp/fukuoka/user/Home#divSearch',
+        },
+    ],
+    熊本県: [
+        {
+            title: 'COSMOSフィールド',
+            url: 'https://cosmos-kfc.com/field/',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://www.yoyakuma.jp/reserve_j/rsv_rj/Portal_i/pindex.asp',
+        },
+    ],
+};
+
 const postDialog = ref(false);
 const reservationDialog = ref(false);
 const dialogDelete = ref(false);
@@ -157,17 +248,6 @@ const isValid = computed(() => {
         editedItem.value.location
     );
 });
-
-const oitaGrounds = [
-    {
-        title: '大分県サッカー協会人工芝グラウンド',
-        url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
-    },
-    {
-        title: '大分県のその他のグラウンド',
-        url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
-    },
-];
 </script>
 
 <template>
@@ -230,14 +310,52 @@ const oitaGrounds = [
                                                 max-width="450"
                                             >
                                                 <v-card>
-                                                    <v-card-title>
-                                                        予約可能なグラウンド
-                                                    </v-card-title>
+                                                    <v-card-item>
+                                                        <v-row>
+                                                            <v-col
+                                                                cols="12"
+                                                                md="6"
+                                                                sm="6"
+                                                            >
+                                                                <v-select
+                                                                    :items="
+                                                                        regionsList
+                                                                    "
+                                                                    label="地域を選択"
+                                                                    v-model="
+                                                                        selectedRegion
+                                                                    "
+                                                                ></v-select>
+                                                            </v-col>
+                                                            <v-col
+                                                                cols="12"
+                                                                md="6"
+                                                                sm="6"
+                                                            >
+                                                                <v-select
+                                                                    label="都道府県を選択"
+                                                                    :items="
+                                                                        regions[
+                                                                            selectedRegion
+                                                                        ]
+                                                                    "
+                                                                    v-model="
+                                                                        selectedPrefecture
+                                                                    "
+                                                                ></v-select>
+                                                            </v-col>
+                                                        </v-row>
 
-                                                    <v-divider></v-divider>
+                                                        <v-divider></v-divider>
+                                                    </v-card-item>
+
                                                     <v-virtual-scroll
-                                                        :items="oitaGrounds"
-                                                        height="300"
+                                                        :items="
+                                                            grounds[
+                                                                selectedPrefecture
+                                                            ]
+                                                        "
+                                                        height="150"
                                                         item-height="50"
                                                     >
                                                         <template
@@ -266,6 +384,7 @@ const oitaGrounds = [
                                                             </v-list-item>
                                                         </template>
                                                     </v-virtual-scroll>
+
                                                     <template v-slot:actions>
                                                         <v-btn
                                                             class="ms-auto"
