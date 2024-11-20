@@ -147,10 +147,9 @@ const img_url =
                                             <v-list-item-title>{{
                                                 item.name
                                             }}</v-list-item-title>
-                                            <v-list-item-subtitle
-                                                >{{ item.region }} |
-                                                {{ item.category }} |
+                                            <v-list-item-subtitle>
                                                 {{ item.prefecture }} |
+                                                {{ item.category }} |
                                                 {{ item.league }}
                                             </v-list-item-subtitle>
                                             <template v-slot:append>
