@@ -87,16 +87,6 @@ const regions = {
 const regionsList = Object.keys(regions);
 
 const grounds = {
-    大分県: [
-        {
-            title: '大分県サッカー協会人工芝グラウンド',
-            url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
-        },
-        {
-            title: 'その他のグラウンド',
-            url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
-        },
-    ],
     福岡県: [
         {
             title: '福岡フットボールセンター',
@@ -107,6 +97,34 @@ const grounds = {
             url: 'https://www3.11489.jp/fukuoka/user/Home#divSearch',
         },
     ],
+    佐賀県: [
+        {
+            title: '小城市フットボールセンター',
+            url: 'https://labola.jp/r/shop/3311/calendar_week/',
+        },
+        {
+            title: 'FOOTBALL PARK SAGA YAMATO',
+            url: 'https://sagayamato-footballpark.com/main/4.html',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://yoyaku.city.saga.lg.jp/web/(S(pvaqi2rg12pvov45ruf4rs55))/Wg_KoukyouShisetsuYoyakuMoushikomi.aspx',
+        },
+    ],
+    長崎県: [
+        {
+            title: '長崎県スポーツ協会人工芝グラウンド',
+            url: 'https://nagasakikensportss.wixsite.com/shinkoukai',
+        },
+        {
+            title: 'その他のグラウンド(県内全域)',
+            url: 'https://nelcs.ne.jp/Facilityrsv/Smartphone/4200042/user/home/index.php5',
+        },
+        {
+            title: 'その他のグラウンド(長崎市内のみ)',
+            url: 'https://www.11489.jp/NagasakiCity/Web/Home/WgR_ModeSelect',
+        },
+    ],
     熊本県: [
         {
             title: 'COSMOSフィールド',
@@ -115,6 +133,48 @@ const grounds = {
         {
             title: 'その他のグラウンド',
             url: 'https://www.yoyakuma.jp/reserve_j/rsv_rj/Portal_i/pindex.asp',
+        },
+    ],
+    大分県: [
+        {
+            title: '大分県サッカー協会人工芝グラウンド',
+            url: 'https://oita-s-c.resv.jp/reserve/calendar.php?x=1731748018',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://www.pa-reserve.jp/eap-rjt/rsv_rj/Core_i/init.asp?KLCD=449999&SBT=1&Target=_Top&LCD=',
+        },
+    ],
+    宮崎県: [
+        {
+            title: '新富町フットボールセンター',
+            url: 'https://miyazaki-fa.net/football-center',
+        },
+        {
+            title: '宮崎県総合運動公園',
+            url: 'https://www.miyazaki-spokyo.jp/reserve/',
+        },
+        {
+            title: 'アミノバイタルトレーニングセンター',
+            url: 'https://dapo-3.dapo.jp/seahorse/webform.php?id=39400',
+        },
+        {
+            title: '大塚原運動広場',
+            url: 'http://toweb.city.kobayashi.lg.jp/yoyakukanri/',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://www.11489.jp/Miyazaki/web/(S(saqkp2f322blz2555yz0ii55))/Wg_ModeSelect.aspx',
+        },
+    ],
+    鹿児島県: [
+        {
+            title: '鹿児島県立サッカー・ラグビー場',
+            url: 'https://www.spm-cloud.com/user/seika/soccer-rugby/',
+        },
+        {
+            title: 'その他のグラウンド',
+            url: 'https://k2.p-kashikan.jp/kagoshima-city/index.php',
         },
     ],
 };
