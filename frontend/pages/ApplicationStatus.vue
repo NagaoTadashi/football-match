@@ -77,7 +77,9 @@ watch(dialogDelete, (val) => {
         >
             <template v-slot:top>
                 <v-toolbar class="px-2">
-                    <v-toolbar-title>申し込み状況</v-toolbar-title>
+                    <v-toolbar-title
+                        >他チームの募集への申し込み状況</v-toolbar-title
+                    >
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialogDelete" max-width="550px">
