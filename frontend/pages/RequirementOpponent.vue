@@ -131,6 +131,14 @@ const grounds = {
             url: 'https://cosmos-kfc.com/field/',
         },
         {
+            title: 'くまトヨスポーツパーク多目的競技場',
+            url: 'https://yoyaku.town.kumamoto-kashima.lg.jp/content/asp/ShisetuIchiran.asp',
+        },
+        {
+            title: '益城町陸上競技場',
+            url: 'https://www.town.mashiki.lg.jp/contents/sisetuyoyaku_pac/asp/ShisetuIchiran.asp',
+        },
+        {
             title: 'その他のグラウンド',
             url: 'https://www.yoyakuma.jp/reserve_j/rsv_rj/Portal_i/pindex.asp',
         },
