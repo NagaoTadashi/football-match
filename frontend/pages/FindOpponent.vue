@@ -132,13 +132,12 @@ const img_url =
                                 prepend-icon="mdi-list-box-outline"
                                 elevation="5"
                                 @click="teamsDialog = true"
-                            >
-                                登録チーム一覧
+                                >登録チーム一覧
                             </v-btn>
 
                             <v-dialog v-model="teamsDialog" max-width="450">
                                 <v-card>
-                                    <v-card-title> 登録チーム </v-card-title>
+                                    <v-card-title>登録チーム</v-card-title>
 
                                     <v-divider></v-divider>
                                     <v-virtual-scroll
@@ -369,24 +368,15 @@ const img_url =
                 >
                     <template v-slot:header>
                         <v-toolbar class="px-2">
-                            <v-text-field
-                                v-model="search"
-                                density="comfortable"
-                                placeholder="Search"
-                                prepend-inner-icon="mdi-magnify"
-                                style="max-width: 300px"
-                                variant="solo"
-                                clearable
-                                hide-details
-                            ></v-text-field>
+                            <v-btn icon="mdi-magnify" elevation="5"></v-btn>
+
                             <v-spacer></v-spacer>
 
                             <v-btn
                                 prepend-icon="mdi-list-box-outline"
                                 elevation="5"
                                 @click="teamsDialog = true"
-                            >
-                                登録チーム一覧
+                                >登録チーム一覧
                             </v-btn>
 
                             <v-dialog v-model="teamsDialog" max-width="450">
