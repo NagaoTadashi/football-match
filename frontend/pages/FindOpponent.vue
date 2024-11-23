@@ -586,5 +586,41 @@ const img_url =
                 </v-data-iterator>
             </template>
         </div>
+
+        <v-dialog v-if="smAndUp" v-model="isErrorDialogVisible" max-width="520">
+            <v-card>
+                <v-card-item>
+                    <v-card-title
+                        ><v-icon>mdi-alert-circle-outline</v-icon
+                        >この募集は直前で削除 or
+                        申し込みされました</v-card-title
+                    >
+                </v-card-item>
+                <v-card-actions>
+                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                        >閉じる</v-btn
+                    >
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-else v-model="isErrorDialogVisible" max-width="350">
+            <v-card>
+                <v-card-item>
+                    <v-card-title
+                        ><v-icon>mdi-alert-circle-outline</v-icon
+                        >申し込みできませんでした</v-card-title
+                    >
+                    <v-card-subtitle>
+                        この募集は直前で削除 or 申し込みされました
+                    </v-card-subtitle>
+                </v-card-item>
+                <v-card-actions>
+                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                        >閉じる</v-btn
+                    >
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
