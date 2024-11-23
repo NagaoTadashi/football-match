@@ -293,7 +293,7 @@ const img_url =
                             density="comfortable"
                             placeholder="Search"
                             prepend-inner-icon="mdi-magnify"
-                            style="max-width: 300px"
+                            style="max-width: 350px"
                             variant="solo"
                             clearable
                             hide-details
