@@ -1,9 +1,12 @@
 <script setup>
-import TeamInfo from './TeamInfo.vue';
+import { useDisplay } from 'vuetify';
+
 const user = await getCurrentUser();
 const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
+
+const { smAndUp } = useDisplay();
 
 const { data: matches } = await useFetch(
     `${runtimeConfig.public.apiUrl}/matches/`,
@@ -37,19 +40,20 @@ const img_url =
 </script>
 
 <template>
-    <div>
-        <div
-            v-if="matches.length === 0"
-            class="d-flex align-center justify-center"
-            style="min-height: 300px"
+    <div
+        v-if="matches.length === 0"
+        class="d-flex align-center justify-center"
+        style="min-height: 300px"
+    >
+        <v-empty-state
+            icon="mdi-soccer-field"
+            title="試合日程・結果はまだありません"
         >
-            <v-empty-state
-                icon="mdi-soccer-field"
-                title="試合日程・結果はまだありません"
-            >
-            </v-empty-state>
-        </div>
-        <div v-else>
+        </v-empty-state>
+    </div>
+
+    <div v-else>
+        <template v-if="smAndUp">
             <v-data-iterator
                 :items="matches"
                 :items-per-page="3"
@@ -76,7 +80,7 @@ const img_url =
                             <v-col
                                 v-for="item in items"
                                 :key="item.title"
-                                cols="auto"
+                                cols="12"
                                 md="4"
                             >
                                 <v-card
@@ -274,6 +278,205 @@ const img_url =
                     </div>
                 </template>
             </v-data-iterator>
-        </div>
+        </template>
+
+        <template v-else>
+            <v-data-iterator
+                :items="matches"
+                :items-per-page="3"
+                :search="search"
+            >
+                <template v-slot:header>
+                    <v-toolbar class="px-2">
+                        <v-text-field
+                            v-model="search"
+                            density="comfortable"
+                            placeholder="Search"
+                            prepend-inner-icon="mdi-magnify"
+                            style="max-width: 300px"
+                            variant="solo"
+                            clearable
+                            hide-details
+                        ></v-text-field>
+                    </v-toolbar>
+                </template>
+
+                <template v-slot:default="{ items }">
+                    <v-container class="pa-2" fluid>
+                        <v-row dense>
+                            <v-col
+                                v-for="item in items"
+                                :key="item.title"
+                                cols="12"
+                                xs="12"
+                            >
+                                <v-card
+                                    v-if="item.raw.home_team_id === myTeam.id"
+                                    class="pb-3"
+                                    border
+                                    flat
+                                >
+                                    <v-img :src="img_url">
+                                        <div class="d-flex justify-end">
+                                            <a
+                                                v-if="
+                                                    item.raw
+                                                        .away_team_instagram_user_name
+                                                "
+                                                :href="`https://www.instagram.com/${item.raw.away_team_instagram_user_name}/`"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src="../public/icons8-インスタグラム.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                            <a
+                                                v-if="
+                                                    item.raw
+                                                        .away_team_X_user_name
+                                                "
+                                                :href="`https://x.com/${item.raw.away_team_X_user_name}/`"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src="../public/icons8-ツイッターx.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                        </div>
+                                    </v-img>
+
+                                    <v-card-item>
+                                        <v-card-title>
+                                            vs
+                                            {{ item.raw.away_team_name }}
+                                            (H)
+                                        </v-card-title>
+
+                                        <v-card-subtitle>
+                                            {{ item.raw.away_team_prefecture }}
+                                            |
+                                            {{ item.raw.away_team_category }}
+                                            |
+                                            {{ item.raw.away_team_league }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon>mdi-calendar-month</v-icon>
+                                            {{ item.raw.year }}年{{
+                                                item.raw.month
+                                            }}月{{ item.raw.day }}日
+                                        </v-card-subtitle>
+                                        <v-card-subtitle>
+                                            <v-icon>
+                                                mdi-clock-time-eight-outline
+                                            </v-icon>
+                                            {{ item.raw.start_time }}
+                                            ~
+                                            {{ item.raw.end_time }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon
+                                                >mdi-map-marker-outline</v-icon
+                                            >
+                                            {{ item.raw.location }}
+                                        </v-card-subtitle>
+                                    </v-card-item>
+                                </v-card>
+
+                                <v-card v-else class="pb-3" border flat>
+                                    <v-img :src="img_url">
+                                        <div class="d-flex justify-end">
+                                            <a
+                                                v-if="
+                                                    item.raw
+                                                        .home_team_instagram_user_name
+                                                "
+                                                :href="`https://www.instagram.com/${item.raw.home_team_instagram_user_name}/`"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src="../public/icons8-インスタグラム.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                            <a
+                                                v-if="
+                                                    item.raw
+                                                        .home_team_X_user_name
+                                                "
+                                                :href="`https://x.com/${item.raw.home_team_X_user_name}/`"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <img
+                                                    src="../public/icons8-ツイッターx.svg"
+                                                    width="50"
+                                                    height="50"
+                                                    style="
+                                                        vertical-align: middle;
+                                                    "
+                                            /></a>
+                                        </div>
+                                    </v-img>
+
+                                    <v-card-item>
+                                        <v-card-title>
+                                            vs
+                                            {{ item.raw.home_team_name }}
+                                            (A)
+                                        </v-card-title>
+
+                                        <v-card-subtitle>
+                                            {{ item.raw.home_team_prefecture }}
+                                            |
+                                            {{ item.raw.home_team_category }}
+                                            |
+                                            {{ item.raw.home_team_league }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon>mdi-calendar-month</v-icon>
+                                            {{ item.raw.year }}年{{
+                                                item.raw.month
+                                            }}月{{ item.raw.day }}日
+                                        </v-card-subtitle>
+                                        <v-card-subtitle>
+                                            <v-icon>
+                                                mdi-clock-time-eight-outline
+                                            </v-icon>
+                                            {{ item.raw.start_time }}
+                                            ~
+                                            {{ item.raw.end_time }}
+                                        </v-card-subtitle>
+
+                                        <v-card-subtitle>
+                                            <v-icon
+                                                >mdi-map-marker-outline</v-icon
+                                            >
+                                            {{ item.raw.location }}
+                                        </v-card-subtitle>
+                                    </v-card-item>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </template>
+            </v-data-iterator>
+        </template>
     </div>
 </template>
