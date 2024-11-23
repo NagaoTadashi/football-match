@@ -51,7 +51,7 @@ const menues = [
 const group = ref(null);
 const drawer = ref(null);
 
-const { smAndDown } = useDisplay();
+const { smAndUp } = useDisplay();
 
 watch(group, () => {
     drawer.value = false;
@@ -70,7 +70,7 @@ const handleSignOut = async () => {
 
 <template>
     <v-app id="inspire">
-        <template v-if="!smAndDown">
+        <template v-if="smAndUp">
             <v-app-bar :elevation="3" rounded>
                 <v-app-bar-title>
                     <v-icon>mdi-soccer</v-icon> Web League</v-app-bar-title
@@ -119,12 +119,6 @@ const handleSignOut = async () => {
                     </v-list>
                 </v-menu>
 
-                <v-btn class="text-none" stacked v-tooltip:bottom="'お知らせ'">
-                    <v-badge color="error" content="1">
-                        <v-icon>mdi-bell-outline</v-icon>
-                    </v-badge>
-                </v-btn>
-
                 <v-btn
                     class="text-none"
                     stacked
@@ -160,11 +154,47 @@ const handleSignOut = async () => {
                     <v-icon>mdi-soccer</v-icon> Web League
                 </v-app-bar-title>
 
-                <v-btn class="text-none" stacked v-tooltip:bottom="'お知らせ'">
-                    <v-badge color="error" content="1">
-                        <v-icon>mdi-bell-outline</v-icon>
-                    </v-badge>
-                </v-btn>
+                <v-menu location="bottom">
+                    <template v-slot:activator="{ props }">
+                        <v-btn
+                            v-bind="props"
+                            class="text-none"
+                            stacked
+                            v-tooltip:bottom="'問い合わせ'"
+                        >
+                            <v-icon>mdi-message-question-outline</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item class="d-flex justify-center">
+                            <a
+                                href="https://x.com/web_league_0508"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img
+                                    src="../public/icons8-ツイッターx.svg"
+                                    width="35"
+                                    height="35"
+                                />
+                            </a>
+                        </v-list-item>
+
+                        <v-list-item class="d-flex justify-center">
+                            <a
+                                href="https://www.instagram.com/web.league/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img
+                                    src="../public/icons8-インスタグラム.svg"
+                                    width="35"
+                                    height="35"
+                                />
+                            </a>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
 
                 <v-btn
                     class="text-none"
