@@ -9,8 +9,6 @@ const runtimeConfig = useRuntimeConfig();
 
 const { smAndUp } = useDisplay();
 
-const isErrorDialogVisible = ref(false);
-
 const teamsDialog = ref(false);
 
 const { data: registeredTeams } = await useFetch(
