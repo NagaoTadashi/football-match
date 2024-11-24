@@ -122,6 +122,7 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                                     /></a>
                                 </v-card-subtitle>
                             </v-col>
+
                             <v-col cols="12" sm="6" md="6">
                                 <v-img
                                     src="https://cdn.pixabay.com/photo/2015/07/02/00/08/football-828218_1280.jpg"
@@ -143,63 +144,67 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                             class="fill-height"
                         ></v-img>
 
-                        <v-card-title class="text-h5">{{
-                            teamInfo.name
-                        }}</v-card-title>
-                        <br />
+                        <v-card-item>
+                            <v-card-title class="text-h5">{{
+                                teamInfo.name
+                            }}</v-card-title>
+                            <br />
 
-                        <v-card-subtitle class="text-h7" opacity="100"
-                            >地域・・・{{ teamInfo.region }}</v-card-subtitle
-                        >
-                        <br />
-
-                        <v-card-subtitle class="text-h7" opacity="100"
-                            >都道府県・・・{{
-                                teamInfo.prefecture
-                            }}</v-card-subtitle
-                        >
-                        <br />
-
-                        <v-card-subtitle class="text-h7" opacity="100"
-                            >カテゴリ・・・{{
-                                teamInfo.category
-                            }}</v-card-subtitle
-                        >
-                        <br />
-
-                        <v-card-subtitle class="text-h7" opacity="100"
-                            >所属リーグ・・・{{
-                                teamInfo.league
-                            }}</v-card-subtitle
-                        >
-                        <br />
-
-                        <v-card-subtitle class="text-h7" opacity="100"
-                            >SNSアカウント・・・<a
-                                v-if="teamInfo.instagram_user_name"
-                                :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <v-card-subtitle class="text-h7" opacity="100"
+                                >地域・・・{{
+                                    teamInfo.region
+                                }}</v-card-subtitle
                             >
-                                <img
-                                    src="../public/icons8-インスタグラム.svg"
-                                    width="30"
-                                    height="30"
-                                    style="vertical-align: middle"
-                            /></a>
-                            <a
-                                v-if="teamInfo.X_user_name"
-                                :href="`https://x.com/${teamInfo.X_user_name}/`"
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <br />
+
+                            <v-card-subtitle class="text-h7" opacity="100"
+                                >都道府県・・・{{
+                                    teamInfo.prefecture
+                                }}</v-card-subtitle
                             >
-                                <img
-                                    src="../public/icons8-ツイッターx.svg"
-                                    width="30"
-                                    height="30"
-                                    style="vertical-align: middle"
-                            /></a>
-                        </v-card-subtitle>
+                            <br />
+
+                            <v-card-subtitle class="text-h7" opacity="100"
+                                >カテゴリ・・・{{
+                                    teamInfo.category
+                                }}</v-card-subtitle
+                            >
+                            <br />
+
+                            <v-card-subtitle class="text-h7" opacity="100"
+                                >所属リーグ・・・{{
+                                    teamInfo.league
+                                }}</v-card-subtitle
+                            >
+                            <br />
+
+                            <v-card-subtitle class="text-h7" opacity="100"
+                                >SNSアカウント・・・<a
+                                    v-if="teamInfo.instagram_user_name"
+                                    :href="`https://www.instagram.com/${teamInfo.instagram_user_name}/`"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <img
+                                        src="../public/icons8-インスタグラム.svg"
+                                        width="30"
+                                        height="30"
+                                        style="vertical-align: middle"
+                                /></a>
+                                <a
+                                    v-if="teamInfo.X_user_name"
+                                    :href="`https://x.com/${teamInfo.X_user_name}/`"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <img
+                                        src="../public/icons8-ツイッターx.svg"
+                                        width="30"
+                                        height="30"
+                                        style="vertical-align: middle"
+                                /></a>
+                            </v-card-subtitle>
+                        </v-card-item>
                     </v-card>
                 </v-col>
             </v-row>
