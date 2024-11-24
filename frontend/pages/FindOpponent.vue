@@ -402,7 +402,7 @@ async function cancelApplication(id) {
             <template v-else>
                 <v-data-iterator :items="recruitments" :search="search">
                     <template v-slot:header>
-                        <v-toolbar class="px-2">
+                        <v-app-bar class="px-2" :elevation="1">
                             <!-- 検索ボタン -->
 
                             <v-btn icon="mdi-magnify" elevation="5"></v-btn>

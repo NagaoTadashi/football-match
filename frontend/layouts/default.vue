@@ -116,7 +116,7 @@ const handleSignOut = async () => {
 <template>
     <v-app id="inspire">
         <template v-if="smAndUp">
-            <v-app-bar :elevation="3" rounded>
+            <v-app-bar :elevation="5" rounded>
                 <v-app-bar-title>
                     <v-icon>mdi-soccer</v-icon> Web League</v-app-bar-title
                 >
@@ -189,7 +189,7 @@ const handleSignOut = async () => {
         </template>
 
         <template v-else>
-            <v-app-bar :elevation="3" rounded>
+            <v-app-bar :elevation="5" rounded>
                 <!-- <v-app-bar-nav-icon
                     variant="text"
                     @click.stop="drawer = !drawer"
@@ -251,18 +251,7 @@ const handleSignOut = async () => {
                 </v-btn>
             </v-app-bar>
 
-            <!-- <v-navigation-drawer v-model="drawer" temporary width="210">
-                <v-list-item
-                    v-for="(menue, index) in menues"
-                    :key="index"
-                    :link="true"
-                    :to="menue.to"
-                    :prepend-icon="menue.icon"
-                    :title="menue.title"
-                ></v-list-item>
-            </v-navigation-drawer> -->
-
-            <v-bottom-navigation>
+            <v-bottom-navigation :elevation="5" rounded>
                 <v-btn
                     v-for="menu in xsMenues"
                     :key="menu.value"
