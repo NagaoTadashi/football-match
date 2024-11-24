@@ -427,8 +427,6 @@ async function cancelApplication(id) {
                                         登録チーム
                                     </v-card-title>
 
-                                    <v-divider></v-divider>
-
                                     <v-virtual-scroll
                                         :items="registeredTeams"
                                         height="300"
@@ -515,8 +513,6 @@ async function cancelApplication(id) {
                                         申し込み状況
                                     </v-card-title>
 
-                                    <v-divider></v-divider>
-
                                     <v-virtual-scroll
                                         :items="applications"
                                         height="300"
@@ -525,7 +521,7 @@ async function cancelApplication(id) {
                                         <template v-slot:default="{ item }">
                                             <v-list-item>
                                                 <v-list-item-title
-                                                    >vs{{ item.name }}
+                                                    >vs {{ item.name }}
                                                     <a
                                                         v-if="
                                                             item.instagram_user_name
@@ -536,8 +532,8 @@ async function cancelApplication(id) {
                                                     >
                                                         <img
                                                             src="../public/icons8-インスタグラム.svg"
-                                                            width="30"
-                                                            height="30"
+                                                            width="25"
+                                                            height="25"
                                                             style="
                                                                 vertical-align: middle;
                                                             "
@@ -550,8 +546,8 @@ async function cancelApplication(id) {
                                                     >
                                                         <img
                                                             src="../public/icons8-ツイッターx.svg"
-                                                            width="30"
-                                                            height="30"
+                                                            width="25"
+                                                            height="25"
                                                             style="
                                                                 vertical-align: middle;
                                                             "
@@ -643,6 +639,7 @@ async function cancelApplication(id) {
                                             <v-divider></v-divider>
                                         </template>
                                     </v-virtual-scroll>
+
                                     <template v-slot:actions>
                                         <v-btn
                                             class="ms-auto"
