@@ -407,6 +407,8 @@ async function cancelApplication(id) {
                 >
                     <template v-slot:header>
                         <v-toolbar class="px-2">
+                            <!-- 検索ボタン -->
+
                             <v-btn icon="mdi-magnify" elevation="5"></v-btn>
 
                             <v-spacer></v-spacer>
