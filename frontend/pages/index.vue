@@ -287,18 +287,11 @@ const img_url =
                 :search="search"
             >
                 <template v-slot:header>
-                    <v-toolbar class="px-2">
-                        <v-text-field
-                            v-model="search"
-                            density="comfortable"
-                            placeholder="Search"
-                            prepend-inner-icon="mdi-magnify"
-                            style="max-width: 350px"
-                            variant="solo"
-                            clearable
-                            hide-details
-                        ></v-text-field>
-                    </v-toolbar>
+                    <v-app-bar class="px-2" :elevation="1">
+                        <v-container class="text-center" style="flex: 1">
+                            <v-app-bar-title prep>試合日程</v-app-bar-title>
+                        </v-container>
+                    </v-app-bar>
                 </template>
 
                 <template v-slot:default="{ items }">
