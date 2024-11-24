@@ -654,7 +654,7 @@ async function cancelApplication(id) {
                                     </template>
                                 </v-card>
                             </v-dialog>
-                        </v-toolbar>
+                        </v-app-bar>
                     </template>
 
                     <!-- 申し込み可能な募集一覧 -->
