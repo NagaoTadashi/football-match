@@ -10,6 +10,19 @@ const runtimeConfig = useRuntimeConfig();
 const { smAndUp } = useDisplay();
 
 const teamsDialog = ref(false);
+const applicationsDialog = ref(false);
+const cancelDialog = ref(false);
+const xsErrorDialog = ref(false);
+const mdErrorDialog = ref(false);
+
+const cancelApplicationId = ref(null);
+
+const search = shallowRef('');
+
+const applications = ref([]);
+
+const img_url =
+    'https://cdn.pixabay.com/photo/2015/07/02/00/08/football-828218_1280.jpg';
 
 const { data: registeredTeams } = await useFetch(
     `${runtimeConfig.public.apiUrl}/registered_teams/`,
@@ -65,7 +78,11 @@ const postApplication = async (recruitment_id) => {
     );
 
     if (postedApplication === null) {
-        isErrorDialogVisible.value = true;
+        if (smAndUp.value) {
+            mdErrorDialog.value = true;
+        } else {
+            xsErrorDialog.value = true;
+        }
 
         recruitments.value = recruitments.value.filter(
             (recruitment) => recruitment.id !== recruitment_id
