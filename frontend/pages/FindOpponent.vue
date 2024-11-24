@@ -464,6 +464,154 @@ const img_url =
                                     </template>
                                 </v-card>
                             </v-dialog>
+
+                            <!-- 申し込み状況確認ボタン -->
+                            <v-btn
+                                icon="mdi-progress-check"
+                                elevation="5"
+                                @click="openApplicationsDialog"
+                            >
+                            </v-btn>
+
+                            <v-dialog
+                                v-model="applicationsDialog"
+                                max-width="450"
+                            >
+                                <v-card>
+                                    <v-card-title class="d-flex align-center">
+                                        <v-icon class="me-2"
+                                            >mdi-progress-check</v-icon
+                                        >
+                                        申し込み状況
+                                    </v-card-title>
+
+                                    <v-divider></v-divider>
+
+                                    <v-virtual-scroll
+                                        :items="applications"
+                                        height="300"
+                                        item-height="50"
+                                    >
+                                        <template v-slot:default="{ item }">
+                                            <v-list-item>
+                                                <v-list-item-title
+                                                    >vs{{ item.name }}
+                                                    <a
+                                                        v-if="
+                                                            item.instagram_user_name
+                                                        "
+                                                        :href="`https://www.instagram.com/${item.instagram_user_name}/`"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <img
+                                                            src="../public/icons8-インスタグラム.svg"
+                                                            width="30"
+                                                            height="30"
+                                                            style="
+                                                                vertical-align: middle;
+                                                            "
+                                                    /></a>
+                                                    <a
+                                                        v-if="item.X_user_name"
+                                                        :href="`https://x.com/${item.X_user_name}/`"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <img
+                                                            src="../public/icons8-ツイッターx.svg"
+                                                            width="30"
+                                                            height="30"
+                                                            style="
+                                                                vertical-align: middle;
+                                                            "
+                                                    /></a>
+                                                </v-list-item-title>
+
+                                                <v-list-item-subtitle>
+                                                    <v-icon
+                                                        >mdi-calendar-clock</v-icon
+                                                    >{{ item.year }}/{{
+                                                        item.month
+                                                    }}/{{ item.day }}
+
+                                                    {{ item.start_time }} ~
+                                                    {{ item.end_time }}
+                                                </v-list-item-subtitle>
+
+                                                <v-list-item-subtitle>
+                                                    <v-icon>
+                                                        mdi-map-marker-outline</v-icon
+                                                    >{{ item.location }}
+                                                </v-list-item-subtitle>
+
+                                                <template v-slot:append>
+                                                    <v-icon
+                                                        v-if="
+                                                            item.status ===
+                                                            '回答待ち'
+                                                        "
+                                                        color="#F44336"
+                                                        class="me-2"
+                                                        @click="
+                                                            cancelDialog = true;
+                                                            cancelApplicationId =
+                                                                item.id;
+                                                        "
+                                                        v-tooltip:top="
+                                                            'キャンセル'
+                                                        "
+                                                    >
+                                                        mdi-cancel
+                                                    </v-icon>
+
+                                                    <v-dialog
+                                                        v-model="cancelDialog"
+                                                        max-width="550px"
+                                                    >
+                                                        <v-card
+                                                            prepend-icon="mdi-alert-circle-outline"
+                                                            title="キャンセルしますか？"
+                                                        >
+                                                            <v-card-actions>
+                                                                <v-spacer></v-spacer>
+
+                                                                <v-btn
+                                                                    text="キャンセル"
+                                                                    variant="plain"
+                                                                    @click="
+                                                                        cancelDialog = false
+                                                                    "
+                                                                ></v-btn>
+                                                                <v-btn
+                                                                    color="primary"
+                                                                    text="OK"
+                                                                    variant="tonal"
+                                                                    @click="
+                                                                        cancelApplication(
+                                                                            cancelApplicationId
+                                                                        )
+                                                                    "
+                                                                ></v-btn>
+                                                                <v-spacer></v-spacer>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </v-dialog>
+                                                </template>
+                                            </v-list-item>
+                                        </template>
+                                    </v-virtual-scroll>
+                                    <template v-slot:actions>
+                                        <v-btn
+                                            class="ms-auto"
+                                            color="primary"
+                                            variant="tonal"
+                                            text="閉じる"
+                                            @click="applicationsDialog = false"
+                                        ></v-btn>
+                                    </template>
+                                </v-card>
+                            </v-dialog>
                         </v-toolbar>
                     </template>
 
