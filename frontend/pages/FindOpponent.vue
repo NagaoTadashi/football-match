@@ -414,17 +414,23 @@ async function cancelApplication(id) {
                             <!-- 登録チーム一覧ボタン -->
 
                             <v-btn
-                                prepend-icon="mdi-list-box-outline"
+                                icon="mdi-list-box-outline"
                                 elevation="5"
                                 @click="teamsDialog = true"
-                                >登録チーム一覧
+                            >
                             </v-btn>
 
                             <v-dialog v-model="teamsDialog" max-width="450">
                                 <v-card>
-                                    <v-card-title>登録チーム</v-card-title>
+                                    <v-card-title class="d-flex align-center">
+                                        <v-icon class="me-2"
+                                            >mdi-list-box-outline</v-icon
+                                        >
+                                        登録チーム
+                                    </v-card-title>
 
                                     <v-divider></v-divider>
+
                                     <v-virtual-scroll
                                         :items="registeredTeams"
                                         height="300"
@@ -435,11 +441,13 @@ async function cancelApplication(id) {
                                                 <v-list-item-title>{{
                                                     item.name
                                                 }}</v-list-item-title>
+
                                                 <v-list-item-subtitle>
                                                     {{ item.prefecture }} |
                                                     {{ item.category }} |
                                                     {{ item.league }}
                                                 </v-list-item-subtitle>
+
                                                 <template v-slot:append>
                                                     <a
                                                         v-if="
