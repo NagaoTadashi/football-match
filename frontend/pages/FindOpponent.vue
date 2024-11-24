@@ -87,10 +87,33 @@ const postApplication = async (recruitment_id) => {
     }
 };
 
-const search = shallowRef('');
+const openApplicationsDialog = async () => {
+    const { data } = await useFetch(
+        `${runtimeConfig.public.apiUrl}/application_status/`,
+        {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
 
-const img_url =
-    'https://cdn.pixabay.com/photo/2015/07/02/00/08/football-828218_1280.jpg';
+    applications.value = data.value || [];
+    applicationsDialog.value = true;
+};
+
+async function cancelApplication(id) {
+    await $fetch(`${runtimeConfig.public.apiUrl}/application/${id}/`, {
+        method: 'DELETE',
+    });
+
+    applications.value = applications.value.filter(
+        (application) => application.id !== id
+    );
+
+    cancelDialog.value = false;
+}
 </script>
 
 <template>
