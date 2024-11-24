@@ -48,6 +48,51 @@ const menues = [
     },
 ];
 
+const xsMenues = [
+    {
+        icon: 'mdi-soccer-field',
+        title: '試合日程・結果',
+        value: 'matchList',
+        to: '/',
+    },
+    {
+        icon: 'mdi-tshirt-crew',
+        title: 'チーム情報',
+        value: 'teamInfo',
+        to: '/TeamInfo/',
+    },
+    {
+        icon: 'mdi-account-group',
+        title: '選手一覧',
+        value: 'playerList',
+        to: '/PlayerList/',
+    },
+    {
+        icon: 'mdi-text-box-outline',
+        title: '対戦相手を募集',
+        value: 'requirementOpponent',
+        to: '/RequirementOpponent/',
+    },
+    // {
+    //     icon: 'mdi-email',
+    //     title: '申し込み依頼',
+    //     value: 'applicationRequest',
+    //     to: '/ApplicationRequest/',
+    // },
+    {
+        icon: 'mdi-account-search',
+        title: '対戦相手を探す',
+        value: 'findOpponent',
+        to: '/FindOpponent/',
+    },
+    // {
+    //     icon: 'mdi-progress-check',
+    //     title: '申し込み状況',
+    //     value: 'applicationStatus',
+    //     to: '/ApplicationStatus/',
+    // },
+];
+
 const group = ref(null);
 const drawer = ref(null);
 
@@ -145,10 +190,10 @@ const handleSignOut = async () => {
 
         <template v-else>
             <v-app-bar :elevation="3" rounded>
-                <v-app-bar-nav-icon
+                <!-- <v-app-bar-nav-icon
                     variant="text"
                     @click.stop="drawer = !drawer"
-                ></v-app-bar-nav-icon>
+                ></v-app-bar-nav-icon> -->
 
                 <v-app-bar-title>
                     <v-icon>mdi-soccer</v-icon> Web League
@@ -206,7 +251,7 @@ const handleSignOut = async () => {
                 </v-btn>
             </v-app-bar>
 
-            <v-navigation-drawer v-model="drawer" temporary width="210">
+            <!-- <v-navigation-drawer v-model="drawer" temporary width="210">
                 <v-list-item
                     v-for="(menue, index) in menues"
                     :key="index"
@@ -215,7 +260,18 @@ const handleSignOut = async () => {
                     :prepend-icon="menue.icon"
                     :title="menue.title"
                 ></v-list-item>
-            </v-navigation-drawer>
+            </v-navigation-drawer> -->
+
+            <v-bottom-navigation>
+                <v-btn
+                    v-for="menu in xsMenues"
+                    :key="menu.value"
+                    :value="menu.value"
+                    :to="menu.to"
+                >
+                    <v-icon>{{ menu.icon }}</v-icon>
+                </v-btn>
+            </v-bottom-navigation>
         </template>
 
         <v-main>
