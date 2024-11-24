@@ -592,7 +592,7 @@ const img_url =
             </template>
         </div>
 
-        <v-dialog v-if="smAndUp" v-model="isErrorDialogVisible" max-width="520">
+        <v-dialog v-model="mdErrorDialog" max-width="520">
             <v-card>
                 <v-card-item>
                     <v-card-title
@@ -602,14 +602,14 @@ const img_url =
                     >
                 </v-card-item>
                 <v-card-actions>
-                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                    <v-btn color="primary" @click="mdErrorDialog = false"
                         >閉じる</v-btn
                     >
                 </v-card-actions>
             </v-card>
         </v-dialog>
 
-        <v-dialog v-else v-model="isErrorDialogVisible" max-width="350">
+        <v-dialog v-model="xsErrorDialog" max-width="350">
             <v-card>
                 <v-card-item>
                     <v-card-title
@@ -621,7 +621,7 @@ const img_url =
                     </v-card-subtitle>
                 </v-card-item>
                 <v-card-actions>
-                    <v-btn color="primary" @click="isErrorDialogVisible = false"
+                    <v-btn color="primary" @click="xsErrorDialog = false"
                         >閉じる</v-btn
                     >
                 </v-card-actions>
