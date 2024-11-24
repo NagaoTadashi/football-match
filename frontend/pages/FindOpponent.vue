@@ -400,11 +400,7 @@ async function cancelApplication(id) {
             <!-- スマホ用 -->
 
             <template v-else>
-                <v-data-iterator
-                    :items="recruitments"
-                    :items-per-page="3"
-                    :search="search"
-                >
+                <v-data-iterator :items="recruitments" :search="search">
                     <template v-slot:header>
                         <v-toolbar class="px-2">
                             <!-- 検索ボタン -->
@@ -483,6 +479,8 @@ async function cancelApplication(id) {
                                                     /></a>
                                                 </template>
                                             </v-list-item>
+
+                                            <v-divider></v-divider>
                                         </template>
                                     </v-virtual-scroll>
                                     <template v-slot:actions>
@@ -641,6 +639,8 @@ async function cancelApplication(id) {
                                                     </v-dialog>
                                                 </template>
                                             </v-list-item>
+
+                                            <v-divider></v-divider>
                                         </template>
                                     </v-virtual-scroll>
                                     <template v-slot:actions>
