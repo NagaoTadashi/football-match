@@ -20,7 +20,7 @@ const visible = ref(false);
                 <v-card class="mb-12" color="surface-variant" variant="tonal">
                     <v-card-text class="text-medium-emphasis text-caption">
                         <v-icon>mdi-information-outline</v-icon>
-                        本サービスはチーム単位での利用を想定しています。チームごとに1つのアカウントを作成し、ログインしてください。
+                        本サービスはチーム単位での利用を想定しています。チームごとに1つのGoogleアカウントを用意し、ログインしてください。
                     </v-card-text>
                 </v-card>
 
