@@ -54,13 +54,10 @@ const { data: recruitments } = await useFetch(
             Authorization: `Bearer ${idToken}`,
             'Content-Type': 'application/json',
         },
+        transform: (data) =>
+            data.map((item) => ({ ...item, isApplied: false })),
     }
 );
-
-recruitments.value = recruitments.value.map((item) => ({
-    ...item,
-    isApplied: false,
-}));
 
 const postApplication = async (recruitment_id) => {
     const postedApplication = await $fetch(
