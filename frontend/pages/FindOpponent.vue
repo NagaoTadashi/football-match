@@ -599,17 +599,27 @@ async function cancelApplication(id) {
 
                                                     <v-dialog
                                                         v-model="cancelDialog"
-                                                        max-width="550px"
+                                                        max-width="500px"
                                                     >
-                                                        <v-card
-                                                            prepend-icon="mdi-alert-circle-outline"
-                                                            title="キャンセルしますか？"
-                                                        >
+                                                        <v-card>
+                                                            <v-card-item>
+                                                                <v-card-title
+                                                                    style="
+                                                                        font-size: 1.1rem;
+                                                                    "
+                                                                >
+                                                                    <v-icon
+                                                                        >mdi-alert-circle-outline</v-icon
+                                                                    >
+                                                                    申し込みをキャンセルしますか？
+                                                                </v-card-title>
+                                                            </v-card-item>
+
                                                             <v-card-actions>
                                                                 <v-spacer></v-spacer>
 
                                                                 <v-btn
-                                                                    text="キャンセル"
+                                                                    text="いいえ"
                                                                     variant="plain"
                                                                     @click="
                                                                         cancelDialog = false
@@ -617,7 +627,7 @@ async function cancelApplication(id) {
                                                                 ></v-btn>
                                                                 <v-btn
                                                                     color="primary"
-                                                                    text="OK"
+                                                                    text="はい"
                                                                     variant="tonal"
                                                                     @click="
                                                                         cancelApplication(
