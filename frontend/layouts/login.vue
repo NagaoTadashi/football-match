@@ -7,20 +7,20 @@ const visible = ref(false);
 <template>
     <div>
         <div>
-            <div class="text-center mx-auto my-6" max-width="228" text>
+            <div class="text-center mx-auto my-6" max-width="230" text>
                 <h1><v-icon>mdi-soccer</v-icon> Web League</h1>
             </div>
 
             <v-card
                 class="mx-auto pa-12 pb-8"
                 elevation="8"
-                max-width="448"
+                max-width="450"
                 rounded="lg"
             >
                 <v-card class="mb-12" color="surface-variant" variant="tonal">
                     <v-card-text class="text-medium-emphasis text-caption">
                         <v-icon>mdi-information-outline</v-icon>
-                        チームで1つのGoogleアカウントを用意してください
+                        本サービスはチーム単位での利用を想定しています。チームごとに1つのアカウントを作成し、ログインしてください。
                     </v-card-text>
                 </v-card>
 
