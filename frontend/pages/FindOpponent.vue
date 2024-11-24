@@ -375,6 +375,8 @@ const img_url =
                 </v-data-iterator>
             </template>
 
+            <!-- スマホ用 -->
+
             <template v-else>
                 <v-data-iterator
                     :items="recruitments"
@@ -386,6 +388,8 @@ const img_url =
                             <v-btn icon="mdi-magnify" elevation="5"></v-btn>
 
                             <v-spacer></v-spacer>
+
+                            <!-- 登録チーム一覧ボタン -->
 
                             <v-btn
                                 prepend-icon="mdi-list-box-outline"
@@ -462,6 +466,8 @@ const img_url =
                             </v-dialog>
                         </v-toolbar>
                     </template>
+
+                    <!-- 申し込み可能な募集一覧 -->
 
                     <template v-slot:default="{ items }">
                         <v-container class="pa-2" fluid>
