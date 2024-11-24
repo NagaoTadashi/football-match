@@ -123,6 +123,8 @@ const img_url =
             </v-empty-state>
         </div>
         <div v-else>
+            <!-- PC用・タブレット用 -->
+
             <template v-if="smAndUp">
                 <v-data-iterator
                     :items="recruitments"
