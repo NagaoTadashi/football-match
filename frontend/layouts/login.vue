@@ -11,10 +11,19 @@ const chromeLink = 'googlechrome://web-league.com/'; // ログインページの
 // 初期化時にブラウザ判定
 if (typeof window !== 'undefined') {
     const userAgent = navigator.userAgent;
-    isChrome.value =
-        /Chrome/.test(userAgent) &&
-        /Google Inc/.test(navigator.vendor) &&
-        !/Edg/.test(userAgent); // EdgeブラウザもChromeベースなので除外
+    const isIOS = /iPhone|iPad|iPod/.test(userAgent); // iOS端末かどうかを判定
+    const isChromeOnIOS = /CriOS/.test(userAgent); // iOSのChromeを判定
+
+    // iOSでない場合、Chromeを検出
+    if (!isIOS) {
+        isChrome.value =
+            /Chrome/.test(userAgent) &&
+            /Google Inc/.test(navigator.vendor) &&
+            !/Edg/.test(userAgent); // EdgeブラウザもChromeベースなので除外
+    } else {
+        // iOSの場合、CriOSが含まれていればChromeとみなす
+        isChrome.value = isChromeOnIOS;
+    }
 }
 </script>
 
