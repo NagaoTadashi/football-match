@@ -6,7 +6,7 @@ const visible = ref(false);
 const isChrome = ref(false);
 
 // Chromeで開くリンクのURL
-const chromeLink = 'googlechrome://https://web-league.com'; // ログインページのURLに置き換え
+const chromeLink = 'googlechrome://web-league.com/'; // ログインページのURLに置き換え
 
 // 初期化時にブラウザ判定
 if (typeof window !== 'undefined') {
