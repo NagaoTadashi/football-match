@@ -53,6 +53,8 @@ const img_url =
     </div>
 
     <div v-else>
+        <!-- PC・タブレット用 -->
+
         <template v-if="smAndUp">
             <v-data-iterator
                 :items="matches"
@@ -280,6 +282,7 @@ const img_url =
             </v-data-iterator>
         </template>
 
+        <!-- スマホ用 -->
         <template v-else>
             <v-data-iterator
                 :items="matches"
