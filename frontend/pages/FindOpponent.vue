@@ -105,6 +105,8 @@ async function cancelApplication(id) {
 </script>
 
 <template>
+    <!-- チーム情報が登録されていない場合 -->
+
     <div v-if="teamInfo === null">
         <v-empty-state
             class="d-flex align-center justify-center"
@@ -118,6 +120,9 @@ async function cancelApplication(id) {
             </template>
         </v-empty-state>
     </div>
+
+    <!-- チーム情報が登録されている場合 -->
+
     <div v-else>
         <!-- PC・タブレット用 -->
 

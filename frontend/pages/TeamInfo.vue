@@ -31,6 +31,8 @@ function handleTeamInfoEdited(updatedTeamInfo) {
 </script>
 
 <template>
+    <!-- チーム情報が登録されていない場合 -->
+
     <div v-if="teamInfo === null">
         <v-empty-state
             class="d-flex align-center justify-center"
@@ -46,8 +48,11 @@ function handleTeamInfoEdited(updatedTeamInfo) {
         </v-empty-state>
     </div>
 
+    <!-- チーム情報が登録されている場合 -->
+
     <div v-else>
         <v-row class="d-flex align-end justify-end">
+            <!-- チーム情報編集ボタン -->
             <EditButton
                 :idToken="idToken"
                 :teamInfo="teamInfo"
@@ -55,6 +60,8 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                 @TeamInfoEdited="handleTeamInfoEdited"
             />
         </v-row>
+
+        <!-- PC・タブレット用 -->
 
         <template v-if="smAndUp">
             <v-row justify="center">
@@ -134,6 +141,8 @@ function handleTeamInfoEdited(updatedTeamInfo) {
                 </v-col>
             </v-row>
         </template>
+
+        <!-- スマホ用 -->
 
         <template v-else>
             <v-row justify="center">
