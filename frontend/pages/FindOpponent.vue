@@ -119,7 +119,7 @@ async function cancelApplication(id) {
         </v-empty-state>
     </div>
     <div v-else>
-        <!-- PC用・タブレット用 -->
+        <!-- PC・タブレット用 -->
 
         <template v-if="smAndUp">
             <!-- 申し込み可能な試合が無い場合 -->
