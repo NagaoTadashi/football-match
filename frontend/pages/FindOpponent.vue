@@ -19,8 +19,6 @@ const cancelApplicationId = ref(null);
 
 const search = shallowRef('');
 
-const applications = ref([]);
-
 const img_url =
     'https://cdn.pixabay.com/photo/2015/07/02/00/08/football-828218_1280.jpg';
 
@@ -59,6 +57,17 @@ const { data: recruitments } = await useFetch(
     }
 );
 
+const { data: applications } = await useFetch(
+    `${runtimeConfig.public.apiUrl}/application_status/`,
+    {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${idToken}`,
+            'Content-Type': 'application/json',
+        },
+    }
+);
+
 const postApplication = async (recruitment_id) => {
     const postedApplication = await $fetch(
         `${runtimeConfig.public.apiUrl}/application/`,
@@ -85,22 +94,6 @@ const postApplication = async (recruitment_id) => {
             (recruitment) => recruitment.id !== recruitment_id
         );
     }
-};
-
-const openApplicationsDialog = async () => {
-    const { data } = await useFetch(
-        `${runtimeConfig.public.apiUrl}/application_status/`,
-        {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${idToken}`,
-                'Content-Type': 'application/json',
-            },
-        }
-    );
-
-    applications.value = data.value || [];
-    applicationsDialog.value = true;
 };
 
 async function cancelApplication(id) {
@@ -497,7 +490,7 @@ async function cancelApplication(id) {
                             <v-btn
                                 icon="mdi-progress-check"
                                 elevation="5"
-                                @click="openApplicationsDialog"
+                                @click="applicationsDialog = true"
                             >
                             </v-btn>
 
