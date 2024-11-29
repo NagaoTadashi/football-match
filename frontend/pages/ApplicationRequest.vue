@@ -8,6 +8,20 @@ const runtimeConfig = useRuntimeConfig();
 
 const isErrorDialogVisible = ref(false);
 
+const itemId = ref(-1);
+const dialogApprove = ref(false);
+const dialogDecline = ref(false);
+const headers = ref([
+    { title: 'チーム', align: 'start', key: 'name', sortable: false },
+    { title: '年', key: 'year', sortable: false },
+    { title: '月', key: 'month', sortable: false },
+    { title: '日', key: 'day', sortable: false },
+    { title: '開始', key: 'start_time', sortable: false },
+    { title: '終了', key: 'end_time', sortable: false },
+    { title: '場所', key: 'location', sortable: false },
+    { title: '', key: 'actions', sortable: false },
+]);
+
 const { data: applicationRequests } = await useFetch(
     `${runtimeConfig.public.apiUrl}/application_requests/`,
     {
@@ -47,20 +61,6 @@ async function declineApplicationRequest(id) {
         (applicationRequest) => applicationRequest.id !== id
     );
 }
-
-const itemId = ref(-1);
-const dialogApprove = ref(false);
-const dialogDecline = ref(false);
-const headers = ref([
-    { title: 'チーム', align: 'start', key: 'name', sortable: false },
-    { title: '年', key: 'year', sortable: false },
-    { title: '月', key: 'month', sortable: false },
-    { title: '日', key: 'day', sortable: false },
-    { title: '開始', key: 'start_time', sortable: false },
-    { title: '終了', key: 'end_time', sortable: false },
-    { title: '場所', key: 'location', sortable: false },
-    { title: '', key: 'actions', sortable: false },
-]);
 
 function approveItem(item) {
     itemId.value = item.id;
