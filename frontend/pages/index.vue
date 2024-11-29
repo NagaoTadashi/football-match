@@ -58,7 +58,7 @@ const img_url =
         <template v-if="smAndUp">
             <v-data-iterator
                 :items="matches"
-                :items-per-page="3"
+                items-per-page="-1"
                 :search="search"
             >
                 <template v-slot:header>
@@ -286,14 +286,14 @@ const img_url =
         <template v-else>
             <v-data-iterator
                 :items="matches"
-                :items-per-page="3"
                 :search="search"
+                items-per-page="-1"
             >
                 <template v-slot:header>
                     <v-app-bar class="px-2" :elevation="1">
-                        <v-container class="text-center" style="flex: 1">
-                            <v-app-bar-title prep>試合日程</v-app-bar-title>
-                        </v-container>
+                        <v-app-bar-title class="text-center"
+                            >試合日程</v-app-bar-title
+                        >
                     </v-app-bar>
                 </template>
 

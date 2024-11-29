@@ -1,10 +1,13 @@
 <script setup>
 import { nextTick, ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
 const user = await getCurrentUser();
 const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
+
+const { smAndUp } = useDisplay();
 
 const { data: players } = await useFetch(
     `${runtimeConfig.public.apiUrl}/players/`,
@@ -110,7 +113,7 @@ function close() {
     });
 }
 
-async function save() {
+async function register() {
     if (editedIndex.value > -1) {
         await editPlayer(itemId.value);
     } else {
@@ -159,205 +162,435 @@ const isValid = computed(() => {
 
 <template>
     <div>
-        <v-data-table
-            :headers="headers"
-            :items="players"
-            :sort-by="[{ key: 'number', order: 'asc' }]"
-        >
-            <template v-slot:top>
-                <v-toolbar class="px-2">
-                    <v-toolbar-title>選手一覧</v-toolbar-title>
-                    <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-spacer></v-spacer>
+        <!-- PC・タブレット用 -->
 
-                    <v-btn
-                        prepend-icon="mdi-account-plus"
-                        elevation="5"
-                        @click="dialog = true"
-                    >
-                        選手を登録
-                    </v-btn>
+        <template v-if="smAndUp">
+            <v-data-table
+                :headers="headers"
+                :items="players"
+                :sort-by="[{ key: 'number', order: 'asc' }]"
+            >
+                <template v-slot:top>
+                    <v-toolbar class="px-2">
+                        <v-toolbar-title>選手一覧</v-toolbar-title>
+                        <v-divider class="mx-4" inset vertical></v-divider>
 
-                    <v-dialog v-model="dialog" max-width="500px">
-                        <v-card prepend-icon="mdi-account" title="選手情報">
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12" md="4" sm="6">
-                                            <v-select
-                                                v-model="editedItem.position"
-                                                label="ポジション"
-                                                :items="positions"
-                                            ></v-select>
-                                        </v-col>
-                                        <v-col cols="12" md="4" sm="6">
-                                            <v-number-input
-                                                v-model="editedItem.number"
-                                                label="背番号"
-                                                :min="1"
-                                                control-variant="stacked"
-                                            >
-                                            </v-number-input>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <v-responsive
-                                                class="mx-auto"
-                                                max-width="344"
-                                            >
-                                                <v-text-field
-                                                    v-model="editedItem.namae"
-                                                    label="名前"
-                                                    clearable
-                                                ></v-text-field>
-                                            </v-responsive>
-                                        </v-col>
-                                        <v-responsive
-                                            class="mx-auto"
-                                            max-width="344"
-                                        >
-                                            <v-col>
-                                                <v-text-field
-                                                    v-model="editedItem.name"
-                                                    label="Name"
-                                                    clearable
-                                                ></v-text-field>
-                                            </v-col>
-                                        </v-responsive>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <v-slider
-                                                v-model="editedItem.height"
-                                                :step="1"
-                                                :max="max_height"
-                                                :min="min_height"
-                                                class="align-center"
-                                                hide-details
-                                                label="身長"
-                                            >
-                                                <template v-slot:append>
-                                                    <v-text-field
-                                                        v-model="
-                                                            editedItem.height
-                                                        "
-                                                        density="compact"
-                                                        style="width: 75px"
-                                                        type="number"
-                                                        hide-details
-                                                        single-line
-                                                    ></v-text-field>
-                                                </template>
-                                            </v-slider>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <v-slider
-                                                v-model="editedItem.weight"
-                                                :step="1"
-                                                :max="max_weight"
-                                                :min="min_weight"
-                                                class="align-center"
-                                                hide-details
-                                                label="体重"
-                                            >
-                                                <template v-slot:append>
-                                                    <v-text-field
-                                                        v-model="
-                                                            editedItem.weight
-                                                        "
-                                                        density="compact"
-                                                        style="width: 75px"
-                                                        type="number"
-                                                        hide-details
-                                                        single-line
-                                                    ></v-text-field>
-                                                </template>
-                                            </v-slider>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col>
-                                            <v-text-field
-                                                v-model="
-                                                    editedItem.previous_team
-                                                "
-                                                label="前所属"
-                                                clearable
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
+                        <v-spacer></v-spacer>
 
-                            <v-divider></v-divider>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-
-                                <v-btn
-                                    text="キャンセル"
-                                    variant="plain"
-                                    @click="close"
-                                >
-                                </v-btn>
-
-                                <v-btn
-                                    color="primary"
-                                    text="保存"
-                                    variant="tonal"
-                                    @click="save"
-                                    :disabled="!isValid"
-                                >
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card
-                            prepend-icon="mdi-alert-circle-outline"
-                            title="この選手情報を削除してもよろしいですか？"
+                        <!-- 選手を登録ボタン -->
+                        <v-btn
+                            prepend-icon="mdi-account-plus"
+                            elevation="5"
+                            @click="dialog = true"
                         >
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    text="キャンセル"
-                                    variant="plain"
-                                    @click="closeDelete"
-                                ></v-btn>
-                                <v-btn
-                                    color="primary"
-                                    text="OK"
-                                    variant="tonal"
-                                    @click="deleteItemConfirm"
-                                ></v-btn>
-                                <v-spacer></v-spacer>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-toolbar>
-            </template>
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon
-                    color="#4CAF50"
-                    class="me-2"
-                    @click="editItem(item)"
-                    v-tooltip:top="'編集'"
+                            選手を登録
+                        </v-btn>
+                    </v-toolbar>
+                </template>
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon
+                        color="#4CAF50"
+                        class="me-2"
+                        @click="editItem(item)"
+                        v-tooltip:top="'編集'"
+                    >
+                        mdi-pencil
+                    </v-icon>
+                    <v-icon
+                        color="#F44336"
+                        class="me-2"
+                        @click="deleteItem(item)"
+                        v-tooltip:top="'削除'"
+                    >
+                        mdi-delete
+                    </v-icon>
+                </template>
+                <template v-slot:no-data> 選手が登録されていません </template>
+            </v-data-table>
+
+            <!-- ダイアログ類 -->
+
+            <!-- 選手を登録ダイアログ -->
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card prepend-icon="mdi-account" title="選手情報">
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="12" md="4" sm="6">
+                                    <v-select
+                                        v-model="editedItem.position"
+                                        label="ポジション"
+                                        :items="positions"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12" md="4" sm="6">
+                                    <v-number-input
+                                        v-model="editedItem.number"
+                                        label="背番号"
+                                        :min="1"
+                                        control-variant="stacked"
+                                    >
+                                    </v-number-input>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-responsive
+                                        class="mx-auto"
+                                        max-width="344"
+                                    >
+                                        <v-text-field
+                                            v-model="editedItem.namae"
+                                            label="名前"
+                                            clearable
+                                        ></v-text-field>
+                                    </v-responsive>
+                                </v-col>
+                                <v-responsive class="mx-auto" max-width="344">
+                                    <v-col>
+                                        <v-text-field
+                                            v-model="editedItem.name"
+                                            label="Name"
+                                            clearable
+                                        ></v-text-field>
+                                    </v-col>
+                                </v-responsive>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-slider
+                                        v-model="editedItem.height"
+                                        :step="1"
+                                        :max="max_height"
+                                        :min="min_height"
+                                        class="align-center"
+                                        hide-details
+                                        label="身長"
+                                    >
+                                        <template v-slot:append>
+                                            <v-text-field
+                                                v-model="editedItem.height"
+                                                density="compact"
+                                                style="width: 75px"
+                                                type="number"
+                                                hide-details
+                                                single-line
+                                            ></v-text-field>
+                                        </template>
+                                    </v-slider>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-slider
+                                        v-model="editedItem.weight"
+                                        :step="1"
+                                        :max="max_weight"
+                                        :min="min_weight"
+                                        class="align-center"
+                                        hide-details
+                                        label="体重"
+                                    >
+                                        <template v-slot:append>
+                                            <v-text-field
+                                                v-model="editedItem.weight"
+                                                density="compact"
+                                                style="width: 75px"
+                                                type="number"
+                                                hide-details
+                                                single-line
+                                            ></v-text-field>
+                                        </template>
+                                    </v-slider>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-text-field
+                                        v-model="editedItem.previous_team"
+                                        label="前所属"
+                                        clearable
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        </v-btn>
+
+                        <v-btn
+                            color="primary"
+                            text="保存"
+                            variant="tonal"
+                            @click="register"
+                            :disabled="!isValid"
+                        >
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 削除確認ダイアログ -->
+            <v-dialog v-model="dialogDelete" max-width="500px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この選手情報を削除してもよろしいですか？"
                 >
-                    mdi-pencil
-                </v-icon>
-                <v-icon
-                    color="#F44336"
-                    class="me-2"
-                    @click="deleteItem(item)"
-                    v-tooltip:top="'削除'"
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closeDelete"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="OK"
+                            variant="tonal"
+                            @click="deleteItemConfirm"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </template>
+
+        <!-- スマホ用 -->
+
+        <template v-else>
+            <v-data-iterator :items="players" items-per-page="-1">
+                <template v-slot:header>
+                    <v-app-bar class="px-2" :elevation="1">
+                        <v-app-bar-title class="text-center"
+                            >選手一覧</v-app-bar-title
+                        >
+
+                        <!-- 選手を登録ボタン -->
+                        <v-btn
+                            icon="mdi-account-plus"
+                            elevation="5"
+                            @click="dialog = true"
+                        >
+                        </v-btn>
+                    </v-app-bar>
+                </template>
+
+                <!-- 登録済みの選手一覧 -->
+
+                <template v-slot:default="{ items }">
+                    <v-container class="pa-2" fluid>
+                        <v-row dense>
+                            <v-col
+                                v-for="item in items"
+                                :key="item.title"
+                                cols="12"
+                                xs="12"
+                            >
+                                <v-card>
+                                    <v-row align="center" no-gutters>
+                                        <v-card-item>
+                                            <v-card-title>
+                                                {{ item.raw.position }}
+                                                {{ item.raw.number }}
+                                            </v-card-title>
+
+                                            <v-card-title>
+                                                {{ item.raw.namae }} |
+                                                {{ item.raw.name }}
+                                            </v-card-title>
+
+                                            <v-card-subtitle>
+                                                身長/体重：
+                                                {{ item.raw.height }}cm/{{
+                                                    item.raw.weight
+                                                }}kg
+                                            </v-card-subtitle>
+
+                                            <v-card-subtitle>
+                                                前所属：
+                                                {{ item.raw.previous_team }}
+                                            </v-card-subtitle>
+                                        </v-card-item>
+
+                                        <v-spacer></v-spacer>
+
+                                        <!-- 削除ボタン -->
+                                        <v-card-actions
+                                            class="d-flex justify-end"
+                                        >
+                                            <v-icon
+                                                color="#F44336"
+                                                class="me-2"
+                                                size="large"
+                                                @click="deleteItem(item.raw)"
+                                                >mdi-delete</v-icon
+                                            >
+                                        </v-card-actions>
+                                    </v-row>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </template>
+            </v-data-iterator>
+
+            <!-- ダイアログ類 -->
+
+            <!-- 選手を登録ダイアログ -->
+            <v-dialog v-model="dialog" max-width="500px">
+                <v-card prepend-icon="mdi-account" title="選手情報">
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col cols="6">
+                                    <v-select
+                                        v-model="editedItem.position"
+                                        label="ポジションを選択"
+                                        :items="positions"
+                                        density="comfortable"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-number-input
+                                        v-model="editedItem.number"
+                                        label="背番号"
+                                        :min="1"
+                                        control-variant="stacked"
+                                        density="comfortable"
+                                    >
+                                    </v-number-input>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="editedItem.namae"
+                                        label="名前を入力"
+                                        clearable
+                                        density="comfortable"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="editedItem.name"
+                                        label="ローマ字で入力"
+                                        clearable
+                                        density="comfortable"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-slider
+                                        v-model="editedItem.height"
+                                        :step="1"
+                                        :max="max_height"
+                                        :min="min_height"
+                                        class="align-center"
+                                        hide-details
+                                        label="身長"
+                                    >
+                                        <template v-slot:append>
+                                            <v-text-field
+                                                v-model="editedItem.height"
+                                                density="comfortable"
+                                                style="width: 75px"
+                                                type="number"
+                                                hide-details
+                                                single-line
+                                            ></v-text-field>
+                                        </template>
+                                    </v-slider>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-slider
+                                        v-model="editedItem.weight"
+                                        :step="1"
+                                        :max="max_weight"
+                                        :min="min_weight"
+                                        class="align-center"
+                                        hide-details
+                                        label="体重"
+                                    >
+                                        <template v-slot:append>
+                                            <v-text-field
+                                                v-model="editedItem.weight"
+                                                density="comfortable"
+                                                style="width: 75px"
+                                                type="number"
+                                                hide-details
+                                                single-line
+                                            ></v-text-field>
+                                        </template>
+                                    </v-slider>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        v-model="editedItem.previous_team"
+                                        label="前所属チームを入力"
+                                        clearable
+                                        density="comfortable"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        </v-btn>
+
+                        <v-btn
+                            color="primary"
+                            text="保存"
+                            variant="tonal"
+                            @click="register"
+                            :disabled="!isValid"
+                        >
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 削除確認ダイアログ -->
+            <v-dialog v-model="dialogDelete" max-width="370px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この選手情報を削除しますか？"
                 >
-                    mdi-delete
-                </v-icon>
-            </template>
-            <template v-slot:no-data> 選手が登録されていません </template>
-        </v-data-table>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="closeDelete"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="deleteItemConfirm"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </template>
     </div>
 </template>

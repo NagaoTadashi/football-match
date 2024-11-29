@@ -51,19 +51,19 @@ function handleTeamInfoEdited(updatedTeamInfo) {
     <!-- チーム情報が登録されている場合 -->
 
     <div v-else>
-        <v-row class="d-flex align-end justify-end">
-            <!-- チーム情報編集ボタン -->
-            <EditButton
-                :idToken="idToken"
-                :teamInfo="teamInfo"
-                :apiUrl="runtimeConfig.public.apiUrl"
-                @TeamInfoEdited="handleTeamInfoEdited"
-            />
-        </v-row>
-
         <!-- PC・タブレット用 -->
 
         <template v-if="smAndUp">
+            <v-row class="d-flex align-end justify-end">
+                <!-- チーム情報編集ボタン -->
+                <EditButton
+                    :idToken="idToken"
+                    :teamInfo="teamInfo"
+                    :apiUrl="runtimeConfig.public.apiUrl"
+                    @TeamInfoEdited="handleTeamInfoEdited"
+                />
+            </v-row>
+
             <v-row justify="center">
                 <v-col cols="12" sm="12" md="12">
                     <v-card>
@@ -145,6 +145,19 @@ function handleTeamInfoEdited(updatedTeamInfo) {
         <!-- スマホ用 -->
 
         <template v-else>
+            <v-app-bar class="px-2" :elevation="1">
+                <v-app-bar-title class="text-center"
+                    >対戦相手を募集</v-app-bar-title
+                >
+                <!-- チーム情報編集ボタン -->
+                <EditButton
+                    :idToken="idToken"
+                    :teamInfo="teamInfo"
+                    :apiUrl="runtimeConfig.public.apiUrl"
+                    @TeamInfoEdited="handleTeamInfoEdited"
+                />
+            </v-app-bar>
+
             <v-row justify="center">
                 <v-col cols="12" xs="12">
                     <v-card>

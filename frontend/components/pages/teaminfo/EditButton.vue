@@ -107,10 +107,7 @@ const isValid = computed(() => {
         <v-dialog v-model="dialog" max-width="600">
             <template v-slot:activator="{ props: activatorProps }">
                 <v-btn
-                    class="text-none font-weight-regular"
-                    prepend-icon="mdi-text-box-edit-outline"
-                    text="チーム情報を編集"
-                    variant="tonal"
+                    icon="mdi-text-box-edit-outline"
                     elevation="5"
                     v-bind="activatorProps"
                 ></v-btn>
@@ -119,49 +116,60 @@ const isValid = computed(() => {
             <v-card prepend-icon="mdi-tshirt-crew" title="チーム情報">
                 <v-card-text>
                     <v-row dense>
-                        <v-col cols="12" md="6" sm="6">
+                        <v-col cols="12">
                             <v-text-field
                                 v-model="teamInfo.name"
                                 label="チーム名を入力"
                                 :rules="[required]"
                                 clearable
+                                density="comfortable"
                             ></v-text-field>
                         </v-col>
                     </v-row>
+
                     <v-row>
-                        <v-col cols="12" md="4" sm="6">
+                        <v-col cols="6">
                             <v-select
                                 v-model="teamInfo.region"
                                 :items="regionsList"
                                 label="地域を選択"
+                                density="comfortable"
                             ></v-select>
                         </v-col>
-                        <v-col cols="12" md="4" sm="6">
+                        <v-col cols="6">
                             <v-select
                                 v-model="teamInfo.prefecture"
                                 :items="regions[teamInfo.region]"
                                 label="都道府県を選択"
+                                density="comfortable"
                             ></v-select>
                         </v-col>
                     </v-row>
+
                     <v-row>
-                        <v-col cols="12" md="4" sm="6">
+                        <v-col cols="6">
                             <v-select
                                 v-model="teamInfo.category"
                                 :items="category"
                                 label="カテゴリを選択"
+                                density="comfortable"
                             ></v-select>
                         </v-col>
-                        <v-col cols="12" md="8" sm="6">
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="12">
                             <v-text-field
                                 v-model="teamInfo.league"
                                 label="所属リーグを入力"
                                 clearable
+                                density="comfortable"
                             ></v-text-field>
                         </v-col>
                     </v-row>
+
                     <v-row>
-                        <v-col cols="12" md="2" sm="6">
+                        <v-col cols="2">
                             <img
                                 src="../../../public/icons8-インスタグラム.svg"
                                 width="50"
@@ -169,16 +177,17 @@ const isValid = computed(() => {
                                 style="vertical-align: middle"
                             />
                         </v-col>
-                        <v-col cols="12" md="6" sm="6">
+                        <v-col cols="10">
                             <v-text-field
                                 v-model="teamInfo.instagram_user_name"
                                 label="ユーザー名を入力"
                                 clearable
+                                density="comfortable"
                             ></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row>
-                        <v-col cols="12" md="2" sm="6">
+                        <v-col cols="2">
                             <img
                                 src="../../../public/icons8-ツイッターx.svg"
                                 width="50"
@@ -186,11 +195,12 @@ const isValid = computed(() => {
                                 style="vertical-align: middle"
                             />
                         </v-col>
-                        <v-col cols="12" md="6" sm="6">
+                        <v-col cols="10">
                             <v-text-field
                                 v-model="teamInfo.X_user_name"
                                 label="ユーザー名を入力"
                                 clearable
+                                density="comfortable"
                             ></v-text-field>
                         </v-col>
                     </v-row>

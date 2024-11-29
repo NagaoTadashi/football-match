@@ -144,7 +144,7 @@ async function cancelApplication(id) {
             <div v-else>
                 <v-data-iterator
                     :items="recruitments"
-                    :items-per-page="3"
+                    :items-per-page="2"
                     :search="search"
                 >
                     <template v-slot:header>
@@ -422,7 +422,6 @@ async function cancelApplication(id) {
                     <v-spacer></v-spacer>
 
                     <!-- 登録チーム一覧ボタン -->
-
                     <v-btn
                         icon="mdi-list-box-outline"
                         elevation="5"
@@ -431,7 +430,6 @@ async function cancelApplication(id) {
                     </v-btn>
 
                     <!-- 申し込み状況確認ボタン -->
-
                     <v-btn
                         icon="mdi-progress-check"
                         elevation="5"
@@ -449,17 +447,21 @@ async function cancelApplication(id) {
 
             <!-- 申し込み可能な試合がある場合 -->
             <div v-else>
-                <v-data-iterator :items="recruitments" :search="search">
+                <v-data-iterator :items="recruitments" items-per-page="-1">
                     <template v-slot:header>
                         <v-app-bar class="px-2" :elevation="1">
                             <!-- 検索ボタン -->
+                            <v-btn
+                                icon="mdi-magnify"
+                                elevation="5"
+                                :disabled="true"
+                            ></v-btn>
 
-                            <v-btn icon="mdi-magnify" elevation="5"></v-btn>
-
-                            <v-spacer></v-spacer>
+                            <v-app-bar-title class="text-center"
+                                >対戦相手を探す</v-app-bar-title
+                            >
 
                             <!-- 登録チーム一覧ボタン -->
-
                             <v-btn
                                 icon="mdi-list-box-outline"
                                 elevation="5"
@@ -531,6 +533,7 @@ async function cancelApplication(id) {
                                             </v-card-title>
 
                                             <v-card-subtitle>
+                                                {{ item.raw.region }} |
                                                 {{ item.raw.prefecture }} |
                                                 {{ item.raw.category }} |
                                                 {{ item.raw.league }}
@@ -610,7 +613,6 @@ async function cancelApplication(id) {
             <!-- ダイアログ類 -->
 
             <!-- エラーダイアログ -->
-
             <v-dialog v-model="ErrorDialog" max-width="350">
                 <v-card>
                     <v-card-item>
