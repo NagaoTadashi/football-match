@@ -419,23 +419,33 @@ async function cancelApplication(id) {
                 style="min-height: 300px"
             >
                 <v-app-bar class="px-2" :elevation="1">
-                    <v-spacer></v-spacer>
+                    <v-col cols="2"></v-col>
 
-                    <!-- 登録チーム一覧ボタン -->
-                    <v-btn
-                        icon="mdi-list-box-outline"
-                        elevation="5"
-                        @click="teamsDialog = true"
-                    >
-                    </v-btn>
+                    <v-col class="d-flex justify-space-around">
+                        <v-app-bar-title
+                            class="text-center"
+                            style="flex-grow: 1"
+                            >対戦相手を探す</v-app-bar-title
+                        >
+                    </v-col>
 
-                    <!-- 申し込み状況確認ボタン -->
-                    <v-btn
-                        icon="mdi-progress-check"
-                        elevation="5"
-                        @click="applicationsDialog = true"
-                    >
-                    </v-btn>
+                    <v-col cols="2" class="d-flex justify-end">
+                        <!-- 登録チーム一覧ボタン -->
+                        <v-btn
+                            icon="mdi-list-box-outline"
+                            elevation="5"
+                            @click="teamsDialog = true"
+                        >
+                        </v-btn>
+
+                        <!-- 申し込み状況確認ボタン -->
+                        <v-btn
+                            icon="mdi-progress-check"
+                            elevation="5"
+                            @click="applicationsDialog = true"
+                        >
+                        </v-btn>
+                    </v-col>
                 </v-app-bar>
 
                 <v-empty-state
