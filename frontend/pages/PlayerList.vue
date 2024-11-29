@@ -21,12 +21,12 @@ const { data: players } = await useFetch(
 );
 
 const dialog = ref(false);
-const dialogDelete = ref(false);
+const deleteDialog = ref(false);
 const headers = ref([
     { title: '背番号', align: 'start', key: 'number' },
     { title: 'ポジション', key: 'position', sortable: false },
     { title: '名前', key: 'namae', sortable: false },
-    { title: 'Name', key: 'name', sortable: false },
+    // { title: 'Name', key: 'name', sortable: false },
     { title: '身長(cm)', key: 'height', sortable: false },
     { title: '体重(kg)', key: 'weight', sortable: false },
     { title: '前所属', key: 'previous_team', sortable: false },
@@ -40,13 +40,13 @@ const max_height = ref(250);
 const min_weight = ref(0);
 const max_weight = ref(100);
 
-const itemId = ref(-1);
-const editedIndex = ref(-1);
-const editedItem = ref({
+const playerId = ref(-1);
+const editedPlayerIndex = ref(-1);
+const editedPlayer = ref({
     position: '',
     number: null,
     namae: '',
-    name: '',
+    // name: '',
     height: null,
     weight: null,
     previous_team: '',
@@ -55,7 +55,7 @@ const defaultItem = ref({
     position: '',
     number: null,
     namae: '',
-    name: '',
+    // name: '',
     height: null,
     weight: null,
     previous_team: '',
@@ -70,26 +70,26 @@ async function registerPlayer() {
                 Authorization: `Bearer ${idToken}`,
                 'Content-Type': 'application/json',
             },
-            body: editedItem.value,
+            body: editedPlayer.value,
         }
     );
 
     players.value.push(registeredPlayer);
 }
 
-async function editPlayer(id) {
-    const editedPlayer = await $fetch(
+async function postEdit(id) {
+    const editedPlayerInfo = await $fetch(
         `${runtimeConfig.public.apiUrl}/players/${id}/`,
         {
             method: 'PUT',
-            body: editedItem.value,
+            body: editedPlayer.value,
         }
     );
 
-    Object.assign(players.value[editedIndex.value], editedPlayer);
+    Object.assign(players.value[editedPlayerIndex.value], editedPlayerInfo);
 }
 
-async function deletePlayer(id) {
+async function postDelete(id) {
     await $fetch(`${runtimeConfig.public.apiUrl}/players/${id}/`, {
         method: 'DELETE',
     });
@@ -97,65 +97,65 @@ async function deletePlayer(id) {
     players.value = players.value.filter((player) => player.id !== id);
 }
 
-function editItem(item) {
-    itemId.value = item.id;
-    editedIndex.value = players.value.indexOf(item);
-    editedItem.value = Object.assign({}, item);
+function editPlayer(item) {
+    playerId.value = item.id;
+    editedPlayerIndex.value = players.value.indexOf(item);
+    editedPlayer.value = Object.assign({}, item);
     dialog.value = true;
 }
 
 function close() {
     dialog.value = false;
     nextTick(() => {
-        editedItem.value = Object.assign({}, defaultItem.value);
-        itemId.value = -1;
-        editedIndex.value = -1;
+        editedPlayer.value = Object.assign({}, defaultItem.value);
+        playerId.value = -1;
+        editedPlayerIndex.value = -1;
     });
 }
 
 async function register() {
-    if (editedIndex.value > -1) {
-        await editPlayer(itemId.value);
+    if (editedPlayerIndex.value > -1) {
+        await postEdit(playerId.value);
     } else {
         await registerPlayer();
     }
     close();
 }
 
-function deleteItem(item) {
-    itemId.value = item.id;
-    dialogDelete.value = true;
+function deletePlayer(item) {
+    playerId.value = item.id;
+    deleteDialog.value = true;
 }
 
-function closeDelete() {
-    dialogDelete.value = false;
+function closeDeleteDialog() {
+    deleteDialog.value = false;
     nextTick(() => {
-        itemId.value = -1;
+        playerId.value = -1;
     });
 }
 
-function deleteItemConfirm() {
-    deletePlayer(itemId.value);
-    closeDelete();
+function deletePlayerConfirm() {
+    postDelete(playerId.value);
+    closeDeleteDialog();
 }
 
 watch(dialog, (val) => {
     val || close();
 });
 
-watch(dialogDelete, (val) => {
-    val || closeDelete();
+watch(deleteDialog, (val) => {
+    val || closeDeleteDialog();
 });
 
 const isValid = computed(() => {
     return (
-        editedItem.value.position &&
-        editedItem.value.number &&
-        editedItem.value.namae &&
-        editedItem.value.name &&
-        editedItem.value.height &&
-        editedItem.value.weight &&
-        editedItem.value.previous_team
+        editedPlayer.value.position &&
+        editedPlayer.value.number &&
+        editedPlayer.value.namae &&
+        // editedPlayer.value.name &&
+        editedPlayer.value.height &&
+        editedPlayer.value.weight &&
+        editedPlayer.value.previous_team
     );
 });
 </script>
@@ -191,7 +191,7 @@ const isValid = computed(() => {
                     <v-icon
                         color="#4CAF50"
                         class="me-2"
-                        @click="editItem(item)"
+                        @click="editPlayer(item)"
                         v-tooltip:top="'編集'"
                     >
                         mdi-pencil
@@ -199,7 +199,7 @@ const isValid = computed(() => {
                     <v-icon
                         color="#F44336"
                         class="me-2"
-                        @click="deleteItem(item)"
+                        @click="deletePlayer(item)"
                         v-tooltip:top="'削除'"
                     >
                         mdi-delete
@@ -218,14 +218,14 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col cols="12" md="4" sm="6">
                                     <v-select
-                                        v-model="editedItem.position"
+                                        v-model="editedPlayer.position"
                                         label="ポジション"
                                         :items="positions"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="12" md="4" sm="6">
                                     <v-number-input
-                                        v-model="editedItem.number"
+                                        v-model="editedPlayer.number"
                                         label="背番号"
                                         :min="1"
                                         control-variant="stacked"
@@ -240,7 +240,7 @@ const isValid = computed(() => {
                                         max-width="344"
                                     >
                                         <v-text-field
-                                            v-model="editedItem.namae"
+                                            v-model="editedPlayer.namae"
                                             label="名前"
                                             clearable
                                         ></v-text-field>
@@ -249,7 +249,7 @@ const isValid = computed(() => {
                                 <v-responsive class="mx-auto" max-width="344">
                                     <v-col>
                                         <v-text-field
-                                            v-model="editedItem.name"
+                                            v-model="editedPlayer.name"
                                             label="Name"
                                             clearable
                                         ></v-text-field>
@@ -259,7 +259,7 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col>
                                     <v-slider
-                                        v-model="editedItem.height"
+                                        v-model="editedPlayer.height"
                                         :step="1"
                                         :max="max_height"
                                         :min="min_height"
@@ -269,7 +269,7 @@ const isValid = computed(() => {
                                     >
                                         <template v-slot:append>
                                             <v-text-field
-                                                v-model="editedItem.height"
+                                                v-model="editedPlayer.height"
                                                 density="compact"
                                                 style="width: 75px"
                                                 type="number"
@@ -283,7 +283,7 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col>
                                     <v-slider
-                                        v-model="editedItem.weight"
+                                        v-model="editedPlayer.weight"
                                         :step="1"
                                         :max="max_weight"
                                         :min="min_weight"
@@ -293,7 +293,7 @@ const isValid = computed(() => {
                                     >
                                         <template v-slot:append>
                                             <v-text-field
-                                                v-model="editedItem.weight"
+                                                v-model="editedPlayer.weight"
                                                 density="compact"
                                                 style="width: 75px"
                                                 type="number"
@@ -307,7 +307,7 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col>
                                     <v-text-field
-                                        v-model="editedItem.previous_team"
+                                        v-model="editedPlayer.previous_team"
                                         label="前所属"
                                         clearable
                                     ></v-text-field>
@@ -337,7 +337,7 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 削除確認ダイアログ -->
-            <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-dialog v-model="deleteDialog" max-width="500px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
                     title="この選手情報を削除してもよろしいですか？"
@@ -347,13 +347,13 @@ const isValid = computed(() => {
                         <v-btn
                             text="キャンセル"
                             variant="plain"
-                            @click="closeDelete"
+                            @click="closeDeleteDialog()"
                         ></v-btn>
                         <v-btn
                             color="primary"
                             text="OK"
                             variant="tonal"
-                            @click="deleteItemConfirm"
+                            @click="deletePlayerConfirm()"
                         ></v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>
@@ -404,12 +404,13 @@ const isValid = computed(() => {
                                             <v-card-title>
                                                 {{ item.raw.position }}
                                                 {{ item.raw.number }}
+                                                {{ item.raw.namae }}
                                             </v-card-title>
 
-                                            <v-card-title>
-                                                {{ item.raw.namae }} |
+                                            <!-- <v-card-title>
+                                                {{ item.raw.namae }}
                                                 {{ item.raw.name }}
-                                            </v-card-title>
+                                            </v-card-title> -->
 
                                             <v-card-subtitle>
                                                 身長/体重：
@@ -431,10 +432,17 @@ const isValid = computed(() => {
                                             class="d-flex justify-end"
                                         >
                                             <v-icon
+                                                color="#4CAF50"
+                                                class="me-2"
+                                                @click="editPlayer(item.raw)"
+                                                v-tooltip:top="'編集'"
+                                            >
+                                                mdi-pencil
+                                            </v-icon>
+                                            <v-icon
                                                 color="#F44336"
                                                 class="me-2"
-                                                size="large"
-                                                @click="deleteItem(item.raw)"
+                                                @click="deletePlayer(item.raw)"
                                                 >mdi-delete</v-icon
                                             >
                                         </v-card-actions>
@@ -456,15 +464,15 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col cols="6">
                                     <v-select
-                                        v-model="editedItem.position"
-                                        label="ポジションを選択"
+                                        v-model="editedPlayer.position"
+                                        label="ポジション"
                                         :items="positions"
                                         density="comfortable"
                                     ></v-select>
                                 </v-col>
                                 <v-col cols="6">
                                     <v-number-input
-                                        v-model="editedItem.number"
+                                        v-model="editedPlayer.number"
                                         label="背番号"
                                         :min="1"
                                         control-variant="stacked"
@@ -476,27 +484,27 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col cols="12">
                                     <v-text-field
-                                        v-model="editedItem.namae"
+                                        v-model="editedPlayer.namae"
                                         label="名前を入力"
                                         clearable
                                         density="comfortable"
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
-                            <v-row>
+                            <!-- <v-row>
                                 <v-col cols="12">
                                     <v-text-field
-                                        v-model="editedItem.name"
+                                        v-model="editedPlayer.name"
                                         label="ローマ字で入力"
                                         clearable
                                         density="comfortable"
                                     ></v-text-field>
                                 </v-col>
-                            </v-row>
+                            </v-row> -->
                             <v-row>
                                 <v-col cols="12">
                                     <v-slider
-                                        v-model="editedItem.height"
+                                        v-model="editedPlayer.height"
                                         :step="1"
                                         :max="max_height"
                                         :min="min_height"
@@ -506,7 +514,7 @@ const isValid = computed(() => {
                                     >
                                         <template v-slot:append>
                                             <v-text-field
-                                                v-model="editedItem.height"
+                                                v-model="editedPlayer.height"
                                                 density="comfortable"
                                                 style="width: 75px"
                                                 type="number"
@@ -520,7 +528,7 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col cols="12">
                                     <v-slider
-                                        v-model="editedItem.weight"
+                                        v-model="editedPlayer.weight"
                                         :step="1"
                                         :max="max_weight"
                                         :min="min_weight"
@@ -530,7 +538,7 @@ const isValid = computed(() => {
                                     >
                                         <template v-slot:append>
                                             <v-text-field
-                                                v-model="editedItem.weight"
+                                                v-model="editedPlayer.weight"
                                                 density="comfortable"
                                                 style="width: 75px"
                                                 type="number"
@@ -544,7 +552,7 @@ const isValid = computed(() => {
                             <v-row>
                                 <v-col cols="12">
                                     <v-text-field
-                                        v-model="editedItem.previous_team"
+                                        v-model="editedPlayer.previous_team"
                                         label="前所属チームを入力"
                                         clearable
                                         density="comfortable"
@@ -559,14 +567,18 @@ const isValid = computed(() => {
                     <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="close()"
+                        >
                         </v-btn>
 
                         <v-btn
                             color="primary"
                             text="保存"
                             variant="tonal"
-                            @click="register"
+                            @click="register()"
                             :disabled="!isValid"
                         >
                         </v-btn>
@@ -575,7 +587,7 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 削除確認ダイアログ -->
-            <v-dialog v-model="dialogDelete" max-width="370px">
+            <v-dialog v-model="deleteDialog" max-width="370px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
                     title="この選手情報を削除しますか？"
@@ -585,13 +597,13 @@ const isValid = computed(() => {
                         <v-btn
                             text="いいえ"
                             variant="plain"
-                            @click="closeDelete"
+                            @click="closeDeleteDialog()"
                         ></v-btn>
                         <v-btn
                             color="primary"
                             text="はい"
                             variant="tonal"
-                            @click="deleteItemConfirm"
+                            @click="deletePlayerConfirm()"
                         ></v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>

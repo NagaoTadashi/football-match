@@ -707,7 +707,7 @@ async function cancelApplication(id) {
             </v-dialog>
 
             <!-- 申し込み状況ダイアログ -->
-            <v-dialog v-model="applicationsDialog" max-width="450">
+            <v-dialog v-model="applicationsDialog" max-width="4000">
                 <v-card>
                     <v-card-title class="d-flex align-center">
                         <v-icon class="me-2">mdi-progress-check</v-icon>
@@ -731,8 +731,8 @@ async function cancelApplication(id) {
                                     >
                                         <img
                                             src="../public/icons8-インスタグラム.svg"
-                                            width="25"
-                                            height="25"
+                                            width="30"
+                                            height="30"
                                             style="vertical-align: middle"
                                     /></a>
                                     <a
@@ -743,18 +743,23 @@ async function cancelApplication(id) {
                                     >
                                         <img
                                             src="../public/icons8-ツイッターx.svg"
-                                            width="25"
-                                            height="25"
+                                            width="30"
+                                            height="30"
                                             style="vertical-align: middle"
                                     /></a>
                                 </v-list-item-title>
 
                                 <v-list-item-subtitle>
-                                    <v-icon>mdi-calendar-clock</v-icon
+                                    <v-icon>mdi-calendar-month</v-icon
                                     >{{ item.year }}/{{ item.month }}/{{
                                         item.day
                                     }}
+                                </v-list-item-subtitle>
 
+                                <v-list-item-subtitle>
+                                    <v-icon
+                                        >mdi-clock-time-eight-outline</v-icon
+                                    >
                                     {{ item.start_time }} ~
                                     {{ item.end_time }}
                                 </v-list-item-subtitle>
@@ -769,6 +774,7 @@ async function cancelApplication(id) {
                                         v-if="item.status === '回答待ち'"
                                         color="#F44336"
                                         class="me-2"
+                                        size="large"
                                         @click="
                                             cancelDialog = true;
                                             cancelApplicationId = item.id;
@@ -780,20 +786,12 @@ async function cancelApplication(id) {
 
                                     <v-dialog
                                         v-model="cancelDialog"
-                                        max-width="500px"
+                                        max-width="390px"
                                     >
-                                        <v-card>
-                                            <v-card-item>
-                                                <v-card-title
-                                                    style="font-size: 1.1rem"
-                                                >
-                                                    <v-icon
-                                                        >mdi-alert-circle-outline</v-icon
-                                                    >
-                                                    申し込みをキャンセルしますか？
-                                                </v-card-title>
-                                            </v-card-item>
-
+                                        <v-card
+                                            prepend-icon="mdi-alert-circle-outline"
+                                            title="申し込みをキャンセルしますか？"
+                                        >
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
 

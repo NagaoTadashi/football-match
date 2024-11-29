@@ -31,6 +31,17 @@ const { data: recruitments } = await useFetch(
     }
 );
 
+const { data: applicationRequests } = await useFetch(
+    `${runtimeConfig.public.apiUrl}/application_requests/`,
+    {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${idToken}`,
+            'Content-Type': 'application/json',
+        },
+    }
+);
+
 const selectedRegion = ref('');
 const selectedPrefecture = ref('');
 
@@ -190,9 +201,15 @@ const grounds = {
     ],
 };
 
-const postDialog = ref(false);
+const applicationRequestId = ref(-1);
+
+const postRecruitmentDialog = ref(false);
 const reservationDialog = ref(false);
-const dialogDelete = ref(false);
+const applicationRequestsDialog = ref(false);
+const deleteDialog = ref(false);
+const dialogApprove = ref(false);
+const dialogDecline = ref(false);
+const approveErrorDialog = ref(false);
 
 const headers = ref([
     { title: '状態', align: 'start', key: 'status' },
@@ -205,7 +222,8 @@ const headers = ref([
     { title: '', key: 'actions', sortable: false },
 ]);
 
-const itemId = ref(-1);
+const recruitmentId = ref(-1);
+
 const editedItem = ref({
     year: null,
     month: null,
@@ -223,6 +241,58 @@ const defaultItem = ref({
     location: '',
 });
 
+// 申し込み依頼
+async function postApprove(id) {
+    const approvedApplicationRequest = await $fetch(
+        `${runtimeConfig.public.apiUrl}/approve_application_request/${id}/`,
+        {
+            method: 'POST',
+        }
+    );
+
+    if (approvedApplicationRequest == null) {
+        approveErrorDialog.value = true;
+    }
+    applicationRequests.value = applicationRequests.value.filter(
+        (applicationRequest) => applicationRequest.id !== id
+    );
+}
+
+function approveApplicationRequestConfirm(item) {
+    applicationRequestId.value = item.id;
+    dialogApprove.value = true;
+}
+
+function approveApplicationRequest() {
+    postApprove(applicationRequestId.value);
+    dialogApprove.value = false;
+    applicationRequestId.value = -1;
+}
+
+async function postDecline(id) {
+    await $fetch(
+        `${runtimeConfig.public.apiUrl}/decline_application_request/${id}/`,
+        {
+            method: 'POST',
+        }
+    );
+
+    applicationRequests.value = applicationRequests.value.filter(
+        (applicationRequest) => applicationRequest.id !== id
+    );
+}
+function declineApplicationRequestConfirm(item) {
+    applicationRequestId.value = item.id;
+    dialogDecline.value = true;
+}
+
+function declineApplicationRequest() {
+    postDecline(applicationRequestId.value);
+    dialogDecline.value = false;
+    applicationRequestId.value = -1;
+}
+
+// 募集
 async function postRecruitment() {
     const postedRecruitment = await $fetch(
         `${runtimeConfig.public.apiUrl}/recruitments/`,
@@ -236,9 +306,11 @@ async function postRecruitment() {
         }
     );
     recruitments.value.push(postedRecruitment);
+
+    closePostRecruitmentDialog();
 }
 
-async function deleteRecruitment(id) {
+async function postDelete(id) {
     await $fetch(`${runtimeConfig.public.apiUrl}/recruitments/${id}/`, {
         method: 'DELETE',
     });
@@ -248,34 +320,29 @@ async function deleteRecruitment(id) {
     );
 }
 
-function close() {
-    postDialog.value = false;
+function closePostRecruitmentDialog() {
+    postRecruitmentDialog.value = false;
     nextTick(() => {
         editedItem.value = Object.assign({}, defaultItem.value);
-        itemId.value = -1;
+        recruitmentId.value = -1;
     });
 }
 
-function post() {
-    postRecruitment();
-    close();
+function deleteRecruitmentConfirm(item) {
+    recruitmentId.value = item.id;
+    deleteDialog.value = true;
 }
 
-function deleteItem(item) {
-    itemId.value = item.id;
-    dialogDelete.value = true;
+function deleteRecruitment() {
+    postDelete(recruitmentId.value);
+    closeDeleteDialog();
 }
 
-function closeDelete() {
-    dialogDelete.value = false;
+function closeDeleteDialog() {
+    deleteDialog.value = false;
     nextTick(() => {
-        itemId.value = -1;
+        recruitmentId.value = -1;
     });
-}
-
-function deleteItemConfirm() {
-    deleteRecruitment(itemId.value);
-    closeDelete();
 }
 
 const goToUrl = (url) => {
@@ -302,11 +369,11 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-watch(postDialog, (val) => {
+watch(postRecruitmentDialog, (val) => {
     val || close();
 });
-watch(dialogDelete, (val) => {
-    val || closeDelete();
+watch(deleteDialog, (val) => {
+    val || closeDeleteDialog();
 });
 
 const isValid = computed(() => {
@@ -363,7 +430,7 @@ const isValid = computed(() => {
                         <v-btn
                             prepend-icon="mdi-text-box-plus-outline"
                             elevation="5"
-                            @click="postDialog = true"
+                            @click="postRecruitmentDialog = true"
                         >
                             募集を投稿
                         </v-btn>
@@ -376,7 +443,7 @@ const isValid = computed(() => {
                         v-if="item.status === '募集中'"
                         color="#F44336"
                         class="me-2"
-                        @click="deleteItem(item)"
+                        @click="deleteRecruitmentConfirm(item)"
                         v-tooltip:top="'削除'"
                     >
                         mdi-delete
@@ -388,7 +455,7 @@ const isValid = computed(() => {
             <!-- ダイアログ類 -->
 
             <!-- 募集投稿ダイアログ -->
-            <v-dialog v-model="postDialog" max-width="500px">
+            <v-dialog v-model="postRecruitmentDialog" max-width="500px">
                 <v-card prepend-icon="mdi-form-select" title="募集内容">
                     <v-card-text>
                         <v-container>
@@ -396,7 +463,7 @@ const isValid = computed(() => {
                                 <v-col class="d-flex align-center">
                                     <v-icon>mdi-soccer-field</v-icon>
                                 </v-col>
-                                <v-col cols="10" md="10" sm="7"
+                                <v-col cols="10"
                                     ><v-btn
                                         evaluation="10"
                                         @click="reservationDialog = true"
@@ -409,7 +476,7 @@ const isValid = computed(() => {
                                 <v-col class="d-flex align-center">
                                     <v-icon>mdi-map-marker-outline</v-icon>
                                 </v-col>
-                                <v-col cols="10" md="10" sm="7">
+                                <v-col cols="10">
                                     <v-text-field
                                         v-model="editedItem.location"
                                         hide-details="auto"
@@ -422,21 +489,21 @@ const isValid = computed(() => {
                                 <v-col class="d-flex align-center">
                                     <v-icon> mdi-calendar-month </v-icon>
                                 </v-col>
-                                <v-col md="4" sm="7">
+                                <v-col cols="4">
                                     <v-select
                                         v-model="editedItem.year"
                                         label="年"
                                         :items="yearOptions"
                                     />
                                 </v-col>
-                                <v-col md="3" sm="7">
+                                <v-col cols="3">
                                     <v-select
                                         v-model="editedItem.month"
                                         label="月"
                                         :items="monthOptions"
                                     />
                                 </v-col>
-                                <v-col md="3" sm="7">
+                                <v-col cols="3">
                                     <v-select
                                         v-model="editedItem.day"
                                         label="日"
@@ -450,14 +517,14 @@ const isValid = computed(() => {
                                         mdi-clock-time-eight-outline
                                     </v-icon>
                                 </v-col>
-                                <v-col cols="5" md="5" sm="7">
+                                <v-col cols="5">
                                     <v-select
                                         v-model="editedItem.start_time"
                                         label="開始時間"
                                         :items="timeOptions"
                                     />
                                 </v-col>
-                                <v-col cols="5" md="5" sm="7">
+                                <v-col cols="5">
                                     <v-select
                                         v-model="editedItem.end_time"
                                         label="終了時間"
@@ -473,14 +540,18 @@ const isValid = computed(() => {
                     <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closePostRecruitmentDialog()"
+                        >
                         </v-btn>
 
                         <v-btn
                             color="primary"
                             text="投稿"
                             variant="tonal"
-                            @click="post"
+                            @click="postRecruitment()"
                             :disabled="!isValid"
                         >
                         </v-btn>
@@ -544,7 +615,7 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 投稿消去確認ダイアログ -->
-            <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-dialog v-model="deleteDialog" max-width="500px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
                     title="この募集投稿を削除してもよろしいですか？"
@@ -552,15 +623,15 @@ const isValid = computed(() => {
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn
-                            text="キャンセル"
+                            text="いいえ"
                             variant="plain"
-                            @click="closeDelete"
+                            @click="closeDeleteDialog()"
                         ></v-btn>
                         <v-btn
                             color="primary"
-                            text="OK"
+                            text="はい"
                             variant="tonal"
-                            @click="deleteItemConfirm"
+                            @click="deleteRecruitment()"
                         ></v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>
@@ -589,14 +660,14 @@ const isValid = computed(() => {
                             <v-btn
                                 icon="mdi-email-outline"
                                 elevation="5"
-                                @click="postDialog = true"
+                                @click="applicationRequestsDialog = true"
                             ></v-btn>
 
                             <!-- 募集を投稿ボタン -->
                             <v-btn
                                 icon="mdi-text-box-plus-outline"
                                 elevation="5"
-                                @click="postDialog = true"
+                                @click="postRecruitmentDialog = true"
                             ></v-btn>
                         </v-col>
                     </v-app-bar>
@@ -650,7 +721,11 @@ const isValid = computed(() => {
                                                 color="#F44336"
                                                 class="me-2"
                                                 size="large"
-                                                @click="deleteItem(item.raw)"
+                                                @click="
+                                                    deleteRecruitmentConfirm(
+                                                        item.raw
+                                                    )
+                                                "
                                                 >mdi-delete</v-icon
                                             >
                                         </v-card-actions>
@@ -664,8 +739,181 @@ const isValid = computed(() => {
 
             <!-- ダイアログ類 -->
 
+            <!-- 申し込み依頼ダイアログ -->
+            <v-dialog v-model="applicationRequestsDialog" max-width="450">
+                <v-card>
+                    <v-card-title class="d-flex align-center">
+                        <v-icon class="me-2">mdi-email-outline</v-icon>
+                        他チームからの申し込み
+                    </v-card-title>
+
+                    <v-virtual-scroll
+                        :items="applicationRequests"
+                        height="300"
+                        item-height="50"
+                    >
+                        <template v-slot:default="{ item }">
+                            <v-list-item>
+                                <v-list-item-title
+                                    >{{ item.name }}
+
+                                    <a
+                                        v-if="item.instagram_user_name"
+                                        :href="`https://www.instagram.com/${item.instagram_user_name}/`"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="../public/icons8-インスタグラム.svg"
+                                            width="30"
+                                            height="30"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                    <a
+                                        v-if="item.X_user_name"
+                                        :href="`https://x.com/${item.X_user_name}/`"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="../public/icons8-ツイッターx.svg"
+                                            width="30"
+                                            height="30"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                </v-list-item-title>
+
+                                <v-list-item-subtitle>
+                                    <v-icon>mdi-calendar-month</v-icon
+                                    >{{ item.year }}/{{ item.month }}/{{
+                                        item.day
+                                    }}
+                                </v-list-item-subtitle>
+
+                                <v-list-item-subtitle>
+                                    <v-icon
+                                        >mdi-clock-time-eight-outline</v-icon
+                                    >
+                                    {{ item.start_time }} ~
+                                    {{ item.end_time }}
+                                </v-list-item-subtitle>
+
+                                <v-list-item-subtitle>
+                                    <v-icon> mdi-map-marker-outline</v-icon
+                                    >{{ item.location }}
+                                </v-list-item-subtitle>
+
+                                <template v-slot:append>
+                                    <v-icon
+                                        color="#4CAF50"
+                                        class="me-2"
+                                        size="large"
+                                        @click="
+                                            approveApplicationRequestConfirm(
+                                                item
+                                            )
+                                        "
+                                    >
+                                        mdi-check-circle-outline
+                                    </v-icon>
+                                    <v-icon
+                                        color="#F44336"
+                                        class="me-2"
+                                        size="large"
+                                        @click="
+                                            declineApplicationRequestConfirm(
+                                                item
+                                            )
+                                        "
+                                    >
+                                        mdi-close-circle
+                                    </v-icon>
+                                </template>
+                            </v-list-item>
+
+                            <v-divider></v-divider>
+                        </template>
+                    </v-virtual-scroll>
+
+                    <template v-slot:actions>
+                        <v-btn
+                            class="ms-auto"
+                            color="primary"
+                            variant="tonal"
+                            text="閉じる"
+                            @click="applicationRequestsDialog = false"
+                        ></v-btn>
+                    </template>
+                </v-card>
+            </v-dialog>
+
+            <!-- 申し込み承認確認ダイアログ -->
+            <v-dialog v-model="dialogApprove" max-width="370px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この申し込みを承認しますか？"
+                >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="dialogApprove = false"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="approveApplicationRequest()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 承認エラーダイアログ -->
+            <v-dialog v-model="approveErrorDialog" max-width="370">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="直前にキャンセルにされました"
+                >
+                    <v-card-actions>
+                        <v-btn
+                            color="primary"
+                            variant="tonal"
+                            @click="approveErrorDialog = false"
+                            >閉じる</v-btn
+                        >
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 辞退確認ダイアログ -->
+            <v-dialog v-model="dialogDecline" max-width="370px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この申し込みを辞退しますか？"
+                >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="dialogDecline = false"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="declineApplicationRequest()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
             <!-- 募集投稿ダイアログ -->
-            <v-dialog v-model="postDialog" max-width="550px">
+            <v-dialog v-model="postRecruitmentDialog" max-width="550px">
                 <v-card prepend-icon="mdi-form-select" title="募集内容">
                     <v-card-text>
                         <v-row>
@@ -692,7 +940,7 @@ const isValid = computed(() => {
                         </v-row>
 
                         <v-row>
-                            <v-col cols="4">
+                            <v-col cols="5">
                                 <v-select
                                     v-model="editedItem.year"
                                     label="年"
@@ -700,7 +948,7 @@ const isValid = computed(() => {
                                     density="comfortable"
                                 />
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="3.5">
                                 <v-select
                                     v-model="editedItem.month"
                                     label="月"
@@ -708,7 +956,7 @@ const isValid = computed(() => {
                                     density="comfortable"
                                 />
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="3.5">
                                 <v-select
                                     v-model="editedItem.day"
                                     label="日"
@@ -743,14 +991,18 @@ const isValid = computed(() => {
                     <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closePostRecruitmentDialog()"
+                        >
                         </v-btn>
 
                         <v-btn
                             color="primary"
                             text="投稿"
                             variant="tonal"
-                            @click="post"
+                            @click="postRecruitment()"
                             :disabled="!isValid"
                         >
                         </v-btn>
@@ -817,23 +1069,25 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 投稿消去確認ログ -->
-            <v-dialog v-model="dialogDelete" max-width="330px">
+            <v-dialog v-model="deleteDialog" max-width="330px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
                     title="この投稿を削除しますか？"
                 >
                     <v-card-actions>
                         <v-spacer></v-spacer>
+
                         <v-btn
                             text="いいえ"
                             variant="plain"
-                            @click="closeDelete"
+                            @click="closeDeleteDialog()"
                         ></v-btn>
+
                         <v-btn
                             color="primary"
                             text="はい"
                             variant="tonal"
-                            @click="deleteItemConfirm"
+                            @click="deleteRecruitment()"
                         ></v-btn>
                         <v-spacer></v-spacer>
                     </v-card-actions>

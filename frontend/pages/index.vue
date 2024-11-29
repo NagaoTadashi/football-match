@@ -58,7 +58,7 @@ const img_url =
         <template v-if="smAndUp">
             <v-data-iterator
                 :items="matches"
-                items-per-page="-1"
+                items-per-page="3"
                 :search="search"
             >
                 <template v-slot:header>
@@ -361,6 +361,8 @@ const img_url =
                                         </v-card-title>
 
                                         <v-card-subtitle>
+                                            {{ item.raw.away_team_region }}
+                                            |
                                             {{ item.raw.away_team_prefecture }}
                                             |
                                             {{ item.raw.away_team_category }}
