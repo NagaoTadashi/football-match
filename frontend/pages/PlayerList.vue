@@ -26,7 +26,7 @@ const headers = ref([
     { title: '背番号', align: 'start', key: 'number' },
     { title: 'ポジション', key: 'position', sortable: false },
     { title: '名前', key: 'namae', sortable: false },
-    // { title: 'Name', key: 'name', sortable: false },
+    { title: 'Name', key: 'name', sortable: false },
     { title: '身長(cm)', key: 'height', sortable: false },
     { title: '体重(kg)', key: 'weight', sortable: false },
     { title: '前所属', key: 'previous_team', sortable: false },
@@ -42,26 +42,28 @@ const max_weight = ref(100);
 
 const playerId = ref(-1);
 const editedPlayerIndex = ref(-1);
+
 const editedPlayer = ref({
     position: '',
     number: null,
     namae: '',
-    // name: '',
-    height: null,
-    weight: null,
-    previous_team: '',
-});
-const defaultPlayer = ref({
-    position: '',
-    number: null,
-    namae: '',
-    // name: '',
+    name: '',
     height: null,
     weight: null,
     previous_team: '',
 });
 
-async function registerPlayer() {
+const defaultPlayer = ref({
+    position: '',
+    number: null,
+    namae: '',
+    name: '',
+    height: null,
+    weight: null,
+    previous_team: '',
+});
+
+async function postRegist() {
     const registeredPlayer = await $fetch(
         `${runtimeConfig.public.apiUrl}/players/`,
         {
@@ -104,7 +106,7 @@ function editPlayer(item) {
     dialog.value = true;
 }
 
-function close() {
+function closePlayerDialog() {
     dialog.value = false;
     nextTick(() => {
         editedPlayer.value = Object.assign({}, defaultPlayer.value);
@@ -113,13 +115,13 @@ function close() {
     });
 }
 
-async function register() {
+async function registerPlayer() {
     if (editedPlayerIndex.value > -1) {
         await postEdit(playerId.value);
     } else {
-        await registerPlayer();
+        await postRegist();
     }
-    close();
+    closePlayerDialog();
 }
 
 function deletePlayer(item) {
@@ -140,7 +142,7 @@ function deletePlayerConfirm() {
 }
 
 watch(dialog, (val) => {
-    val || close();
+    val || closePlayerDialog();
 });
 
 watch(deleteDialog, (val) => {
@@ -152,7 +154,7 @@ const isValid = computed(() => {
         editedPlayer.value.position &&
         editedPlayer.value.number &&
         editedPlayer.value.namae &&
-        // editedPlayer.value.name &&
+        editedPlayer.value.name &&
         editedPlayer.value.height &&
         editedPlayer.value.weight &&
         editedPlayer.value.previous_team
@@ -321,14 +323,18 @@ const isValid = computed(() => {
                     <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn text="キャンセル" variant="plain" @click="close">
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closePlayerDialog()"
+                        >
                         </v-btn>
 
                         <v-btn
                             color="primary"
                             text="保存"
                             variant="tonal"
-                            @click="register"
+                            @click="registerPlayer()"
                             :disabled="!isValid"
                         >
                         </v-btn>
@@ -406,11 +412,6 @@ const isValid = computed(() => {
                                                 {{ item.raw.number }}
                                                 {{ item.raw.namae }}
                                             </v-card-title>
-
-                                            <!-- <v-card-title>
-                                                {{ item.raw.namae }}
-                                                {{ item.raw.name }}
-                                            </v-card-title> -->
 
                                             <v-card-subtitle>
                                                 身長/体重：
@@ -491,7 +492,7 @@ const isValid = computed(() => {
                                     ></v-text-field>
                                 </v-col>
                             </v-row>
-                            <!-- <v-row>
+                            <v-row>
                                 <v-col cols="12">
                                     <v-text-field
                                         v-model="editedPlayer.name"
@@ -500,7 +501,7 @@ const isValid = computed(() => {
                                         density="comfortable"
                                     ></v-text-field>
                                 </v-col>
-                            </v-row> -->
+                            </v-row>
                             <v-row>
                                 <v-col cols="12">
                                     <v-slider
@@ -570,7 +571,7 @@ const isValid = computed(() => {
                         <v-btn
                             text="キャンセル"
                             variant="plain"
-                            @click="close()"
+                            @click="closePlayerDialog()"
                         >
                         </v-btn>
 
@@ -578,7 +579,7 @@ const isValid = computed(() => {
                             color="primary"
                             text="保存"
                             variant="tonal"
-                            @click="register()"
+                            @click="registerPlayer()"
                             :disabled="!isValid"
                         >
                         </v-btn>
