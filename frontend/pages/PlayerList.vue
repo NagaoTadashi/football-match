@@ -51,7 +51,7 @@ const editedPlayer = ref({
     weight: null,
     previous_team: '',
 });
-const defaultItem = ref({
+const defaultPlayer = ref({
     position: '',
     number: null,
     namae: '',
@@ -107,7 +107,7 @@ function editPlayer(item) {
 function close() {
     dialog.value = false;
     nextTick(() => {
-        editedPlayer.value = Object.assign({}, defaultItem.value);
+        editedPlayer.value = Object.assign({}, defaultPlayer.value);
         playerId.value = -1;
         editedPlayerIndex.value = -1;
     });
