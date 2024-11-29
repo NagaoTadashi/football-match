@@ -450,32 +450,38 @@ async function cancelApplication(id) {
                 <v-data-iterator :items="recruitments" items-per-page="-1">
                     <template v-slot:header>
                         <v-app-bar class="px-2" :elevation="1">
-                            <!-- 検索ボタン -->
-                            <v-btn
-                                icon="mdi-magnify"
-                                elevation="5"
-                                :disabled="true"
-                            ></v-btn>
+                            <v-col cols="2">
+                                <!-- 検索ボタン -->
+                                <v-btn
+                                    icon="mdi-magnify"
+                                    elevation="5"
+                                    :disabled="true"
+                                ></v-btn>
+                            </v-col>
 
-                            <v-app-bar-title class="text-center"
-                                >対戦相手を探す</v-app-bar-title
-                            >
+                            <v-col class="d-flex justify-space-around">
+                                <v-app-bar-title class="text-center"
+                                    >対戦相手を探す</v-app-bar-title
+                                >
+                            </v-col>
 
-                            <!-- 登録チーム一覧ボタン -->
-                            <v-btn
-                                icon="mdi-list-box-outline"
-                                elevation="5"
-                                @click="teamsDialog = true"
-                            >
-                            </v-btn>
+                            <v-col cols="2" class="d-flex justify-end">
+                                <!-- 登録チーム一覧ボタン -->
+                                <v-btn
+                                    icon="mdi-list-box-outline"
+                                    elevation="5"
+                                    @click="teamsDialog = true"
+                                >
+                                </v-btn>
 
-                            <!-- 申し込み状況確認ボタン -->
-                            <v-btn
-                                icon="mdi-progress-check"
-                                elevation="5"
-                                @click="applicationsDialog = true"
-                            >
-                            </v-btn>
+                                <!-- 申し込み状況確認ボタン -->
+                                <v-btn
+                                    icon="mdi-progress-check"
+                                    elevation="5"
+                                    @click="applicationsDialog = true"
+                                >
+                                </v-btn>
+                            </v-col>
                         </v-app-bar>
                     </template>
 

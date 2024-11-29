@@ -574,16 +574,31 @@ const isValid = computed(() => {
             <v-data-iterator :items="recruitments" items-per-page="-1">
                 <template v-slot:header>
                     <v-app-bar class="px-2" :elevation="1">
-                        <v-app-bar-title class="text-center"
-                            >対戦相手を募集</v-app-bar-title
-                        >
+                        <v-col cols="2"></v-col>
 
-                        <!-- 募集を投稿ボタン -->
-                        <v-btn
-                            icon="mdi-text-box-plus-outline"
-                            elevation="5"
-                            @click="postDialog = true"
-                        ></v-btn>
+                        <v-col class="d-flex justify-space-around">
+                            <v-app-bar-title
+                                class="text-center"
+                                style="flex-grow: 1"
+                                >対戦相手を募集</v-app-bar-title
+                            >
+                        </v-col>
+
+                        <v-col cols="2" class="d-flex justify-end">
+                            <!-- 申し込み依頼ボタン -->
+                            <v-btn
+                                icon="mdi-email-outline"
+                                elevation="5"
+                                @click="postDialog = true"
+                            ></v-btn>
+
+                            <!-- 募集を投稿ボタン -->
+                            <v-btn
+                                icon="mdi-text-box-plus-outline"
+                                elevation="5"
+                                @click="postDialog = true"
+                            ></v-btn>
+                        </v-col>
                     </v-app-bar>
                 </template>
 

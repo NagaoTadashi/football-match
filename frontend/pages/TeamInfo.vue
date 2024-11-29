@@ -146,16 +146,23 @@ function handleTeamInfoEdited(updatedTeamInfo) {
 
         <template v-else>
             <v-app-bar class="px-2" :elevation="1">
-                <v-app-bar-title class="text-center"
-                    >対戦相手を募集</v-app-bar-title
-                >
-                <!-- チーム情報編集ボタン -->
-                <EditButton
-                    :idToken="idToken"
-                    :teamInfo="teamInfo"
-                    :apiUrl="runtimeConfig.public.apiUrl"
-                    @TeamInfoEdited="handleTeamInfoEdited"
-                />
+                <v-col cols="2"></v-col>
+
+                <v-col class="d-flex justify-space-around">
+                    <v-app-bar-title class="text-center"
+                        >チーム情報</v-app-bar-title
+                    >
+                </v-col>
+
+                <v-col cols="2" class="d-flex justify-end">
+                    <!-- チーム情報編集ボタン -->
+                    <EditButton
+                        :idToken="idToken"
+                        :teamInfo="teamInfo"
+                        :apiUrl="runtimeConfig.public.apiUrl"
+                        @TeamInfoEdited="handleTeamInfoEdited"
+                    />
+                </v-col>
             </v-app-bar>
 
             <v-row justify="center">

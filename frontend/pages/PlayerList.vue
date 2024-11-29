@@ -367,17 +367,23 @@ const isValid = computed(() => {
             <v-data-iterator :items="players" items-per-page="-1">
                 <template v-slot:header>
                     <v-app-bar class="px-2" :elevation="1">
-                        <v-app-bar-title class="text-center"
-                            >選手一覧</v-app-bar-title
-                        >
+                        <v-col cols="2"></v-col>
 
-                        <!-- 選手を登録ボタン -->
-                        <v-btn
-                            icon="mdi-account-plus"
-                            elevation="5"
-                            @click="dialog = true"
-                        >
-                        </v-btn>
+                        <v-col class="d-flex justify-space-around">
+                            <v-app-bar-title class="text-center"
+                                >選手一覧</v-app-bar-title
+                            >
+                        </v-col>
+
+                        <v-col cols="2" class="d-flex justify-end">
+                            <!-- 選手を登録ボタン -->
+                            <v-btn
+                                icon="mdi-account-plus"
+                                elevation="5"
+                                @click="dialog = true"
+                            >
+                            </v-btn>
+                        </v-col>
                     </v-app-bar>
                 </template>
 
