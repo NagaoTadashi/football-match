@@ -686,49 +686,52 @@ const isValid = computed(() => {
                             >
                                 <v-card>
                                     <v-row align="center" no-gutters>
-                                        <v-card-item>
-                                            <v-icon>mdi-calendar-month</v-icon>
-                                            {{ item.raw.year }}年{{
-                                                item.raw.month
-                                            }}月{{ item.raw.day }}日
+                                        <v-col cols="11">
+                                            <v-card-item>
+                                                <v-icon
+                                                    >mdi-calendar-month</v-icon
+                                                >
+                                                {{ item.raw.year }}年{{
+                                                    item.raw.month
+                                                }}月{{ item.raw.day }}日
 
-                                            <br />
+                                                <br />
 
-                                            <v-icon
-                                                >mdi-clock-time-eight-outline</v-icon
+                                                <v-icon
+                                                    >mdi-clock-time-eight-outline</v-icon
+                                                >
+                                                {{ item.raw.start_time }} ~
+                                                {{ item.raw.end_time }}
+
+                                                <br />
+
+                                                <v-icon
+                                                    >mdi-map-marker-outline</v-icon
+                                                >
+                                                {{ item.raw.location }}
+                                            </v-card-item>
+                                        </v-col>
+
+                                        <v-col cols="1">
+                                            <v-card-actions
+                                                class="d-flex justify-end"
                                             >
-                                            {{ item.raw.start_time }} ~
-                                            {{ item.raw.end_time }}
-
-                                            <br />
-
-                                            <v-icon
-                                                >mdi-map-marker-outline</v-icon
-                                            >
-                                            {{ item.raw.location }}
-                                        </v-card-item>
-
-                                        <v-spacer></v-spacer>
-
-                                        <!-- 削除ボタン -->
-                                        <v-card-actions
-                                            class="d-flex justify-end"
-                                        >
-                                            <v-icon
-                                                v-if="
-                                                    item.raw.status === '募集中'
-                                                "
-                                                color="#F44336"
-                                                class="me-2"
-                                                size="large"
-                                                @click="
-                                                    deleteRecruitmentConfirm(
-                                                        item.raw
-                                                    )
-                                                "
-                                                >mdi-delete</v-icon
-                                            >
-                                        </v-card-actions>
+                                                <v-icon
+                                                    v-if="
+                                                        item.raw.status ===
+                                                        '募集中'
+                                                    "
+                                                    color="#F44336"
+                                                    class="me-2"
+                                                    @click="
+                                                        deleteRecruitmentConfirm(
+                                                            item.raw
+                                                        )
+                                                    "
+                                                    >mdi-delete</v-icon
+                                                >
+                                            </v-card-actions>
+                                        </v-col>
                                     </v-row>
                                 </v-card>
                             </v-col>
@@ -848,13 +851,14 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 申し込み承認確認ダイアログ -->
-            <v-dialog v-model="dialogApprove" max-width="370px">
+            <v-dialog v-model="dialogApprove" max-width="330px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
-                    title="この申し込みを承認しますか？"
+                    title="申し込みを承認しますか？"
                 >
                     <v-card-actions>
                         <v-spacer></v-spacer>
+
                         <v-btn
                             text="いいえ"
                             variant="plain"
@@ -872,11 +876,15 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 承認エラーダイアログ -->
-            <v-dialog v-model="approveErrorDialog" max-width="370">
-                <v-card
-                    prepend-icon="mdi-alert-circle-outline"
-                    title="直前にキャンセルにされました"
-                >
+            <v-dialog v-model="approveErrorDialog" max-width="330">
+                <v-card>
+                    <v-card-title
+                        ><v-icon>mdi-alert-circle-outline</v-icon>
+                        承認できませんでした</v-card-title
+                    >
+                    <v-card-subtitle
+                        >この申し込みは直前にキャンセルされました</v-card-subtitle
+                    >
                     <v-card-actions>
                         <v-btn
                             color="primary"
@@ -889,10 +897,10 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 辞退確認ダイアログ -->
-            <v-dialog v-model="dialogDecline" max-width="370px">
+            <v-dialog v-model="dialogDecline" max-width="330px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
-                    title="この申し込みを辞退しますか？"
+                    title="申し込みを辞退しますか？"
                 >
                     <v-card-actions>
                         <v-spacer></v-spacer>
@@ -940,7 +948,7 @@ const isValid = computed(() => {
                         </v-row>
 
                         <v-row>
-                            <v-col cols="5">
+                            <v-col cols="6">
                                 <v-select
                                     v-model="editedItem.year"
                                     label="年"
@@ -948,7 +956,9 @@ const isValid = computed(() => {
                                     density="comfortable"
                                 />
                             </v-col>
-                            <v-col cols="3.5">
+                        </v-row>
+                        <v-row>
+                            <v-col cols="5">
                                 <v-select
                                     v-model="editedItem.month"
                                     label="月"
@@ -956,16 +966,14 @@ const isValid = computed(() => {
                                     density="comfortable"
                                 />
                             </v-col>
-                            <v-col cols="3.5">
+                            <v-col cols="5">
                                 <v-select
                                     v-model="editedItem.day"
                                     label="日"
                                     :items="dayOptions"
                                     density="comfortable"
-                                />
-                            </v-col>
-                        </v-row>
-
+                                /> </v-col
+                        ></v-row>
                         <v-row>
                             <v-col cols="6">
                                 <v-select

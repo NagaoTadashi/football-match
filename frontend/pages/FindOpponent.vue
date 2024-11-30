@@ -631,15 +631,14 @@ async function cancelApplication(id) {
             <!-- エラーダイアログ -->
             <v-dialog v-model="ErrorDialog" max-width="350">
                 <v-card>
-                    <v-card-item>
-                        <v-card-title
-                            ><v-icon>mdi-alert-circle-outline</v-icon
-                            >申し込みできませんでした</v-card-title
-                        >
-                        <v-card-subtitle>
-                            この募集は直前で削除 or 申し込みされました
-                        </v-card-subtitle>
-                    </v-card-item>
+                    <v-card-title
+                        ><v-icon>mdi-alert-circle-outline</v-icon>
+                        申し込みできませんでした</v-card-title
+                    >
+                    <v-card-subtitle>
+                        この募集は直前で削除or申し込みされました
+                    </v-card-subtitle>
+
                     <v-card-actions>
                         <v-btn color="primary" @click="ErrorDialog = false"
                             >閉じる</v-btn
@@ -796,11 +795,11 @@ async function cancelApplication(id) {
 
                                     <v-dialog
                                         v-model="cancelDialog"
-                                        max-width="390px"
+                                        max-width="290px"
                                     >
                                         <v-card
                                             prepend-icon="mdi-alert-circle-outline"
-                                            title="申し込みをキャンセルしますか？"
+                                            title="キャンセルしますか？"
                                         >
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>

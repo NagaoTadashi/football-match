@@ -406,47 +406,54 @@ const isValid = computed(() => {
                             >
                                 <v-card>
                                     <v-row align="center" no-gutters>
-                                        <v-card-item>
-                                            <v-card-title>
-                                                {{ item.raw.position }}
-                                                {{ item.raw.number }}
-                                                {{ item.raw.namae }}
-                                            </v-card-title>
+                                        <v-col cols="10">
+                                            <v-card-item>
+                                                <v-card-title>
+                                                    {{ item.raw.position }}
+                                                    {{ item.raw.number }}
+                                                    {{ item.raw.namae }}
+                                                </v-card-title>
 
-                                            <v-card-subtitle>
-                                                身長/体重：
-                                                {{ item.raw.height }}cm/{{
-                                                    item.raw.weight
-                                                }}kg
-                                            </v-card-subtitle>
+                                                <v-card-subtitle>
+                                                    身長/体重：
+                                                    {{ item.raw.height }}cm/{{
+                                                        item.raw.weight
+                                                    }}kg
+                                                </v-card-subtitle>
 
-                                            <v-card-subtitle>
-                                                前所属：
-                                                {{ item.raw.previous_team }}
-                                            </v-card-subtitle>
-                                        </v-card-item>
+                                                <v-card-subtitle>
+                                                    前所属：
+                                                    {{ item.raw.previous_team }}
+                                                </v-card-subtitle>
+                                            </v-card-item>
+                                        </v-col>
 
-                                        <v-spacer></v-spacer>
-
-                                        <!-- 削除ボタン -->
-                                        <v-card-actions
-                                            class="d-flex justify-end"
-                                        >
-                                            <v-icon
-                                                color="#4CAF50"
-                                                class="me-2"
-                                                @click="editPlayer(item.raw)"
-                                                v-tooltip:top="'編集'"
+                                        <v-col cols="2">
+                                            <v-card-actions
+                                                class="d-flex justify-end"
                                             >
-                                                mdi-pencil
-                                            </v-icon>
-                                            <v-icon
-                                                color="#F44336"
-                                                class="me-2"
-                                                @click="deletePlayer(item.raw)"
-                                                >mdi-delete</v-icon
-                                            >
-                                        </v-card-actions>
+                                                <!-- 編集ボタン -->
+                                                <v-icon
+                                                    color="#4CAF50"
+                                                    class="me-2"
+                                                    @click="
+                                                        editPlayer(item.raw)
+                                                    "
+                                                    v-tooltip:top="'編集'"
+                                                >
+                                                    mdi-pencil
+                                                </v-icon>
+                                                <!-- 削除ボタン -->
+                                                <v-icon
+                                                    color="#F44336"
+                                                    class="me-2"
+                                                    @click="
+                                                        deletePlayer(item.raw)
+                                                    "
+                                                    >mdi-delete</v-icon
+                                                >
+                                            </v-card-actions>
+                                        </v-col>
                                     </v-row>
                                 </v-card>
                             </v-col>
@@ -588,10 +595,10 @@ const isValid = computed(() => {
             </v-dialog>
 
             <!-- 削除確認ダイアログ -->
-            <v-dialog v-model="deleteDialog" max-width="370px">
+            <v-dialog v-model="deleteDialog" max-width="400px">
                 <v-card
                     prepend-icon="mdi-alert-circle-outline"
-                    title="この選手情報を削除しますか？"
+                    title="この選手を削除しますか？"
                 >
                     <v-card-actions>
                         <v-spacer></v-spacer>

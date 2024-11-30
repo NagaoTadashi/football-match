@@ -466,7 +466,7 @@ function handleTeamInfoRegisterd(newTeamInfo) {
                         </v-row>
 
                         <v-row>
-                            <v-col cols="6">
+                            <v-col cols="7">
                                 <v-select
                                     v-model="editedTeamInfo.region"
                                     :items="regionsList"
@@ -474,7 +474,10 @@ function handleTeamInfoRegisterd(newTeamInfo) {
                                     density="comfortable"
                                 ></v-select>
                             </v-col>
-                            <v-col cols="6">
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="7">
                                 <v-select
                                     v-model="editedTeamInfo.prefecture"
                                     :items="regions[editedTeamInfo.region]"
@@ -483,9 +486,8 @@ function handleTeamInfoRegisterd(newTeamInfo) {
                                 ></v-select>
                             </v-col>
                         </v-row>
-
                         <v-row>
-                            <v-col cols="6">
+                            <v-col cols="7">
                                 <v-select
                                     v-model="editedTeamInfo.category"
                                     :items="category"
