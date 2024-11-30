@@ -2,8 +2,6 @@
 import { ref } from 'vue';
 import { useDisplay } from 'vuetify';
 
-const visible = ref(false);
-
 const { smAndUp } = useDisplay();
 
 const isChrome = ref(false);
@@ -13,21 +11,30 @@ const chromeLink = 'googlechrome://web-league.com/'; // ログインページの
 
 // 初期化時にブラウザ判定
 if (typeof window !== 'undefined') {
-    const userAgent = navigator.userAgent;
-    const isIOS = /iPhone|iPad|iPod/.test(userAgent); // iOS端末かどうかを判定
-    const isChromeOnIOS = /CriOS/.test(userAgent); // iOSのChromeを判定
-
-    // iOSでない場合、Chromeを検出
-    if (!isIOS) {
-        isChrome.value =
-            /Chrome/.test(userAgent) &&
-            /Google Inc/.test(navigator.vendor) &&
-            !/Edg/.test(userAgent); // EdgeブラウザもChromeベースなので除外
+    if (navigator.userAgentData) {
+        // 新しいUser-Agent判定 (navigator.userAgentDataを使う)
+        const brands = navigator.userAgentData.brands || [];
+        isChrome.value = brands.some((brand) => brand.brand.includes('Chrome'));
     } else {
-        // iOSの場合、CriOSが含まれていればChromeとみなす
-        isChrome.value = isChromeOnIOS;
+        // 従来のUser-Agentを使った判定
+        const userAgent = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/.test(userAgent); // iOS端末かどうかを判定
+        const isChromeOnIOS = /CriOS/.test(userAgent); // iOSのChromeを判定
+
+        // iOSでない場合、Chromeを検出
+        if (!isIOS) {
+            isChrome.value =
+                /Chrome/.test(userAgent) &&
+                /Google Inc/.test(navigator.vendor) &&
+                !/Edg/.test(userAgent); // EdgeブラウザもChromeベースなので除外
+        } else {
+            // iOSの場合、CriOSが含まれていればChromeとみなす
+            isChrome.value = isChromeOnIOS;
+        }
     }
 }
+
+console.log(isChrome.value);
 </script>
 
 <template>
@@ -81,7 +88,7 @@ if (typeof window !== 'undefined') {
                 <v-card
                     class="mx-auto pa-12 pb-8"
                     elevation="8"
-                    max-width="400"
+                    max-width="350"
                     rounded="lg"
                 >
                     <v-card

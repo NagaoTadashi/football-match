@@ -355,8 +355,8 @@ function handleTeamInfoRegisterd(newTeamInfo) {
         <!-- スマホ用 -->
 
         <template v-else>
-            <v-app-bar class="px-2" :elevation="1">
-                <v-col cols="2"></v-col>
+            <v-app-bar :elevation="1">
+                <v-col cols="3"></v-col>
 
                 <v-col class="d-flex justify-space-around">
                     <v-app-bar-title class="text-center"
@@ -364,7 +364,7 @@ function handleTeamInfoRegisterd(newTeamInfo) {
                     >
                 </v-col>
 
-                <v-col cols="2" class="d-flex justify-end">
+                <v-col cols="3" class="d-flex justify-end">
                     <!-- チーム情報編集ボタン -->
                     <v-btn
                         icon="mdi-text-box-edit-outline"

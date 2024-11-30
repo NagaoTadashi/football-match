@@ -418,8 +418,8 @@ async function cancelApplication(id) {
                 class="d-flex align-center justify-center"
                 style="min-height: 300px"
             >
-                <v-app-bar class="px-2" :elevation="1">
-                    <v-col cols="2"></v-col>
+                <v-app-bar :elevation="1">
+                    <v-col cols="3"></v-col>
 
                     <v-col class="d-flex justify-space-around">
                         <v-app-bar-title
@@ -429,7 +429,7 @@ async function cancelApplication(id) {
                         >
                     </v-col>
 
-                    <v-col cols="2" class="d-flex justify-end">
+                    <v-col cols="3" class="d-flex justify-end">
                         <!-- 登録チーム一覧ボタン -->
                         <v-btn
                             icon="mdi-list-box-outline"
@@ -459,8 +459,8 @@ async function cancelApplication(id) {
             <div v-else>
                 <v-data-iterator :items="recruitments" items-per-page="-1">
                     <template v-slot:header>
-                        <v-app-bar class="px-2" :elevation="1">
-                            <v-col cols="2">
+                        <v-app-bar :elevation="1">
+                            <v-col cols="3">
                                 <!-- 検索ボタン -->
                                 <v-btn
                                     icon="mdi-magnify"
@@ -475,7 +475,7 @@ async function cancelApplication(id) {
                                 >
                             </v-col>
 
-                            <v-col cols="2" class="d-flex justify-end">
+                            <v-col cols="3" class="d-flex justify-end">
                                 <!-- 登録チーム一覧ボタン -->
                                 <v-btn
                                     icon="mdi-list-box-outline"

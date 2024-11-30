@@ -103,6 +103,8 @@ const handleSignOut = async () => {
 
 <template>
     <v-app id="inspire">
+        <!-- PC・タブレット用 -->
+
         <template v-if="smAndUp">
             <v-app-bar :elevation="5" rounded>
                 <v-app-bar-title>
@@ -182,6 +184,8 @@ const handleSignOut = async () => {
             </v-navigation-drawer>
         </template>
 
+        <!-- スマホ用 -->
+
         <template v-else>
             <v-app-bar :elevation="5" rounded>
                 <v-app-bar-title>
@@ -194,14 +198,10 @@ const handleSignOut = async () => {
                     Web League
                 </v-app-bar-title>
 
+                <!-- 問い合わせボタン -->
                 <v-menu location="bottom">
                     <template v-slot:activator="{ props }">
-                        <v-btn
-                            v-bind="props"
-                            class="text-none"
-                            stacked
-                            v-tooltip:bottom="'問い合わせ'"
-                        >
+                        <v-btn v-bind="props" class="text-none" stacked>
                             <v-icon>mdi-message-question-outline</v-icon>
                         </v-btn>
                     </template>
@@ -236,16 +236,13 @@ const handleSignOut = async () => {
                     </v-list>
                 </v-menu>
 
-                <v-btn
-                    class="text-none"
-                    stacked
-                    v-tooltip:bottom="'ログアウト'"
-                    @click="handleSignOut"
-                >
+                <!-- ログアウトボタン -->
+                <v-btn class="text-none" stacked @click="handleSignOut">
                     <v-icon>mdi-logout</v-icon>
                 </v-btn>
             </v-app-bar>
 
+            <!-- ボトムナビゲーション -->
             <v-bottom-navigation :elevation="5" rounded>
                 <v-btn
                     v-for="menu in xsMenues"

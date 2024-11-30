@@ -644,8 +644,8 @@ const isValid = computed(() => {
         <template v-else>
             <v-data-iterator :items="recruitments" items-per-page="-1">
                 <template v-slot:header>
-                    <v-app-bar class="px-2" :elevation="1">
-                        <v-col cols="2"></v-col>
+                    <v-app-bar :elevation="1">
+                        <v-col cols="3"></v-col>
 
                         <v-col class="d-flex justify-space-around">
                             <v-app-bar-title
@@ -655,7 +655,7 @@ const isValid = computed(() => {
                             >
                         </v-col>
 
-                        <v-col cols="2" class="d-flex justify-end">
+                        <v-col cols="3" class="d-flex justify-end">
                             <!-- 申し込み依頼ボタン -->
                             <v-btn
                                 icon="mdi-email-outline"
