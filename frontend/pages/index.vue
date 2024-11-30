@@ -291,11 +291,15 @@ const img_url =
             >
                 <template v-slot:header>
                     <v-app-bar class="px-2" :elevation="1">
+                        <v-col cols="2"></v-col>
+
                         <v-col class="d-flex justify-space-around">
                             <v-app-bar-title class="text-center"
                                 >試合日程</v-app-bar-title
                             >
                         </v-col>
+
+                        <v-col cols="2"></v-col>
                     </v-app-bar>
                 </template>
 
