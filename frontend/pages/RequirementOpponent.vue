@@ -1,10 +1,13 @@
 <script setup>
 import { nextTick, ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
 const user = await getCurrentUser();
 const idToken = await user.getIdToken();
 
 const runtimeConfig = useRuntimeConfig();
+
+const { smAndUp } = useDisplay();
 
 const { data: teamInfo } = await useFetch(
     `${runtimeConfig.public.apiUrl}/team_info/`,
@@ -19,6 +22,17 @@ const { data: teamInfo } = await useFetch(
 
 const { data: recruitments } = await useFetch(
     `${runtimeConfig.public.apiUrl}/my_team_recruitments/`,
+    {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${idToken}`,
+            'Content-Type': 'application/json',
+        },
+    }
+);
+
+const { data: applicationRequests } = await useFetch(
+    `${runtimeConfig.public.apiUrl}/application_requests/`,
     {
         method: 'GET',
         headers: {
@@ -187,9 +201,15 @@ const grounds = {
     ],
 };
 
-const postDialog = ref(false);
+const applicationRequestId = ref(-1);
+
+const postRecruitmentDialog = ref(false);
 const reservationDialog = ref(false);
-const dialogDelete = ref(false);
+const applicationRequestsDialog = ref(false);
+const deleteDialog = ref(false);
+const dialogApprove = ref(false);
+const dialogDecline = ref(false);
+const approveErrorDialog = ref(false);
 
 const headers = ref([
     { title: '状態', align: 'start', key: 'status' },
@@ -202,7 +222,8 @@ const headers = ref([
     { title: '', key: 'actions', sortable: false },
 ]);
 
-const itemId = ref(-1);
+const recruitmentId = ref(-1);
+
 const editedItem = ref({
     year: null,
     month: null,
@@ -220,6 +241,58 @@ const defaultItem = ref({
     location: '',
 });
 
+// 申し込み依頼
+async function postApprove(id) {
+    const approvedApplicationRequest = await $fetch(
+        `${runtimeConfig.public.apiUrl}/approve_application_request/${id}/`,
+        {
+            method: 'POST',
+        }
+    );
+
+    if (approvedApplicationRequest == null) {
+        approveErrorDialog.value = true;
+    }
+    applicationRequests.value = applicationRequests.value.filter(
+        (applicationRequest) => applicationRequest.id !== id
+    );
+}
+
+function approveApplicationRequestConfirm(item) {
+    applicationRequestId.value = item.id;
+    dialogApprove.value = true;
+}
+
+function approveApplicationRequest() {
+    postApprove(applicationRequestId.value);
+    dialogApprove.value = false;
+    applicationRequestId.value = -1;
+}
+
+async function postDecline(id) {
+    await $fetch(
+        `${runtimeConfig.public.apiUrl}/decline_application_request/${id}/`,
+        {
+            method: 'POST',
+        }
+    );
+
+    applicationRequests.value = applicationRequests.value.filter(
+        (applicationRequest) => applicationRequest.id !== id
+    );
+}
+function declineApplicationRequestConfirm(item) {
+    applicationRequestId.value = item.id;
+    dialogDecline.value = true;
+}
+
+function declineApplicationRequest() {
+    postDecline(applicationRequestId.value);
+    dialogDecline.value = false;
+    applicationRequestId.value = -1;
+}
+
+// 募集
 async function postRecruitment() {
     const postedRecruitment = await $fetch(
         `${runtimeConfig.public.apiUrl}/recruitments/`,
@@ -233,9 +306,11 @@ async function postRecruitment() {
         }
     );
     recruitments.value.push(postedRecruitment);
+
+    closePostRecruitmentDialog();
 }
 
-async function deleteRecruitment(id) {
+async function postDelete(id) {
     await $fetch(`${runtimeConfig.public.apiUrl}/recruitments/${id}/`, {
         method: 'DELETE',
     });
@@ -245,34 +320,29 @@ async function deleteRecruitment(id) {
     );
 }
 
-function close() {
-    postDialog.value = false;
+function closePostRecruitmentDialog() {
+    postRecruitmentDialog.value = false;
     nextTick(() => {
         editedItem.value = Object.assign({}, defaultItem.value);
-        itemId.value = -1;
+        recruitmentId.value = -1;
     });
 }
 
-function save() {
-    postRecruitment();
-    close();
+function deleteRecruitmentConfirm(item) {
+    recruitmentId.value = item.id;
+    deleteDialog.value = true;
 }
 
-function deleteItem(item) {
-    itemId.value = item.id;
-    dialogDelete.value = true;
+function deleteRecruitment() {
+    postDelete(recruitmentId.value);
+    closeDeleteDialog();
 }
 
-function closeDelete() {
-    dialogDelete.value = false;
+function closeDeleteDialog() {
+    deleteDialog.value = false;
     nextTick(() => {
-        itemId.value = -1;
+        recruitmentId.value = -1;
     });
-}
-
-function deleteItemConfirm() {
-    deleteRecruitment(itemId.value);
-    closeDelete();
 }
 
 const goToUrl = (url) => {
@@ -299,11 +369,11 @@ const generateTimeOptions = () => {
 
 const timeOptions = generateTimeOptions();
 
-watch(postDialog, (val) => {
+watch(postRecruitmentDialog, (val) => {
     val || close();
 });
-watch(dialogDelete, (val) => {
-    val || closeDelete();
+watch(deleteDialog, (val) => {
+    val || closeDeleteDialog();
 });
 
 const isValid = computed(() => {
@@ -319,6 +389,8 @@ const isValid = computed(() => {
 </script>
 
 <template>
+    <!-- チーム情報が登録されていない場合 -->
+
     <div v-if="teamInfo === null">
         <v-empty-state
             class="d-flex align-center justify-center"
@@ -332,268 +404,695 @@ const isValid = computed(() => {
             </template>
         </v-empty-state>
     </div>
+
+    <!-- チーム情報が登録されている場合 -->
+
     <div v-else>
-        <v-data-table
-            :headers="headers"
-            :items="recruitments"
-            :sort-by="[
-                { key: 'year', order: 'desc' },
-                { key: 'month', order: 'desc' },
-                { key: 'day', order: 'desc' },
-            ]"
-        >
-            <template v-slot:top>
-                <v-toolbar class="px-2">
-                    <v-toolbar-title>投稿済みの募集一覧</v-toolbar-title>
-                    <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-spacer></v-spacer>
+        <!-- PC・タブレット用 -->
 
-                    <v-btn
-                        prepend-icon="mdi-text-box-plus-outline"
-                        elevation="5"
-                        @click="postDialog = true"
+        <template v-if="smAndUp">
+            <v-data-table
+                :headers="headers"
+                :items="recruitments"
+                :sort-by="[
+                    { key: 'year', order: 'desc' },
+                    { key: 'month', order: 'desc' },
+                    { key: 'day', order: 'desc' },
+                ]"
+            >
+                <template v-slot:top>
+                    <v-toolbar class="px-2">
+                        <v-toolbar-title>投稿済みの募集一覧</v-toolbar-title>
+                        <v-divider class="mx-4" inset vertical></v-divider>
+                        <v-spacer></v-spacer>
+
+                        <!-- 募集を投稿ボタン -->
+                        <v-btn
+                            prepend-icon="mdi-text-box-plus-outline"
+                            elevation="5"
+                            @click="postRecruitmentDialog = true"
+                        >
+                            募集を投稿
+                        </v-btn>
+                    </v-toolbar>
+                </template>
+
+                <!-- 削除ボタン -->
+                <template v-slot:[`item.actions`]="{ item }">
+                    <v-icon
+                        v-if="item.status === '募集中'"
+                        color="#F44336"
+                        class="me-2"
+                        @click="deleteRecruitmentConfirm(item)"
+                        v-tooltip:top="'削除'"
                     >
-                        募集を投稿
-                    </v-btn>
+                        mdi-delete
+                    </v-icon>
+                </template>
+                <template v-slot:no-data> 募集が投稿されていません </template>
+            </v-data-table>
 
-                    <v-dialog v-model="postDialog" max-width="500px">
-                        <v-card prepend-icon="mdi-form-select" title="募集内容">
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col class="d-flex align-center">
-                                            <v-icon>mdi-soccer-field</v-icon>
-                                        </v-col>
-                                        <v-col cols="10" md="10" sm="7"
-                                            ><v-btn
-                                                evaluation="10"
-                                                @click="
-                                                    reservationDialog = true
-                                                "
+            <!-- ダイアログ類 -->
+
+            <!-- 募集投稿ダイアログ -->
+            <v-dialog v-model="postRecruitmentDialog" max-width="500px">
+                <v-card prepend-icon="mdi-form-select" title="募集内容">
+                    <v-card-text>
+                        <v-container>
+                            <v-row>
+                                <v-col class="d-flex align-center">
+                                    <v-icon>mdi-soccer-field</v-icon>
+                                </v-col>
+                                <v-col cols="10"
+                                    ><v-btn
+                                        evaluation="10"
+                                        @click="reservationDialog = true"
+                                    >
+                                        グラウンドを予約
+                                    </v-btn>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col class="d-flex align-center">
+                                    <v-icon>mdi-map-marker-outline</v-icon>
+                                </v-col>
+                                <v-col cols="10">
+                                    <v-text-field
+                                        v-model="editedItem.location"
+                                        hide-details="auto"
+                                        label="開催場所を入力"
+                                        clearable
+                                    ></v-text-field>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col class="d-flex align-center">
+                                    <v-icon> mdi-calendar-month </v-icon>
+                                </v-col>
+                                <v-col cols="4">
+                                    <v-select
+                                        v-model="editedItem.year"
+                                        label="年"
+                                        :items="yearOptions"
+                                    />
+                                </v-col>
+                                <v-col cols="3">
+                                    <v-select
+                                        v-model="editedItem.month"
+                                        label="月"
+                                        :items="monthOptions"
+                                    />
+                                </v-col>
+                                <v-col cols="3">
+                                    <v-select
+                                        v-model="editedItem.day"
+                                        label="日"
+                                        :items="dayOptions"
+                                    />
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col class="d-flex align-center">
+                                    <v-icon>
+                                        mdi-clock-time-eight-outline
+                                    </v-icon>
+                                </v-col>
+                                <v-col cols="5">
+                                    <v-select
+                                        v-model="editedItem.start_time"
+                                        label="開始時間"
+                                        :items="timeOptions"
+                                    />
+                                </v-col>
+                                <v-col cols="5">
+                                    <v-select
+                                        v-model="editedItem.end_time"
+                                        label="終了時間"
+                                        :items="timeOptions"
+                                    />
+                                </v-col>
+                            </v-row>
+                        </v-container>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closePostRecruitmentDialog()"
+                        >
+                        </v-btn>
+
+                        <v-btn
+                            color="primary"
+                            text="投稿"
+                            variant="tonal"
+                            @click="postRecruitment()"
+                            :disabled="!isValid"
+                        >
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+
+                <!-- グラウンドを予約ダイアログ -->
+                <v-dialog v-model="reservationDialog" max-width="450">
+                    <v-card>
+                        <v-card-item>
+                            <v-row>
+                                <v-col cols="12" md="6" sm="6">
+                                    <v-select
+                                        :items="regionsList"
+                                        label="地域を選択"
+                                        v-model="selectedRegion"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="12" md="6" sm="6">
+                                    <v-select
+                                        label="都道府県を選択"
+                                        :items="regions[selectedRegion]"
+                                        v-model="selectedPrefecture"
+                                    ></v-select>
+                                </v-col>
+                            </v-row>
+
+                            <v-divider></v-divider>
+                        </v-card-item>
+
+                        <v-virtual-scroll
+                            :items="grounds[selectedPrefecture]"
+                            height="150"
+                            item-height="50"
+                        >
+                            <template v-slot:default="{ item }">
+                                <v-list-item>
+                                    <v-list-item-title>{{
+                                        item.title
+                                    }}</v-list-item-title>
+                                    <template v-slot:append>
+                                        <v-btn @click="goToUrl(item.url)"
+                                            >予約ページへ</v-btn
+                                        >
+                                    </template>
+                                </v-list-item>
+                            </template>
+                        </v-virtual-scroll>
+
+                        <template v-slot:actions>
+                            <v-btn
+                                class="ms-auto"
+                                color="primary"
+                                variant="tonal"
+                                text="閉じる"
+                                @click="reservationDialog = false"
+                            ></v-btn>
+                        </template>
+                    </v-card>
+                </v-dialog>
+            </v-dialog>
+
+            <!-- 投稿消去確認ダイアログ -->
+            <v-dialog v-model="deleteDialog" max-width="500px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この募集投稿を削除してもよろしいですか？"
+                >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="closeDeleteDialog()"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="deleteRecruitment()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </template>
+
+        <!-- スマホ用 -->
+
+        <template v-else>
+            <v-data-iterator :items="recruitments" items-per-page="-1">
+                <template v-slot:header>
+                    <v-app-bar class="px-2" :elevation="1">
+                        <v-col cols="2"></v-col>
+
+                        <v-col class="d-flex justify-space-around">
+                            <v-app-bar-title
+                                class="text-center"
+                                style="flex-grow: 1"
+                                >対戦相手を募集</v-app-bar-title
+                            >
+                        </v-col>
+
+                        <v-col cols="2" class="d-flex justify-end">
+                            <!-- 申し込み依頼ボタン -->
+                            <v-btn
+                                icon="mdi-email-outline"
+                                elevation="5"
+                                @click="applicationRequestsDialog = true"
+                            ></v-btn>
+
+                            <!-- 募集を投稿ボタン -->
+                            <v-btn
+                                icon="mdi-text-box-plus-outline"
+                                elevation="5"
+                                @click="postRecruitmentDialog = true"
+                            ></v-btn>
+                        </v-col>
+                    </v-app-bar>
+                </template>
+
+                <!-- 投稿済みの募集一覧 -->
+
+                <template v-slot:default="{ items }">
+                    <v-container class="pa-2" fluid>
+                        <v-row dense>
+                            <v-col
+                                v-for="item in items"
+                                :key="item.title"
+                                cols="12"
+                                xs="12"
+                            >
+                                <v-card>
+                                    <v-row align="center" no-gutters>
+                                        <v-card-item>
+                                            <v-icon>mdi-calendar-month</v-icon>
+                                            {{ item.raw.year }}年{{
+                                                item.raw.month
+                                            }}月{{ item.raw.day }}日
+
+                                            <br />
+
+                                            <v-icon
+                                                >mdi-clock-time-eight-outline</v-icon
                                             >
-                                                グラウンドを予約
-                                            </v-btn>
-                                            <v-dialog
-                                                v-model="reservationDialog"
-                                                max-width="450"
-                                            >
-                                                <v-card>
-                                                    <v-card-item>
-                                                        <v-row>
-                                                            <v-col
-                                                                cols="12"
-                                                                md="6"
-                                                                sm="6"
-                                                            >
-                                                                <v-select
-                                                                    :items="
-                                                                        regionsList
-                                                                    "
-                                                                    label="地域を選択"
-                                                                    v-model="
-                                                                        selectedRegion
-                                                                    "
-                                                                ></v-select>
-                                                            </v-col>
-                                                            <v-col
-                                                                cols="12"
-                                                                md="6"
-                                                                sm="6"
-                                                            >
-                                                                <v-select
-                                                                    label="都道府県を選択"
-                                                                    :items="
-                                                                        regions[
-                                                                            selectedRegion
-                                                                        ]
-                                                                    "
-                                                                    v-model="
-                                                                        selectedPrefecture
-                                                                    "
-                                                                ></v-select>
-                                                            </v-col>
-                                                        </v-row>
+                                            {{ item.raw.start_time }} ~
+                                            {{ item.raw.end_time }}
 
-                                                        <v-divider></v-divider>
-                                                    </v-card-item>
+                                            <br />
 
-                                                    <v-virtual-scroll
-                                                        :items="
-                                                            grounds[
-                                                                selectedPrefecture
-                                                            ]
-                                                        "
-                                                        height="150"
-                                                        item-height="50"
-                                                    >
-                                                        <template
-                                                            v-slot:default="{
-                                                                item,
-                                                            }"
-                                                        >
-                                                            <v-list-item>
-                                                                <v-list-item-title
-                                                                    >{{
-                                                                        item.title
-                                                                    }}</v-list-item-title
-                                                                >
-                                                                <template
-                                                                    v-slot:append
-                                                                >
-                                                                    <v-btn
-                                                                        @click="
-                                                                            goToUrl(
-                                                                                item.url
-                                                                            )
-                                                                        "
-                                                                        >予約ページへ</v-btn
-                                                                    >
-                                                                </template>
-                                                            </v-list-item>
-                                                        </template>
-                                                    </v-virtual-scroll>
-
-                                                    <template v-slot:actions>
-                                                        <v-btn
-                                                            class="ms-auto"
-                                                            color="primary"
-                                                            variant="tonal"
-                                                            text="閉じる"
-                                                            @click="
-                                                                reservationDialog = false
-                                                            "
-                                                        ></v-btn>
-                                                    </template>
-                                                </v-card>
-                                            </v-dialog>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col class="d-flex align-center">
                                             <v-icon
                                                 >mdi-map-marker-outline</v-icon
                                             >
-                                        </v-col>
-                                        <v-col cols="10" md="10" sm="7">
-                                            <v-text-field
-                                                v-model="editedItem.location"
-                                                hide-details="auto"
-                                                label="開催場所を入力"
-                                                clearable
-                                            ></v-text-field>
-                                        </v-col>
+                                            {{ item.raw.location }}
+                                        </v-card-item>
+
+                                        <v-spacer></v-spacer>
+
+                                        <!-- 削除ボタン -->
+                                        <v-card-actions
+                                            class="d-flex justify-end"
+                                        >
+                                            <v-icon
+                                                v-if="
+                                                    item.raw.status === '募集中'
+                                                "
+                                                color="#F44336"
+                                                class="me-2"
+                                                size="large"
+                                                @click="
+                                                    deleteRecruitmentConfirm(
+                                                        item.raw
+                                                    )
+                                                "
+                                                >mdi-delete</v-icon
+                                            >
+                                        </v-card-actions>
                                     </v-row>
-                                    <v-row>
-                                        <v-col class="d-flex align-center">
-                                            <v-icon>
-                                                mdi-calendar-month
-                                            </v-icon>
-                                        </v-col>
-                                        <v-col md="4" sm="7">
-                                            <v-select
-                                                v-model="editedItem.year"
-                                                label="年"
-                                                :items="yearOptions"
-                                            />
-                                        </v-col>
-                                        <v-col md="3" sm="7">
-                                            <v-select
-                                                v-model="editedItem.month"
-                                                label="月"
-                                                :items="monthOptions"
-                                            />
-                                        </v-col>
-                                        <v-col md="3" sm="7">
-                                            <v-select
-                                                v-model="editedItem.day"
-                                                label="日"
-                                                :items="dayOptions"
-                                            />
-                                        </v-col>
-                                    </v-row>
-                                    <v-row>
-                                        <v-col class="d-flex align-center">
-                                            <v-icon>
-                                                mdi-clock-time-eight-outline
-                                            </v-icon>
-                                        </v-col>
-                                        <v-col cols="5" md="5" sm="7">
-                                            <v-select
-                                                v-model="editedItem.start_time"
-                                                label="開始時間"
-                                                :items="timeOptions"
-                                            />
-                                        </v-col>
-                                        <v-col cols="5" md="5" sm="7">
-                                            <v-select
-                                                v-model="editedItem.end_time"
-                                                label="終了時間"
-                                                :items="timeOptions"
-                                            />
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-container>
+                </template>
+            </v-data-iterator>
+
+            <!-- ダイアログ類 -->
+
+            <!-- 申し込み依頼ダイアログ -->
+            <v-dialog v-model="applicationRequestsDialog" max-width="450">
+                <v-card>
+                    <v-card-title class="d-flex align-center">
+                        <v-icon class="me-2">mdi-email-outline</v-icon>
+                        他チームからの申し込み
+                    </v-card-title>
+
+                    <v-virtual-scroll
+                        :items="applicationRequests"
+                        height="300"
+                        item-height="50"
+                    >
+                        <template v-slot:default="{ item }">
+                            <v-list-item>
+                                <v-list-item-title
+                                    >{{ item.name }}
+
+                                    <a
+                                        v-if="item.instagram_user_name"
+                                        :href="`https://www.instagram.com/${item.instagram_user_name}/`"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="../public/icons8-インスタグラム.svg"
+                                            width="30"
+                                            height="30"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                    <a
+                                        v-if="item.X_user_name"
+                                        :href="`https://x.com/${item.X_user_name}/`"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="../public/icons8-ツイッターx.svg"
+                                            width="30"
+                                            height="30"
+                                            style="vertical-align: middle"
+                                    /></a>
+                                </v-list-item-title>
+
+                                <v-list-item-subtitle>
+                                    <v-icon>mdi-calendar-month</v-icon
+                                    >{{ item.year }}/{{ item.month }}/{{
+                                        item.day
+                                    }}
+                                </v-list-item-subtitle>
+
+                                <v-list-item-subtitle>
+                                    <v-icon
+                                        >mdi-clock-time-eight-outline</v-icon
+                                    >
+                                    {{ item.start_time }} ~
+                                    {{ item.end_time }}
+                                </v-list-item-subtitle>
+
+                                <v-list-item-subtitle>
+                                    <v-icon> mdi-map-marker-outline</v-icon
+                                    >{{ item.location }}
+                                </v-list-item-subtitle>
+
+                                <template v-slot:append>
+                                    <v-icon
+                                        color="#4CAF50"
+                                        class="me-2"
+                                        size="large"
+                                        @click="
+                                            approveApplicationRequestConfirm(
+                                                item
+                                            )
+                                        "
+                                    >
+                                        mdi-check-circle-outline
+                                    </v-icon>
+                                    <v-icon
+                                        color="#F44336"
+                                        class="me-2"
+                                        size="large"
+                                        @click="
+                                            declineApplicationRequestConfirm(
+                                                item
+                                            )
+                                        "
+                                    >
+                                        mdi-close-circle
+                                    </v-icon>
+                                </template>
+                            </v-list-item>
 
                             <v-divider></v-divider>
+                        </template>
+                    </v-virtual-scroll>
 
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
+                    <template v-slot:actions>
+                        <v-btn
+                            class="ms-auto"
+                            color="primary"
+                            variant="tonal"
+                            text="閉じる"
+                            @click="applicationRequestsDialog = false"
+                        ></v-btn>
+                    </template>
+                </v-card>
+            </v-dialog>
 
-                                <v-btn
-                                    text="キャンセル"
-                                    variant="plain"
-                                    @click="close"
-                                >
-                                </v-btn>
-
-                                <v-btn
-                                    color="primary"
-                                    text="保存"
-                                    variant="tonal"
-                                    @click="save"
-                                    :disabled="!isValid"
-                                >
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card
-                            prepend-icon="mdi-alert-circle-outline"
-                            title="この募集投稿を削除してもよろしいですか？"
-                        >
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    text="キャンセル"
-                                    variant="plain"
-                                    @click="closeDelete"
-                                ></v-btn>
-                                <v-btn
-                                    color="primary"
-                                    text="OK"
-                                    variant="tonal"
-                                    @click="deleteItemConfirm"
-                                ></v-btn>
-                                <v-spacer></v-spacer>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-toolbar>
-            </template>
-            <template v-slot:[`item.actions`]="{ item }">
-                <v-icon
-                    v-if="item.status === '募集中'"
-                    color="#F44336"
-                    class="me-2"
-                    @click="deleteItem(item)"
-                    v-tooltip:top="'削除'"
+            <!-- 申し込み承認確認ダイアログ -->
+            <v-dialog v-model="dialogApprove" max-width="370px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この申し込みを承認しますか？"
                 >
-                    mdi-delete
-                </v-icon>
-            </template>
-            <template v-slot:no-data> 募集が投稿されていません </template>
-        </v-data-table>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="dialogApprove = false"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="approveApplicationRequest()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 承認エラーダイアログ -->
+            <v-dialog v-model="approveErrorDialog" max-width="370">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="直前にキャンセルにされました"
+                >
+                    <v-card-actions>
+                        <v-btn
+                            color="primary"
+                            variant="tonal"
+                            @click="approveErrorDialog = false"
+                            >閉じる</v-btn
+                        >
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 辞退確認ダイアログ -->
+            <v-dialog v-model="dialogDecline" max-width="370px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この申し込みを辞退しますか？"
+                >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="dialogDecline = false"
+                        ></v-btn>
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="declineApplicationRequest()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+
+            <!-- 募集投稿ダイアログ -->
+            <v-dialog v-model="postRecruitmentDialog" max-width="550px">
+                <v-card prepend-icon="mdi-form-select" title="募集内容">
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12"
+                                ><v-btn
+                                    evaluation="10"
+                                    @click="reservationDialog = true"
+                                >
+                                    グラウンドを予約
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field
+                                    v-model="editedItem.location"
+                                    hide-details="auto"
+                                    label="開催場所を入力"
+                                    clearable
+                                    density="comfortable"
+                                ></v-text-field>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="5">
+                                <v-select
+                                    v-model="editedItem.year"
+                                    label="年"
+                                    :items="yearOptions"
+                                    density="comfortable"
+                                />
+                            </v-col>
+                            <v-col cols="3.5">
+                                <v-select
+                                    v-model="editedItem.month"
+                                    label="月"
+                                    :items="monthOptions"
+                                    density="comfortable"
+                                />
+                            </v-col>
+                            <v-col cols="3.5">
+                                <v-select
+                                    v-model="editedItem.day"
+                                    label="日"
+                                    :items="dayOptions"
+                                    density="comfortable"
+                                />
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="6">
+                                <v-select
+                                    v-model="editedItem.start_time"
+                                    label="開始時間"
+                                    :items="timeOptions"
+                                    density="comfortable"
+                                />
+                            </v-col>
+                            <v-col cols="6">
+                                <v-select
+                                    v-model="editedItem.end_time"
+                                    label="終了時間"
+                                    :items="timeOptions"
+                                    density="comfortable"
+                                />
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+
+                    <v-divider></v-divider>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            text="キャンセル"
+                            variant="plain"
+                            @click="closePostRecruitmentDialog()"
+                        >
+                        </v-btn>
+
+                        <v-btn
+                            color="primary"
+                            text="投稿"
+                            variant="tonal"
+                            @click="postRecruitment()"
+                            :disabled="!isValid"
+                        >
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+
+                <!-- グラウンドを予約ダイアログ -->
+                <v-dialog v-model="reservationDialog" max-width="370">
+                    <v-card>
+                        <v-card-item>
+                            <v-row>
+                                <v-col cols="6">
+                                    <v-select
+                                        :items="regionsList"
+                                        label="地域を選択"
+                                        v-model="selectedRegion"
+                                        density="comfortable"
+                                    ></v-select>
+                                </v-col>
+                                <v-col cols="6">
+                                    <v-select
+                                        :items="regions[selectedRegion]"
+                                        label="都道府県を選択"
+                                        v-model="selectedPrefecture"
+                                        density="comfortable"
+                                    ></v-select>
+                                </v-col>
+                            </v-row>
+
+                            <v-divider></v-divider>
+                        </v-card-item>
+
+                        <v-virtual-scroll
+                            :items="grounds[selectedPrefecture]"
+                            height="150"
+                            item-height="50"
+                        >
+                            <template v-slot:default="{ item }">
+                                <v-list-item>
+                                    <v-list-item-title>{{
+                                        item.title
+                                    }}</v-list-item-title>
+                                    <template v-slot:append>
+                                        <v-icon
+                                            icon="mdi-open-in-new"
+                                            @click="goToUrl(item.url)"
+                                        ></v-icon>
+                                    </template>
+                                </v-list-item>
+                            </template>
+                        </v-virtual-scroll>
+
+                        <template v-slot:actions>
+                            <v-btn
+                                class="ms-auto"
+                                color="primary"
+                                variant="tonal"
+                                text="閉じる"
+                                @click="reservationDialog = false"
+                            ></v-btn>
+                        </template>
+                    </v-card>
+                </v-dialog>
+            </v-dialog>
+
+            <!-- 投稿消去確認ログ -->
+            <v-dialog v-model="deleteDialog" max-width="330px">
+                <v-card
+                    prepend-icon="mdi-alert-circle-outline"
+                    title="この投稿を削除しますか？"
+                >
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            text="いいえ"
+                            variant="plain"
+                            @click="closeDeleteDialog()"
+                        ></v-btn>
+
+                        <v-btn
+                            color="primary"
+                            text="はい"
+                            variant="tonal"
+                            @click="deleteRecruitment()"
+                        ></v-btn>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </template>
     </div>
 </template>

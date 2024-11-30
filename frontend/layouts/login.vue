@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue';
+import { useDisplay } from 'vuetify';
 
 const visible = ref(false);
+
+const { smAndUp } = useDisplay();
 
 const isChrome = ref(false);
 
@@ -45,21 +48,48 @@ if (typeof window !== 'undefined') {
             </div>
         </div>
         <div v-else>
-            <v-card
-                class="mx-auto pa-12 pb-8"
-                elevation="8"
-                max-width="450"
-                rounded="lg"
-            >
-                <v-card class="mb-12" color="surface-variant" variant="tonal">
-                    <v-card-text class="text-medium-emphasis text-caption">
-                        <v-icon>mdi-information-outline</v-icon>
-                        本サービスはチーム単位での利用を想定しています。チームごとに1つのGoogleアカウントを用意し、ログインしてください。
-                    </v-card-text>
-                </v-card>
+            <template v-if="smAndUp">
+                <v-card
+                    class="mx-auto pa-12 pb-8"
+                    elevation="8"
+                    max-width="450"
+                    rounded="lg"
+                >
+                    <v-card
+                        class="mb-12"
+                        color="surface-variant"
+                        variant="tonal"
+                    >
+                        <v-card-text class="text-medium-emphasis text-caption">
+                            <v-icon>mdi-information-outline</v-icon>
+                            本サービスはチーム単位での利用を想定しています。チームごとに1つのGoogleアカウントを用意し、ログインしてください。
+                        </v-card-text>
+                    </v-card>
 
-                <slot />
-            </v-card>
+                    <slot />
+                </v-card>
+            </template>
+            <template v-else>
+                <v-card
+                    class="mx-auto pa-12 pb-8"
+                    elevation="8"
+                    max-width="400"
+                    rounded="lg"
+                >
+                    <v-card
+                        class="mb-12"
+                        color="surface-variant"
+                        variant="tonal"
+                    >
+                        <v-card-text class="text-medium-emphasis text-caption">
+                            <v-icon>mdi-information-outline</v-icon>
+                            本サービスはチーム単位での利用を想定しています。チームごとに1つのGoogleアカウントを用意し、ログインしてください。
+                        </v-card-text>
+                    </v-card>
+
+                    <slot />
+                </v-card>
+            </template>
         </div>
     </div>
 </template>

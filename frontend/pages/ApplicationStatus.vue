@@ -18,8 +18,9 @@ const { data: applications } = await useFetch(
 );
 
 const itemId = ref(-1);
-const dialog = ref(false);
+
 const dialogDelete = ref(false);
+
 const headers = ref([
     { title: '状態', align: 'start', key: 'status', sortable: false },
     { title: 'チーム', key: 'name', sortable: false },
@@ -81,7 +82,9 @@ watch(dialogDelete, (val) => {
                         >他チームの募集への申し込み状況</v-toolbar-title
                     >
                     <v-divider class="mx-4" inset vertical></v-divider>
+
                     <v-spacer></v-spacer>
+
                     <v-dialog v-model="dialogDelete" max-width="550px">
                         <v-card
                             prepend-icon="mdi-alert-circle-outline"
