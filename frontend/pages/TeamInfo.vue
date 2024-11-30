@@ -124,10 +124,6 @@ function closeEditTeamInfoDialog() {
 function handleTeamInfoRegisterd(newTeamInfo) {
     teamInfo.value = newTeamInfo;
 }
-
-function handleTeamInfoEdited(updatedTeamInfo) {
-    teamInfo.value = updatedTeamInfo;
-}
 </script>
 
 <template>
@@ -154,15 +150,16 @@ function handleTeamInfoEdited(updatedTeamInfo) {
         <!-- PC・タブレット用 -->
 
         <template v-if="smAndUp">
-            <v-row class="d-flex align-end justify-end">
-                <!-- チーム情報編集ボタン -->
-
-                <v-btn
-                    prepend-icon="mdi-text-box-edit-outline"
-                    elevation="5"
-                    @click="editTeamInfoDialog = true"
-                    >チーム情報を編集</v-btn
-                >
+            <v-row>
+                <v-col cols="12" class="d-flex align-end justify-end">
+                    <!-- チーム情報編集ボタン -->
+                    <v-btn
+                        prepend-icon="mdi-text-box-edit-outline"
+                        elevation="5"
+                        @click="editTeamInfoDialog = true"
+                        >チーム情報を編集</v-btn
+                    >
+                </v-col>
             </v-row>
 
             <v-row justify="center">
