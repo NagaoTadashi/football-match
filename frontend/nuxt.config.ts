@@ -16,7 +16,11 @@ export default defineNuxtConfig({
                 },
             ],
             link: [
-                { rel: 'icon', type: 'image/png', href: '/favicon.png' }, // これを追記する
+                {
+                    rel: 'icon',
+                    type: 'image/svg',
+                    href: '/web_league_logo.svg',
+                },
             ],
         },
     },

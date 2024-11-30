@@ -33,7 +33,15 @@ if (typeof window !== 'undefined') {
 <template>
     <div>
         <div class="text-center mx-auto my-6" max-width="230" text>
-            <h1><v-icon>mdi-soccer</v-icon> Web League</h1>
+            <h1>
+                <img
+                    src="../public/web_league_logo.svg"
+                    width="50"
+                    height="50"
+                    style="vertical-align: middle"
+                />
+                Web League
+            </h1>
         </div>
 
         <div v-if="!isChrome">

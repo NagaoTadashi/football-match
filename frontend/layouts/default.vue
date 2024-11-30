@@ -73,24 +73,12 @@ const xsMenues = [
         value: 'requirementOpponent',
         to: '/RequirementOpponent/',
     },
-    // {
-    //     icon: 'mdi-email',
-    //     title: '申し込み依頼',
-    //     value: 'applicationRequest',
-    //     to: '/ApplicationRequest/',
-    // },
     {
         icon: 'mdi-account-search',
         title: '対戦相手を探す',
         value: 'findOpponent',
         to: '/FindOpponent/',
     },
-    // {
-    //     icon: 'mdi-progress-check',
-    //     title: '申し込み状況',
-    //     value: 'applicationStatus',
-    //     to: '/ApplicationStatus/',
-    // },
 ];
 
 const group = ref(null);
@@ -118,7 +106,13 @@ const handleSignOut = async () => {
         <template v-if="smAndUp">
             <v-app-bar :elevation="5" rounded>
                 <v-app-bar-title>
-                    <v-icon>mdi-soccer</v-icon> Web League</v-app-bar-title
+                    <img
+                        src="../public/web_league_logo.svg"
+                        width="30"
+                        height="30"
+                        style="vertical-align: middle"
+                    />
+                    Web League</v-app-bar-title
                 >
                 <v-spacer></v-spacer>
 
@@ -190,13 +184,14 @@ const handleSignOut = async () => {
 
         <template v-else>
             <v-app-bar :elevation="5" rounded>
-                <!-- <v-app-bar-nav-icon
-                    variant="text"
-                    @click.stop="drawer = !drawer"
-                ></v-app-bar-nav-icon> -->
-
                 <v-app-bar-title>
-                    <v-icon>mdi-soccer</v-icon> Web League
+                    <img
+                        src="../public/web_league_logo.svg"
+                        width="30"
+                        height="30"
+                        style="vertical-align: middle"
+                    />
+                    Web League
                 </v-app-bar-title>
 
                 <v-menu location="bottom">
